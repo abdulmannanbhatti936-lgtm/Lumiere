@@ -1,0 +1,33 @@
+{
+  "name": "lumiere-stays",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently -n server,client -c blue,yellow \"npm:dev:server\" \"npm:dev:client\"",
+    "dev:client": "npm run dev --workspace=client",
+    "dev:server": "npm run dev --workspace=server",
+    "build": "npm run build --workspace=server && npm run build --workspace=client",
+    "type-check": "npm run type-check --workspace=client && npm run type-check --workspace=server",
+    "lint": "npm run lint --workspace=client",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "db:generate": "npm run db:generate --workspace=server",
+    "db:migrate": "npm run db:migrate --workspace=server",
+    "db:seed": "npm run db:seed --workspace=server",
+    "db:studio": "npm run db:studio --workspace=server",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down"
+  },
+  "devDependencies": {
+    "@types/node": "^24.7.0",
+    "concurrently": "^9.1.2",
+    "typescript": "5.9.3",
+    "vitest": "^3.2.4"
+  }
+}

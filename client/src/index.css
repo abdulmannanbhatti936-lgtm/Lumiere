@@ -1,0 +1,218 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+/* Dark Luxury Theme - CSS Variables */
+@layer base {
+  :root {
+    --background: 12 6% 8%;
+    --foreground: 0 0% 98%;
+    --card: 12 8% 12%;
+    --card-foreground: 0 0% 98%;
+    --primary: 45 100% 51%;
+    --primary-foreground: 12 6% 8%;
+    --secondary: 260 70% 50%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 12 6% 30%;
+    --muted-foreground: 0 0% 70%;
+    --accent: 45 100% 51%;
+    --accent-foreground: 12 6% 8%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 12 8% 20%;
+    --input: 12 8% 15%;
+    --ring: 45 100% 51%;
+    --radius: 0.5rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Inter", sans-serif;
+    font-feature-settings: "rounding" 1;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Playfair Display", serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  h1 {
+    @apply text-5xl md:text-6xl font-bold;
+  }
+
+  h2 {
+    @apply text-4xl md:text-5xl font-bold;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl font-bold;
+  }
+
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground;
+  }
+}
+
+/* Utility Classes */
+@layer components {
+  .glass {
+    @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-lg;
+  }
+
+  .glass-dark {
+    @apply bg-black/40 backdrop-blur-md border border-white/10 rounded-lg;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-200 bg-clip-text text-transparent;
+  }
+
+  .btn-primary {
+    @apply px-6 py-3 bg-accent text-accent-foreground rounded-lg font-semibold hover:opacity-90 transition-all duration-200 transform hover:scale-105 active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 bg-card text-foreground border border-border rounded-lg font-semibold hover:bg-muted transition-all duration-200;
+  }
+
+  .card-luxury {
+    @apply bg-card border border-border rounded-xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300;
+  }
+
+  .input-luxury {
+    @apply w-full px-4 py-3 bg-input border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all;
+  }
+
+  .star-rating {
+    @apply flex gap-1;
+  }
+
+  .star {
+    @apply text-accent text-lg;
+  }
+
+  /* 3D Animation Classes */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px );
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes glow {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(255, 193, 7, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 40px rgba(255, 193, 7, 0.6);
+    }
+  }
+
+  .animate-glow {
+    animation: glow 3s ease-in-out infinite;
+  }
+
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-slide-in-up {
+    animation: slideInUp 0.6s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out;
+  }
+
+  /* Parallax effect */
+  .parallax {
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  h1 {
+    @apply text-3xl;
+  }
+
+  h2 {
+    @apply text-2xl;
+  }
+
+  h3 {
+    @apply text-xl;
+  }
+
+  .container {
+    @apply px-3;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
