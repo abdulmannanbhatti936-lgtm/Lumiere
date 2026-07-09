@@ -1,164 +1,157 @@
-import { useEffect, useState } from 'react';
-import { Menu, X, LogOut, Sparkles } from 'lucide-react';
+import { useState } from 'react';
+import { Menu, X, Sparkles } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Link, useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
-import Magnetic from '@/components/motion/Magnetic';
+
+const NAV_ITEMS = [
+  { label: 'Home', href: '/' },
+  { label: 'Tours', href: '/tours', activeOn: ['/tours', '/destinations'] },
+  { label: 'Search', href: '/hotels', activeOn: ['/hotels', '/hotel', '/booking'] },
+  { label: 'Contact', href: '/contact' },
+  { label: 'My Trips', href: '/my-bookings', requiresAuth: true },
+];
+
+function getInitials(name?: string | null) {
+  if (!name) return '?';
+  const parts = name.trim().split(/\s+/);
+  const initials = parts.length > 1 ? `${parts[0][0]}${parts[parts.length - 1][0]}` : parts[0].slice(0, 2);
+  return initials.toUpperCase();
+}
 
 export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const { isAuthenticated, user, logout } = useAuth();
-  const [location, navigate] = useLocation();
+  const { isAuthenticated, user } = useAuth();
+  const [location] = useLocation();
 
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 24);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const navItems = [
-    { label: 'Hotels', href: '/hotels' },
-    { label: 'Destinations', href: '/destinations' },
-    { label: 'My Bookings', href: '/my-bookings', requiresAuth: true },
-    { label: 'Management', href: '/dashboard', requiresAuth: true, adminOnly: true },
-  ];
-
-  const handleLogout = async () => {
-    await logout();
-    navigate('/');
+  const isItemActive = (item: (typeof NAV_ITEMS)[number]) => {
+    const targets = item.activeOn ?? [item.href];
+    return targets.some((href) => (href === '/' ? location === '/' : location.startsWith(href)));
   };
 
   return (
-    <nav
-      className={`sticky top-0 z-50 transition-all duration-500 ${
-        scrolled ? 'glass-panel border-x-0 border-t-0 rounded-none' : 'bg-transparent border-b border-transparent'
-      }`}
-    >
-      <div className="container flex items-center justify-between h-20">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 shrink-0">
-          <Sparkles className="text-accent" size={20} />
-          <span className="font-serif text-2xl tracking-tight text-foreground">
-            LUMI<span className="text-accent">È</span>RE
-          </span>
-        </Link>
+    <>
+      {/* Desktop "Dynamic Island" */}
+      <div className="hidden md:flex fixed top-5 left-0 right-0 z-50 justify-center px-4">
+        <nav className="nav-island rounded-full flex items-center gap-1 px-2 py-2">
+          <Link href="/" className="flex items-center gap-1.5 pl-3 pr-4">
+            <span className="font-serif text-[17px] font-bold text-primary tracking-tight">Lumière</span>
+          </Link>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-9">
-          {navItems.map((item) => {
-            if (item.requiresAuth && !isAuthenticated) return null;
-            if (item.adminOnly && user?.role !== 'admin') return null;
-            const isActive = location === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`label-caps !text-[11px] pb-1 border-b transition-colors ${
-                  isActive
-                    ? 'text-accent border-accent'
-                    : 'text-muted-foreground border-transparent hover:text-accent'
-                }`}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
-        </div>
+          <div className="w-px h-5 bg-foreground/10" />
 
-        {/* Auth Section */}
-        <div className="hidden md:flex items-center gap-6">
-          {isAuthenticated ? (
-            <>
-              <Link
-                href="/profile"
-                className="text-sm text-muted-foreground hover:text-accent transition-colors"
-              >
-                {user?.name || 'Guest'}
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="p-2 hover:bg-muted/40 rounded-md transition-colors"
-                aria-label="Log out"
-              >
-                <LogOut size={18} />
-              </button>
-            </>
-          ) : (
-            <Magnetic>
-              <Link
-                href="/login"
-                className="label-caps !text-[11px] !text-primary border border-primary px-7 py-2.5 rounded-sm hover:bg-primary hover:text-primary-foreground transition-all duration-300"
-              >
-                Sign In
-              </Link>
-            </Magnetic>
-          )}
-        </div>
-
-        {/* Mobile Menu Button */}
-        <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 text-foreground">
-          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
-
-      {/* Mobile Navigation */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="md:hidden overflow-hidden glass-panel border-x-0 rounded-none"
-          >
-            <div className="container py-6 flex flex-col gap-5">
-              {navItems.map((item) => {
-                if (item.requiresAuth && !isAuthenticated) return null;
-                if (item.adminOnly && user?.role !== 'admin') return null;
-                return (
+          <div className="flex items-center gap-1 px-1">
+            {NAV_ITEMS.map((item) => {
+              if (item.requiresAuth && !isAuthenticated) return null;
+              const active = isItemActive(item);
+              return (
+                <motion.div key={item.href} whileHover={{ y: -3, scale: 1.05 }} transition={{ duration: 0.15 }}>
                   <Link
-                    key={item.href}
                     href={item.href}
-                    className="label-caps !text-foreground hover:!text-accent"
-                    onClick={() => setMobileMenuOpen(false)}
+                    className={`block px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+                      active ? 'nav-pill-active text-white' : 'text-[#3A3F52] hover:text-primary'
+                    }`}
                   >
                     {item.label}
                   </Link>
-                );
-              })}
-              {isAuthenticated ? (
-                <>
+                </motion.div>
+              );
+            })}
+            {isAuthenticated && user?.role === 'admin' && (
+              <motion.div whileHover={{ y: -3, scale: 1.05 }} transition={{ duration: 0.15 }}>
+                <Link
+                  href="/dashboard"
+                  className={`block px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+                    location.startsWith('/dashboard') || location.startsWith('/admin')
+                      ? 'nav-pill-active text-white'
+                      : 'text-[#3A3F52] hover:text-primary'
+                  }`}
+                >
+                  Admin
+                </Link>
+              </motion.div>
+            )}
+          </div>
+
+          <motion.div whileHover={{ y: -2, scale: 1.1 }} transition={{ duration: 0.15 }} className="pl-1">
+            {isAuthenticated ? (
+              <Link
+                href="/my-bookings"
+                aria-label="My account"
+                className="nav-pill-active w-[38px] h-[38px] rounded-full flex items-center justify-center text-white text-xs font-bold"
+              >
+                {getInitials(user?.name)}
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                className="btn-primary !px-5 !py-2 !text-sm"
+              >
+                Sign In
+              </Link>
+            )}
+          </motion.div>
+        </nav>
+      </div>
+
+      {/* Mobile top bar (compact — full nav lives in the bottom tab bar) */}
+      <div className="md:hidden fixed top-0 left-0 right-0 z-50">
+        <div className="flex items-center justify-between px-5 py-4 bg-background/90 backdrop-blur-lg border-b border-border">
+          <Link href="/" className="flex items-center gap-1.5">
+            <Sparkles className="text-accent" size={16} />
+            <span className="font-serif text-lg font-bold text-primary">Lumière</span>
+          </Link>
+          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 text-foreground" aria-label="Menu">
+            {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
+
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+              className="overflow-hidden bg-background border-b border-border"
+            >
+              <div className="px-5 py-6 flex flex-col gap-4">
+                {NAV_ITEMS.map((item) => {
+                  if (item.requiresAuth && !isAuthenticated) return null;
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="label-field !text-foreground text-base normal-case font-semibold"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                })}
+                {isAuthenticated && user?.role === 'admin' && (
                   <Link
-                    href="/profile"
-                    className="label-caps !text-foreground hover:!text-accent"
+                    href="/dashboard"
+                    className="text-base font-semibold text-foreground"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    My Profile
+                    Admin
                   </Link>
-                  <button
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      handleLogout();
-                    }}
-                    className="label-caps text-left !text-destructive"
+                )}
+                {!isAuthenticated && (
+                  <Link
+                    href="/login"
+                    className="btn-primary text-center"
+                    onClick={() => setMobileMenuOpen(false)}
                   >
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <Link
-                  href="/login"
-                  className="label-caps !text-primary border border-primary px-6 py-3 rounded-sm text-center"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Sign In
-                </Link>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </nav>
+                    Sign In
+                  </Link>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </>
   );
 }

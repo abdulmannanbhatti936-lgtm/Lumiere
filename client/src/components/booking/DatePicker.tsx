@@ -61,7 +61,7 @@ export default function DatePicker({ onDateChange }: DatePickerProps) {
             ? 'bg-accent text-accent-foreground'
             : isInRange
             ? 'bg-accent/15 text-accent'
-            : 'hover:bg-white/10 text-foreground'
+            : 'hover:bg-muted text-foreground'
         }`}
       >
         {i}
@@ -78,13 +78,13 @@ export default function DatePicker({ onDateChange }: DatePickerProps) {
         <div className="flex gap-1">
           <button
             onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}
-            className="p-1.5 rounded-full hover:bg-white/10 hover:text-accent transition-colors"
+            className="p-1.5 rounded-full hover:bg-muted hover:text-accent transition-colors"
           >
             <ChevronLeft size={18} />
           </button>
           <button
             onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))}
-            className="p-1.5 rounded-full hover:bg-white/10 hover:text-accent transition-colors"
+            className="p-1.5 rounded-full hover:bg-muted hover:text-accent transition-colors"
           >
             <ChevronRight size={18} />
           </button>

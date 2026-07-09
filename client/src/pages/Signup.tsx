@@ -38,6 +38,7 @@ export default function Signup() {
         <img
           src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1600&q=80"
           alt=""
+          decoding="async"
           className="w-full h-full object-cover blur-sm scale-105 opacity-40"
         />
         <div className="absolute inset-0 bg-background/70" />
@@ -47,7 +48,7 @@ export default function Signup() {
       </div>
 
       <Reveal className="relative z-10 w-full max-w-md">
-        <Card className="glass-panel border-white/10 shadow-2xl">
+        <Card className="glass-panel shadow-xl">
           <CardHeader className="text-center pt-10">
             <div className="flex items-center justify-center gap-2 mb-3">
               <Sparkles className="text-accent" size={18} />

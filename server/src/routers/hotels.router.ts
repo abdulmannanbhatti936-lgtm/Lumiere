@@ -36,6 +36,7 @@ export const hotelsRouter = router({
       input.search ? ilike(schema.hotels.name, `%${input.search}%`) : undefined,
       input.city ? ilike(schema.hotels.city, `%${input.city}%`) : undefined,
       input.destinationId ? eq(schema.hotels.destinationId, input.destinationId) : undefined,
+      input.category ? eq(schema.hotels.category, input.category) : undefined,
       input.minPrice !== undefined ? gte(schema.hotels.basePrice, input.minPrice.toFixed(2)) : undefined,
       input.maxPrice !== undefined ? lte(schema.hotels.basePrice, input.maxPrice.toFixed(2)) : undefined,
       input.minStars !== undefined ? gte(schema.hotels.starRating, input.minStars) : undefined,
@@ -51,6 +52,25 @@ export const hotelsRouter = router({
           : input.sortBy === 'rating'
             ? desc(schema.hotels.starRating)
             : desc(schema.hotels.createdAt);
+
+    // minRating depends on the review aggregate, which is computed after the
+    // query (attachRatings) — when it's set, fetch every matching row instead
+    // of a single page, filter in memory, then paginate the filtered set.
+    if (input.minRating !== undefined) {
+      const rows = await db.query.hotels.findMany({ where, orderBy, with: { destination: true } });
+      const withRatings = await attachRatings(rows);
+      const filtered = withRatings.filter((h) => (h.averageRating ?? 0) >= input.minRating!);
+      const start = (input.page - 1) * input.limit;
+      return {
+        items: filtered.slice(start, start + input.limit),
+        pagination: {
+          page: input.page,
+          limit: input.limit,
+          total: filtered.length,
+          totalPages: Math.ceil(filtered.length / input.limit),
+        },
+      };
+    }
 
     const [rows, [{ total }]] = await Promise.all([
       db.query.hotels.findMany({

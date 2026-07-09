@@ -26,9 +26,11 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          'react-vendor': ['react', 'react-dom'],
           'three-vendor': ['three', '@react-three/fiber', '@react-three/drei'],
-          'ui-vendor': ['recharts', 'lucide-react'],
+          // recharts, stripe, and lottie are deliberately left out of a shared vendor
+          // chunk — they're only pulled in by lazy-loaded routes/components (admin
+          // analytics/dashboard, checkout, the preloader animation), so Rollup bundles
+          // each into its own async chunk instead of shipping them on every page load.
         },
       },
     },

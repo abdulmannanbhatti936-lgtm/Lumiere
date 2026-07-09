@@ -24,6 +24,7 @@ const EMPTY_FORM: HotelWriteInput = {
   city: '',
   country: '',
   description: '',
+  category: 'city',
   starRating: 5,
   basePrice: 0,
   imageUrl: '',
@@ -68,6 +69,7 @@ export default function AdminHotels() {
       city: hotel.city,
       country: hotel.country,
       description: hotel.description ?? '',
+      category: hotel.category,
       starRating: hotel.starRating,
       basePrice: Number(hotel.basePrice),
       imageUrl: hotel.imageUrl ?? '',
@@ -150,7 +152,7 @@ export default function AdminHotels() {
                 </thead>
                 <tbody>
                   {data.items.map((hotel) => (
-                    <tr key={hotel.id} className="border-b border-border hover:bg-white/5 transition-colors">
+                    <tr key={hotel.id} className="border-b border-border hover:bg-muted/60 transition-colors">
                       <td className="py-4 px-4 font-semibold">{hotel.name}</td>
                       <td className="py-4 px-4 text-muted-foreground">
                         {hotel.city}, {hotel.country}
@@ -184,7 +186,7 @@ export default function AdminHotels() {
       </Reveal>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="glass-panel border-white/10 max-w-2xl max-h-[85vh] overflow-y-auto">
+        <DialogContent className="glass-panel max-w-2xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="font-serif text-2xl font-normal">
               {editingHotel ? `Edit ${editingHotel.name}` : 'Add Hotel'}
@@ -251,6 +253,24 @@ export default function AdminHotels() {
                               {d.name}, {d.country}
                             </option>
                           ))}
+                        </select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="category"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Category</FormLabel>
+                      <FormControl>
+                        <select className="input-luxury" {...field}>
+                          <option value="beach">Beach</option>
+                          <option value="city">City</option>
+                          <option value="mountain">Mountain</option>
+                          <option value="boutique">Boutique</option>
                         </select>
                       </FormControl>
                       <FormMessage />

@@ -17,14 +17,13 @@ import { stripePromise } from '@/lib/stripe';
 
 type BookingRecord = RouterOutputs['bookings']['create'];
 
-const BOOKING_STEPS = ['dates', 'details', 'payment', 'confirmation'] as const;
+const BOOKING_STEPS = ['details', 'payment', 'confirm'] as const;
 type BookingStep = (typeof BOOKING_STEPS)[number];
 
 const STEP_LABELS: Record<BookingStep, string> = {
-  dates: 'Dates',
-  details: 'Guest Details',
+  details: 'Details',
   payment: 'Payment',
-  confirmation: 'Confirmed',
+  confirm: 'Confirm',
 };
 
 export default function Booking() {
@@ -36,7 +35,7 @@ export default function Booking() {
   const [checkIn, setCheckIn] = useState('');
   const [checkOut, setCheckOut] = useState('');
   const [guests, setGuests] = useState(1);
-  const [bookingStep, setBookingStep] = useState<BookingStep>('dates');
+  const [bookingStep, setBookingStep] = useState<BookingStep>('details');
   const [guestName, setGuestName] = useState('');
   const [guestEmail, setGuestEmail] = useState('');
   const [guestPhone, setGuestPhone] = useState('');
@@ -94,7 +93,7 @@ export default function Booking() {
   if (roomLoading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
-        <Loader2 size={40} className="animate-spin text-accent" />
+        <Loader2 size={40} className="animate-spin text-primary" />
       </div>
     );
   }
@@ -108,49 +107,42 @@ export default function Booking() {
   }
 
   return (
-    <div className="min-h-screen bg-background py-12 md:py-20">
-      <div className="container">
+    <div className="bg-background pb-section-gap">
+      <div className="container max-w-[920px]">
         <Reveal>
-          <h1 className="font-serif text-4xl md:text-5xl mb-12">Complete Your Booking</h1>
+          <h1 className="font-serif text-3xl md:text-4xl mb-10">Complete your booking</h1>
         </Reveal>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
-          {/* Main Content */}
-          <div className="lg:col-span-2">
-            {/* Step Indicator */}
-            <div className="flex items-center justify-center md:justify-start gap-3 md:gap-4 mb-14 overflow-x-auto">
-              {BOOKING_STEPS.map((step, i) => {
-                const currentIndex = BOOKING_STEPS.indexOf(bookingStep);
-                const done = currentIndex > i;
-                const active = bookingStep === step;
-                return (
-                  <div key={step} className="flex items-center gap-3 shrink-0">
-                    <div className="flex flex-col items-center gap-2">
-                      <div
-                        className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold border transition-colors ${
-                          active || done
-                            ? 'bg-accent text-accent-foreground border-accent'
-                            : 'border-border text-muted-foreground'
-                        }`}
-                      >
-                        {i + 1}
-                      </div>
-                      <span
-                        className={`label-caps !text-[9px] whitespace-nowrap ${
-                          active ? '!text-accent' : '!text-muted-foreground'
-                        }`}
-                      >
-                        {STEP_LABELS[step]}
-                      </span>
-                    </div>
-                    {i < BOOKING_STEPS.length - 1 && (
-                      <div className={`w-8 md:w-12 h-px ${currentIndex > i ? 'bg-accent' : 'bg-border'}`} />
-                    )}
+        {/* Step Indicator */}
+        <div className="flex items-center justify-center gap-3 md:gap-4 mb-12">
+          {BOOKING_STEPS.map((step, i) => {
+            const currentIndex = BOOKING_STEPS.indexOf(bookingStep);
+            const done = currentIndex > i;
+            const active = bookingStep === step;
+            return (
+              <div key={step} className="flex items-center gap-3 shrink-0">
+                <div className="flex flex-col items-center gap-2">
+                  <div
+                    className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold border transition-colors ${
+                      active || done ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-muted-foreground'
+                    }`}
+                  >
+                    {i + 1}
                   </div>
-                );
-              })}
-            </div>
+                  <span className={`text-xs font-semibold whitespace-nowrap ${active ? 'text-primary' : 'text-muted-foreground'}`}>
+                    {STEP_LABELS[step]}
+                  </span>
+                </div>
+                {i < BOOKING_STEPS.length - 1 && (
+                  <div className={`w-10 md:w-16 h-px ${currentIndex > i ? 'bg-primary' : 'bg-border'}`} />
+                )}
+              </div>
+            );
+          })}
+        </div>
 
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-gutter">
+          <div className="lg:col-span-3">
             <AnimatePresence mode="wait">
               <motion.div
                 key={bookingStep}
@@ -159,14 +151,14 @@ export default function Booking() {
                 exit={{ opacity: 0, x: -16 }}
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
               >
-                {/* Dates Step */}
-                {bookingStep === 'dates' && (
+                {/* Details Step: dates + guests + guest info */}
+                {bookingStep === 'details' && (
                   <div className="space-y-8">
                     <div>
-                      <h2 className="font-serif text-2xl mb-6">Select Your Dates</h2>
+                      <h2 className="font-serif text-2xl mb-6">Your dates</h2>
                       <div className="grid grid-cols-2 gap-4 mb-4">
                         <div>
-                          <label className="label-caps !text-[10px] mb-2 block">Check-in</label>
+                          <label className="label-field block mb-2">Check-in</label>
                           <input
                             type="date"
                             value={checkIn}
@@ -176,7 +168,7 @@ export default function Booking() {
                           />
                         </div>
                         <div>
-                          <label className="label-caps !text-[10px] mb-2 block">Check-out</label>
+                          <label className="label-field block mb-2">Check-out</label>
                           <input
                             type="date"
                             value={checkOut}
@@ -198,31 +190,15 @@ export default function Booking() {
                     </div>
 
                     <div>
-                      <h3 className="label-caps !text-foreground mb-6">Number of Guests</h3>
+                      <h3 className="label-field mb-4">Number of guests</h3>
                       <GuestCounter guests={guests} onGuestChange={setGuests} maxGuests={room.capacity} />
                     </div>
 
-                    <Magnetic className="block w-full">
-                      <button
-                        onClick={() => setBookingStep('details')}
-                        disabled={!validDateRange || checkingAvailability || !availability?.available}
-                        className="btn-primary w-full flex items-center justify-center gap-2 disabled:opacity-50"
-                      >
-                        Continue to Guest Details <ArrowRight size={20} />
-                      </button>
-                    </Magnetic>
-                  </div>
-                )}
-
-                {/* Details Step */}
-                {bookingStep === 'details' && (
-                  <div className="space-y-8">
                     <div>
-                      <h2 className="font-serif text-2xl mb-6">Guest Information</h2>
-
+                      <h2 className="font-serif text-2xl mb-6">Guest information</h2>
                       <div className="space-y-4">
                         <div>
-                          <label className="label-caps !text-[10px] mb-2 block">Full Name</label>
+                          <label className="label-field block mb-2">Full name</label>
                           <input
                             type="text"
                             value={guestName}
@@ -231,9 +207,8 @@ export default function Booking() {
                             className="input-luxury"
                           />
                         </div>
-
                         <div>
-                          <label className="label-caps !text-[10px] mb-2 block">Email Address</label>
+                          <label className="label-field block mb-2">Email address</label>
                           <input
                             type="email"
                             value={guestEmail}
@@ -242,9 +217,8 @@ export default function Booking() {
                             className="input-luxury"
                           />
                         </div>
-
                         <div>
-                          <label className="label-caps !text-[10px] mb-2 block">Phone Number</label>
+                          <label className="label-field block mb-2">Phone number</label>
                           <input
                             type="tel"
                             value={guestPhone}
@@ -253,9 +227,8 @@ export default function Booking() {
                             className="input-luxury"
                           />
                         </div>
-
                         <div>
-                          <label className="label-caps !text-[10px] mb-2 block">Special Requests</label>
+                          <label className="label-field block mb-2">Special requests</label>
                           <textarea
                             value={specialRequests}
                             onChange={(e) => setSpecialRequests(e.target.value)}
@@ -268,32 +241,33 @@ export default function Booking() {
 
                     {errorMessage && <p className="text-sm font-medium text-destructive">{errorMessage}</p>}
 
-                    <div className="flex gap-4">
-                      <button onClick={() => setBookingStep('dates')} className="btn-secondary flex-1">
-                        Back
+                    <Magnetic className="block w-full">
+                      <button
+                        onClick={handleConfirmBooking}
+                        disabled={
+                          !validDateRange ||
+                          checkingAvailability ||
+                          !availability?.available ||
+                          createBooking.isPending ||
+                          createPaymentIntent.isPending
+                        }
+                        className="btn-primary w-full flex items-center justify-center gap-2 disabled:opacity-50"
+                      >
+                        {createBooking.isPending || createPaymentIntent.isPending
+                          ? 'Preparing payment...'
+                          : 'Continue to payment'}{' '}
+                        <ArrowRight size={18} />
                       </button>
-                      <Magnetic className="flex-1 block">
-                        <button
-                          onClick={handleConfirmBooking}
-                          disabled={createBooking.isPending || createPaymentIntent.isPending}
-                          className="btn-primary w-full flex items-center justify-center gap-2 disabled:opacity-50"
-                        >
-                          {createBooking.isPending || createPaymentIntent.isPending
-                            ? 'Preparing payment...'
-                            : 'Continue to Payment'}{' '}
-                          <ArrowRight size={20} />
-                        </button>
-                      </Magnetic>
-                    </div>
+                    </Magnetic>
                   </div>
                 )}
 
                 {/* Payment Step */}
                 {bookingStep === 'payment' && clientSecret && stripePromise && (
-                  <div className="space-y-8">
-                    <h2 className="font-serif text-2xl mb-6">Payment</h2>
-                    <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'night' } }}>
-                      <PaymentForm onSuccess={() => setBookingStep('confirmation')} />
+                  <div className="space-y-6">
+                    <h2 className="font-serif text-2xl mb-2">Payment</h2>
+                    <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe', variables: { colorPrimary: '#2B3A67', fontFamily: 'Manrope, sans-serif', borderRadius: '10px' } } }}>
+                      <PaymentForm onSuccess={() => setBookingStep('confirm')} />
                     </Elements>
                   </div>
                 )}
@@ -305,75 +279,71 @@ export default function Booking() {
                 )}
 
                 {/* Confirmation Step */}
-                {bookingStep === 'confirmation' && confirmedBooking && (
+                {bookingStep === 'confirm' && confirmedBooking && (
                   <div className="space-y-8">
-                    <div className="text-center py-12">
-                      <CheckCircle size={56} className="mx-auto mb-6 text-accent animate-glow" />
-                      <span className="label-caps mb-4 block">Confirmed</span>
-                      <h2 className="font-serif text-4xl italic mb-4">Your Journey Begins</h2>
+                    <div className="text-center py-10">
+                      <div className="w-16 h-16 rounded-full mx-auto mb-6 flex items-center justify-center badge-success">
+                        <CheckCircle size={32} />
+                      </div>
+                      <h2 className="font-serif text-3xl mb-3">Booking confirmed</h2>
                       <p className="text-muted-foreground text-lg">
-                        Your reservation is being finalized — you'll get an email confirmation shortly.
+                        Your stay at <strong className="text-foreground">{hotel?.name}</strong> is booked — a confirmation email is on its way.
                       </p>
                     </div>
 
-                    <div className="glass-panel p-8">
-                      <h3 className="label-caps !text-foreground mb-6">Booking Details</h3>
-
-                      <div className="space-y-4 border-b border-border pb-6 mb-6">
+                    <div className="glass-panel p-7">
+                      <h3 className="label-field mb-5">Booking details</h3>
+                      <div className="space-y-3 border-b border-border pb-5 mb-5 text-sm">
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Confirmation Number:</span>
-                          <span className="font-semibold text-accent">LUM-{confirmedBooking.id}</span>
+                          <span className="text-muted-foreground">Confirmation number</span>
+                          <span className="font-semibold text-primary">LUM-{confirmedBooking.id}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Guest Name:</span>
+                          <span className="text-muted-foreground">Guest name</span>
                           <span className="font-semibold">{confirmedBooking.guestName}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Email:</span>
+                          <span className="text-muted-foreground">Email</span>
                           <span className="font-semibold">{confirmedBooking.guestEmail}</span>
                         </div>
                       </div>
-
-                      <div className="space-y-4">
+                      <div className="space-y-3 text-sm">
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Check-in:</span>
+                          <span className="text-muted-foreground">Check-in</span>
                           <span className="font-semibold">{confirmedBooking.checkIn}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Check-out:</span>
+                          <span className="text-muted-foreground">Check-out</span>
                           <span className="font-semibold">{confirmedBooking.checkOut}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Guests:</span>
+                          <span className="text-muted-foreground">Guests</span>
                           <span className="font-semibold">{confirmedBooking.guests}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Total Paid:</span>
-                          <span className="font-semibold text-accent">${confirmedBooking.totalPrice}</span>
+                          <span className="text-muted-foreground">Total paid</span>
+                          <span className="font-semibold text-primary">${confirmedBooking.totalPrice}</span>
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex gap-4">
-                      <Link href="/my-bookings" className="flex-1">
-                        <button className="btn-secondary w-full">View My Bookings</button>
+                    <Magnetic className="block w-full">
+                      <Link href="/my-bookings">
+                        <button className="btn-primary w-full">View my trips</button>
                       </Link>
-                      <Link href="/hotels" className="flex-1">
-                        <button className="btn-primary w-full">Continue Browsing</button>
-                      </Link>
-                    </div>
+                    </Magnetic>
                   </div>
                 )}
               </motion.div>
             </AnimatePresence>
           </div>
 
-          {/* Sidebar - Booking Summary */}
-          <div className="lg:col-span-1">
-            <div className="glass-panel p-8 sticky top-24">
-              <h3 className="label-caps !text-foreground mb-6">Booking Summary</h3>
+          {/* Order summary */}
+          <div className="lg:col-span-2">
+            <div className="glass-panel p-7 lg:sticky lg:top-[126px]">
+              <h3 className="label-field mb-5">Order summary</h3>
 
-              <div className="space-y-4 border-b border-border pb-6 mb-6">
+              <div className="space-y-3 border-b border-border pb-5 mb-5">
                 <div>
                   <p className="text-sm text-muted-foreground">{hotel?.name}</p>
                   <p className="font-serif text-lg">{room.name}</p>
@@ -382,23 +352,23 @@ export default function Booking() {
               </div>
 
               {validDateRange && (
-                <div className="space-y-3 mb-6">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Check-in:</span>
+                <div className="space-y-3 mb-5 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Check-in</span>
                     <span className="font-semibold">{checkIn}</span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Check-out:</span>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Check-out</span>
                     <span className="font-semibold">{checkOut}</span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Guests:</span>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Guests</span>
                     <span className="font-semibold">{guests}</span>
                   </div>
                 </div>
               )}
 
-              <div className="border-t border-border pt-6">
+              <div className="border-t border-border pt-5">
                 <PriceBreakdown pricePerNight={pricePerNight} nights={nights} />
               </div>
             </div>

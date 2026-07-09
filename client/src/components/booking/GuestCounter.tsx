@@ -16,7 +16,7 @@ export default function GuestCounter({
       <div className="flex items-center justify-between">
         <button
           onClick={() => guests > 1 && onGuestChange(guests - 1)}
-          className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center hover:border-accent hover:text-accent transition-colors disabled:opacity-30 disabled:hover:border-white/15 disabled:hover:text-foreground"
+          className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:border-accent hover:text-accent transition-colors disabled:opacity-30 disabled:hover:border-border disabled:hover:text-foreground"
           disabled={guests <= 1}
         >
           <Minus size={16} />
@@ -26,7 +26,7 @@ export default function GuestCounter({
 
         <button
           onClick={() => guests < maxGuests && onGuestChange(guests + 1)}
-          className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center hover:border-accent hover:text-accent transition-colors disabled:opacity-30 disabled:hover:border-white/15 disabled:hover:text-foreground"
+          className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:border-accent hover:text-accent transition-colors disabled:opacity-30 disabled:hover:border-border disabled:hover:text-foreground"
           disabled={guests >= maxGuests}
         >
           <Plus size={16} />

@@ -22,6 +22,7 @@ export const bookingStatusEnum = pgEnum('booking_status', [
   'cancelled',
   'completed',
 ]);
+export const hotelCategoryEnum = pgEnum('hotel_category', ['beach', 'city', 'mountain', 'boutique']);
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
@@ -56,6 +57,7 @@ export const hotels = pgTable('hotels', {
   city: varchar('city', { length: 255 }).notNull(),
   country: varchar('country', { length: 255 }).notNull(),
   description: text('description'),
+  category: hotelCategoryEnum('category').notNull().default('city'),
   starRating: integer('star_rating').notNull().default(5),
   basePrice: numeric('base_price', { precision: 10, scale: 2 }).notNull(),
   imageUrl: text('image_url'),
@@ -123,6 +125,44 @@ export const reviews = pgTable('reviews', {
   userIdx: index('reviews_user_idx').on(table.userId),
 }));
 
+export const tours = pgTable('tours', {
+  id: serial('id').primaryKey(),
+  destinationId: integer('destination_id').notNull().references(() => destinations.id, { onDelete: 'cascade' }),
+  name: varchar('name', { length: 255 }).notNull(),
+  description: text('description'),
+  category: varchar('category', { length: 100 }).notNull().default('Adventure'),
+  durationDays: integer('duration_days').notNull().default(1),
+  groupSize: integer('group_size').notNull().default(10),
+  pricePerPerson: numeric('price_per_person', { precision: 10, scale: 2 }).notNull(),
+  imageUrl: text('image_url'),
+  images: jsonb('images').$type<string[]>().notNull().default([]),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+}, (table) => ({
+  destinationIdx: index('tours_destination_idx').on(table.destinationId),
+}));
+
+export const contactMessages = pgTable('contact_messages', {
+  id: serial('id').primaryKey(),
+  firstName: varchar('first_name', { length: 255 }).notNull(),
+  lastName: varchar('last_name', { length: 255 }).notNull(),
+  email: varchar('email', { length: 255 }).notNull(),
+  subject: varchar('subject', { length: 100 }).notNull(),
+  message: text('message').notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+});
+
+// "Saved stays" on the Account screen — a guest's wishlisted hotels.
+export const wishlists = pgTable('wishlists', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  hotelId: integer('hotel_id').notNull().references(() => hotels.id, { onDelete: 'cascade' }),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+}, (table) => ({
+  userHotelIdx: uniqueIndex('wishlists_user_hotel_idx').on(table.userId, table.hotelId),
+  userIdx: index('wishlists_user_idx').on(table.userId),
+}));
+
 // Refresh-token sessions (JWT access tokens are stateless; this table backs the 7-day refresh flow and logout invalidation)
 export const sessions = pgTable('sessions', {
   id: serial('id').primaryKey(),
@@ -152,10 +192,21 @@ export const usersRelations = relations(users, ({ many }) => ({
   bookings: many(bookings),
   reviews: many(reviews),
   sessions: many(sessions),
+  wishlists: many(wishlists),
 }));
 
 export const destinationsRelations = relations(destinations, ({ many }) => ({
   hotels: many(hotels),
+  tours: many(tours),
+}));
+
+export const toursRelations = relations(tours, ({ one }) => ({
+  destination: one(destinations, { fields: [tours.destinationId], references: [destinations.id] }),
+}));
+
+export const wishlistsRelations = relations(wishlists, ({ one }) => ({
+  user: one(users, { fields: [wishlists.userId], references: [users.id] }),
+  hotel: one(hotels, { fields: [wishlists.hotelId], references: [hotels.id] }),
 }));
 
 export const hotelsRelations = relations(hotels, ({ one, many }) => ({
@@ -163,6 +214,7 @@ export const hotelsRelations = relations(hotels, ({ one, many }) => ({
   rooms: many(rooms),
   bookings: many(bookings),
   reviews: many(reviews),
+  wishlists: many(wishlists),
 }));
 
 export const roomsRelations = relations(rooms, ({ one, many }) => ({
@@ -200,3 +252,8 @@ export type Review = typeof reviews.$inferSelect;
 export type NewReview = typeof reviews.$inferInsert;
 export type Session = typeof sessions.$inferSelect;
 export type LoginAttempt = typeof loginAttempts.$inferSelect;
+export type Tour = typeof tours.$inferSelect;
+export type NewTour = typeof tours.$inferInsert;
+export type ContactMessage = typeof contactMessages.$inferSelect;
+export type NewContactMessage = typeof contactMessages.$inferInsert;
+export type Wishlist = typeof wishlists.$inferSelect;

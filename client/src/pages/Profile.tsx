@@ -67,7 +67,7 @@ export default function Profile() {
         </Reveal>
 
         <Reveal delay={0.1}>
-          <Card className="glass-panel border-white/10">
+          <Card className="glass-panel">
             <CardHeader>
               <CardTitle className="font-serif text-2xl font-normal">Profile Information</CardTitle>
               <CardDescription>{user?.email}</CardDescription>
@@ -115,7 +115,7 @@ export default function Profile() {
         </Reveal>
 
         <Reveal delay={0.2}>
-          <Card className="glass-panel border-white/10">
+          <Card className="glass-panel">
             <CardHeader>
               <CardTitle className="font-serif text-2xl font-normal">Change Password</CardTitle>
               <CardDescription>Choose a strong password you don't use elsewhere.</CardDescription>

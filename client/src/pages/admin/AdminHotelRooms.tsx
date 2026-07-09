@@ -148,7 +148,7 @@ export default function AdminHotelRooms() {
                 </thead>
                 <tbody>
                   {rooms.map((room) => (
-                    <tr key={room.id} className="border-b border-border hover:bg-white/5 transition-colors">
+                    <tr key={room.id} className="border-b border-border hover:bg-muted/60 transition-colors">
                       <td className="py-4 px-4 font-semibold">{room.name}</td>
                       <td className="py-4 px-4 text-muted-foreground">{room.capacity} guests</td>
                       <td className="py-4 px-4 text-muted-foreground">{formatCurrency(Number(room.pricePerNight))}</td>
@@ -175,7 +175,7 @@ export default function AdminHotelRooms() {
       </Reveal>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="glass-panel border-white/10 max-w-2xl max-h-[85vh] overflow-y-auto">
+        <DialogContent className="glass-panel max-w-2xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="font-serif text-2xl font-normal">
               {editingRoom ? `Edit ${editingRoom.name}` : 'Add Room'}

@@ -120,7 +120,7 @@ export default function AdminDestinations() {
                 </thead>
                 <tbody>
                   {destinations.map((destination) => (
-                    <tr key={destination.id} className="border-b border-border hover:bg-white/5 transition-colors">
+                    <tr key={destination.id} className="border-b border-border hover:bg-muted/60 transition-colors">
                       <td className="py-4 px-4 font-semibold">{destination.name}</td>
                       <td className="py-4 px-4 text-muted-foreground">{destination.country}</td>
                       <td className="py-4 px-4">
@@ -152,7 +152,7 @@ export default function AdminDestinations() {
       </Reveal>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="glass-panel border-white/10 max-w-lg max-h-[85vh] overflow-y-auto">
+        <DialogContent className="glass-panel max-w-lg max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="font-serif text-2xl font-normal">
               {editingDestination ? `Edit ${editingDestination.name}` : 'Add Destination'}

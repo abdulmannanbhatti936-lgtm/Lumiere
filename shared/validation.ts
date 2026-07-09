@@ -21,13 +21,18 @@ export const loginSchema = z.object({
 export type SignupInput = z.infer<typeof signupSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 
+export const hotelCategorySchema = z.enum(['beach', 'city', 'mountain', 'boutique']);
+export type HotelCategory = z.infer<typeof hotelCategorySchema>;
+
 export const hotelsQuerySchema = z.object({
   search: z.string().trim().max(255).optional(),
   city: z.string().trim().max(255).optional(),
   destinationId: z.coerce.number().int().positive().optional(),
+  category: hotelCategorySchema.optional(),
   minPrice: z.coerce.number().nonnegative().optional(),
   maxPrice: z.coerce.number().nonnegative().optional(),
   minStars: z.coerce.number().int().min(1).max(5).optional(),
+  minRating: z.coerce.number().min(0).max(5).optional(),
   sortBy: z.enum(['price_asc', 'price_desc', 'rating', 'newest']).default('newest'),
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(50).default(12),
@@ -40,6 +45,7 @@ export const hotelWriteSchema = z.object({
   city: z.string().trim().min(1).max(255),
   country: z.string().trim().min(1).max(255),
   description: z.string().trim().max(5000).optional(),
+  category: hotelCategorySchema.default('city'),
   starRating: z.coerce.number().int().min(1).max(5).default(5),
   basePrice: z.coerce.number().positive(),
   imageUrl: z.string().url().optional(),
@@ -104,6 +110,29 @@ export const changePasswordSchema = z.object({
   newPassword: passwordSchema,
 });
 export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
+
+export const tourWriteSchema = z.object({
+  destinationId: z.coerce.number().int().positive(),
+  name: z.string().trim().min(1).max(255),
+  description: z.string().trim().max(2000).optional(),
+  category: z.string().trim().min(1).max(100).default('Adventure'),
+  durationDays: z.coerce.number().int().min(1).max(30).default(1),
+  groupSize: z.coerce.number().int().min(1).max(100).default(10),
+  pricePerPerson: z.coerce.number().positive(),
+  imageUrl: z.string().url().optional(),
+  images: z.array(z.string().url()).default([]),
+});
+export type TourWriteInput = z.infer<typeof tourWriteSchema>;
+export type TourWriteFormInput = z.input<typeof tourWriteSchema>;
+
+export const contactMessageSchema = z.object({
+  firstName: z.string().trim().min(1, 'First name is required').max(255),
+  lastName: z.string().trim().min(1, 'Last name is required').max(255),
+  email: z.string().email('Invalid email format'),
+  subject: z.enum(['General enquiry', 'Booking support', 'Partnerships', 'Press', 'Other']),
+  message: z.string().trim().min(10, 'Please share a few more details').max(2000),
+});
+export type ContactMessageInput = z.infer<typeof contactMessageSchema>;
 
 export const destinationWriteSchema = z.object({
   name: z.string().trim().min(1).max(255),

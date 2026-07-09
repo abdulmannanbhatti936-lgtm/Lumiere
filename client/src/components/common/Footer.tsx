@@ -7,8 +7,8 @@ export default function Footer() {
     <footer className="relative border-t border-border bg-background mt-20">
       <div className="container py-24">
         <Reveal>
-          <div className="text-center font-serif text-5xl md:text-6xl tracking-tight text-accent mb-16">
-            LUMIÈRE
+          <div className="text-center font-serif text-5xl md:text-6xl tracking-tight text-primary mb-16">
+            Lumière
           </div>
         </Reveal>
 

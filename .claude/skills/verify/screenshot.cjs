@@ -72,7 +72,7 @@ function cleanup(code) {
   process.exit(code);
 }
 process.on('SIGINT', () => cleanup(1));
-const hardTimeout = setTimeout(() => { console.error('HARD TIMEOUT — killing chrome'); cleanup(1); }, 25000);
+const hardTimeout = setTimeout(() => { console.error('HARD TIMEOUT — killing chrome'); cleanup(1); }, 60000);
 
 async function waitForEndpoint() {
   for (let i = 0; i < 40; i++) {

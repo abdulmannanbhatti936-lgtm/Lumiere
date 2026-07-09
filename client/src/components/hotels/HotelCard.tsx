@@ -1,6 +1,15 @@
-import { Star, MapPin, ArrowRight, Sparkles } from 'lucide-react';
-import { Link } from 'wouter';
+import { Star, MapPin, Heart } from 'lucide-react';
+import { Link, useLocation } from 'wouter';
 import { formatCurrency } from '@/lib/utils';
+import { trpc } from '@/lib/trpc';
+import { useAuth } from '@/hooks/useAuth';
+
+const CATEGORY_LABELS: Record<string, string> = {
+  beach: 'Beachfront',
+  city: 'City Stay',
+  mountain: 'Mountain View',
+  boutique: 'Boutique',
+};
 
 interface HotelCardProps {
   id: number;
@@ -10,9 +19,11 @@ interface HotelCardProps {
   starRating: number;
   imageUrl: string | null;
   price: number;
-  amenities: string[];
+  amenities?: string[];
   averageRating?: number | null;
   reviewCount?: number;
+  category?: string;
+  layout?: 'vertical' | 'horizontal';
 }
 
 export default function HotelCard({
@@ -23,85 +34,120 @@ export default function HotelCard({
   starRating,
   imageUrl,
   price,
-  amenities,
   averageRating,
   reviewCount,
+  category,
+  layout = 'vertical',
 }: HotelCardProps) {
-  return (
-    <Link href={`/hotel/${id}`}>
-      <div className="group relative h-[440px] [perspective:1200px] cursor-pointer">
-        <div className="relative h-full w-full transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
-          {/* Front face */}
-          <div className="absolute inset-0 overflow-hidden rounded-2xl border border-white/10 group-hover:border-primary/40 transition-colors duration-500 [backface-visibility:hidden]">
-            <img
-              src={imageUrl || 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=1000&fit=crop'}
-              alt={name}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-background/10" />
+  const displayRating = averageRating ?? starRating;
+  const tag = category ? CATEGORY_LABELS[category] ?? category : null;
 
-            <div
-              className="absolute top-5 right-5 label-caps !text-[10px] px-3 py-1.5 rounded-full border border-white/15 backdrop-blur-md"
-              style={{ background: 'hsl(0 0% 100% / 0.1)' }}
-            >
-              {formatCurrency(price)}
-              <span className="text-muted-foreground normal-case tracking-normal">/night</span>
-            </div>
+  const { isAuthenticated } = useAuth();
+  const [, navigate] = useLocation();
+  const utils = trpc.useUtils();
+  const { data: wishlistIds } = trpc.wishlist.listMineIds.useQuery(undefined, { enabled: isAuthenticated });
+  const isWishlisted = wishlistIds?.includes(id) ?? false;
+  const addWishlist = trpc.wishlist.add.useMutation({ onSuccess: () => utils.wishlist.listMineIds.invalidate() });
+  const removeWishlist = trpc.wishlist.remove.useMutation({ onSuccess: () => utils.wishlist.listMineIds.invalidate() });
 
-            <div
-              className="absolute bottom-3 left-3 right-3 rounded-xl border border-white/15 backdrop-blur-xl p-5 flex flex-col items-start"
-              style={{ background: 'hsl(0 0% 100% / 0.08)' }}
-            >
-              <span className="label-caps !text-[10px] mb-2 flex items-center gap-1.5">
-                <MapPin size={12} /> {city}, {country}
-              </span>
-              <h3 className="font-serif text-2xl mb-2 leading-tight">{name}</h3>
+  const toggleWishlist = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+    if (isWishlisted) removeWishlist.mutate({ hotelId: id });
+    else addWishlist.mutate({ hotelId: id });
+  };
 
-              <div className="flex items-center gap-1.5">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={13} className={i < starRating ? 'fill-accent text-accent' : 'text-muted'} />
-                ))}
-                {averageRating != null && reviewCount ? (
-                  <span className="text-xs text-muted-foreground ml-1">
-                    {averageRating} ({reviewCount})
-                  </span>
-                ) : null}
+  const wishlistButton = (
+    <button
+      type="button"
+      onClick={toggleWishlist}
+      aria-label={isWishlisted ? 'Remove from saved stays' : 'Save stay'}
+      className={`absolute top-3 right-3 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-colors ${
+        isWishlisted ? 'bg-primary text-primary-foreground' : 'bg-white/90 text-foreground hover:bg-white'
+      }`}
+    >
+      <Heart size={16} className={isWishlisted ? 'fill-current' : ''} />
+    </button>
+  );
+
+  const photo = imageUrl ? (
+    <img src={imageUrl} alt={name} loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover" />
+  ) : (
+    <div className="photo-placeholder absolute inset-0 flex items-center justify-center">
+      <span className="photo-placeholder-caption">PHOTO — {city}, {country}</span>
+    </div>
+  );
+
+  if (layout === 'horizontal') {
+    return (
+      <Link href={`/hotel/${id}`}>
+        <div className="group glass-panel overflow-hidden cursor-pointer flex flex-col sm:flex-row">
+          <div className="relative h-52 sm:h-auto sm:w-[280px] shrink-0 overflow-hidden">
+            {photo}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent sm:hidden" />
+            {wishlistButton}
+          </div>
+          <div className="p-6 flex flex-col flex-1 justify-between">
+            <div>
+              <div className="flex items-start justify-between gap-4 mb-1">
+                <h3 className="font-serif text-xl font-semibold leading-tight">{name}</h3>
+                <span className="shrink-0 inline-flex items-center gap-1 text-xs font-bold bg-muted px-2.5 py-1 rounded-full">
+                  <Star size={12} className="fill-accent text-accent" /> {displayRating}
+                </span>
               </div>
+              <p className="text-sm text-muted-foreground flex items-center gap-1.5">
+                <MapPin size={13} /> {city}, {country}
+              </p>
+              {averageRating != null && reviewCount ? (
+                <p className="text-sm text-muted-foreground mt-2">
+                  {averageRating} guest rating ({reviewCount})
+                </p>
+              ) : null}
+            </div>
+            <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
+              <div>
+                {tag && <span className="label-caps !text-[10px] block mb-1">{tag}</span>}
+                <span className="font-serif text-2xl text-primary">
+                  {formatCurrency(price)}
+                  <span className="text-xs text-muted-foreground font-sans normal-case"> / night</span>
+                </span>
+              </div>
+              <span className="btn-secondary !py-2.5 text-sm">View stay</span>
             </div>
           </div>
+        </div>
+      </Link>
+    );
+  }
 
-          {/* Back face — flips into view on hover, Voyara-style highlight reveal */}
-          <div
-            className="absolute inset-0 rounded-2xl border border-primary/30 p-7 flex flex-col [backface-visibility:hidden] [transform:rotateY(180deg)]"
-            style={{ background: 'linear-gradient(160deg, hsl(var(--card)), hsl(var(--background)))' }}
-          >
-            <span className="label-caps !text-[10px] mb-1 flex items-center gap-1.5">
-              <MapPin size={12} /> {city}, {country}
+  return (
+    <Link href={`/hotel/${id}`}>
+      <div className="group glass-panel overflow-hidden cursor-pointer h-full flex flex-col">
+        <div className="relative h-56 overflow-hidden">
+          {photo}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent" />
+          {wishlistButton}
+        </div>
+        <div className="p-5 flex flex-col flex-1">
+          <div className="flex items-start justify-between gap-3 mb-1">
+            <h3 className="font-serif text-[19px] font-semibold leading-tight">{name}</h3>
+            <span className="shrink-0 inline-flex items-center gap-1 text-xs font-bold bg-muted px-2 py-1 rounded-full">
+              <Star size={12} className="fill-accent text-accent" /> {displayRating}
             </span>
-            <h3 className="font-serif text-2xl mb-5 leading-tight">{name}</h3>
-
-            <div className="space-y-3 flex-1 overflow-hidden">
-              {amenities.length > 0 ? (
-                amenities.slice(0, 5).map((amenity) => (
-                  <div key={amenity} className="flex items-center gap-2.5 text-sm text-muted-foreground">
-                    <Sparkles size={12} className="text-accent shrink-0" />
-                    {amenity}
-                  </div>
-                ))
-              ) : (
-                <p className="text-sm text-muted-foreground">Full amenity details on the hotel page.</p>
-              )}
-            </div>
-
-            <div className="flex items-center justify-between pt-4 border-t border-white/10">
-              <span className="font-serif text-xl text-accent">
-                {formatCurrency(price)}
-                <span className="text-xs text-muted-foreground normal-case tracking-normal"> /night</span>
-              </span>
-              <span className="label-caps !text-[10px] flex items-center gap-1.5">
-                View Details <ArrowRight size={12} />
-              </span>
-            </div>
+          </div>
+          <p className="text-sm text-muted-foreground mb-4 flex items-center gap-1.5">
+            <MapPin size={13} /> {city}, {country}
+          </p>
+          <div className="mt-auto flex items-center justify-between pt-3 border-t border-border">
+            {tag ? <span className="label-caps !text-[10px]">{tag}</span> : <span />}
+            <span className="text-base font-bold">
+              {formatCurrency(price)}
+              <span className="text-xs text-muted-foreground font-normal"> / night</span>
+            </span>
           </div>
         </div>
       </div>

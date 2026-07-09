@@ -1,28 +1,41 @@
 @import "tailwindcss";
 @config "../tailwind.config.js";
 
-/* Aurora Theme - CSS Variables */
+/*
+  Lumière Stays — "Boutique Ivory" design system.
+  Tokens sourced from the design handoff (Lumiere Stays prototype.zip / README.md):
+  cream background, indigo primary, coral accent. HSL triples (not hex) so the
+  existing hsl(var(--x) / alpha) opacity-mixing pattern used across the app keeps working.
+*/
 @layer base {
   :root {
-    --background: 222 45% 5%;
-    --foreground: 200 30% 96%;
-    --card: 220 35% 10%;
-    --card-foreground: 200 30% 96%;
-    --primary: 189 100% 50%;
-    --primary-foreground: 222 45% 6%;
-    --secondary: 180 72% 18%;
-    --secondary-foreground: 200 30% 96%;
-    --muted: 220 25% 20%;
-    --muted-foreground: 210 15% 68%;
-    --accent: 189 100% 50%;
-    --accent-foreground: 222 45% 6%;
-    --accent-light: 189 100% 72%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 210 25% 26%;
-    --input: 220 30% 14%;
-    --ring: 189 100% 50%;
-    --radius: 0.9rem;
+    --background: 38 52% 96%;        /* #FAF6EF cream */
+    --foreground: 229 26% 16%;       /* #1E2233 ink */
+    --card: 0 0% 100%;               /* #FFFFFF surface white */
+    --card-foreground: 229 26% 16%;
+    --primary: 225 41% 29%;          /* #2B3A67 indigo */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 225 41% 40%;        /* lighter indigo, for gradients */
+    --secondary-foreground: 0 0% 100%;
+    --muted: 43 39% 91%;             /* #F1ECDF hairline/row */
+    --muted-foreground: 43 8% 44%;   /* #7A7568 text muted */
+    --faint: 43 21% 57%;             /* #A99C7C placeholder-caption text */
+    --accent: 15 77% 60%;            /* #E8724C coral */
+    --accent-foreground: 0 0% 100%;
+    --accent-light: 15 77% 72%;
+    --destructive: 10 44% 44%;       /* #A3503F */
+    --destructive-foreground: 0 0% 100%;
+    --border: 42 29% 87%;            /* #E7E1D3 */
+    --input: 40 32% 91%;             /* #EFEAE0 */
+    --ring: 15 77% 60%;
+    --radius: 1rem;                  /* 16px primary card radius */
+
+    --success-bg: 138 23% 91%;       /* #E4EEE7 */
+    --success-text: 150 32% 36%;     /* #3F7A5C */
+    --warning-bg: 26 80% 93%;        /* #FBEADD */
+    --warning-text: 25 61% 44%;      /* #B4632B */
+    --danger-bg: 9 46% 92%;          /* #F4E4E1 */
+    --danger-text: 10 44% 44%;       /* #A3503F */
   }
 
   * {
@@ -36,32 +49,30 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: "Playfair Display", serif;
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: -0.02em;
   }
 
   h1 {
-    @apply text-5xl md:text-6xl font-bold;
+    @apply text-5xl md:text-6xl;
   }
 
   h2 {
-    @apply text-4xl md:text-5xl font-bold;
+    @apply text-4xl md:text-5xl;
   }
 
   h3 {
-    @apply text-2xl md:text-3xl font-bold;
+    @apply text-2xl md:text-3xl;
   }
 
   .container {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    @apply max-w-[1240px] mx-auto px-5 md:px-10;
   }
 
-  /* Smooth scrolling */
   html {
     scroll-behavior: smooth;
   }
 
-  /* Custom scrollbar */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -72,7 +83,7 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-muted rounded-full;
+    @apply bg-border rounded-full;
   }
 
   ::-webkit-scrollbar-thumb:hover {
@@ -80,143 +91,178 @@
   }
 }
 
-/* Utility Classes */
 @layer components {
-  .glass {
-    @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-lg;
+  /* ---------- Type & labels ---------- */
+
+  /* Uppercase tracked-out eyebrow / micro-label */
+  .label-caps {
+    @apply text-xs font-bold uppercase tracking-[0.05em] text-accent;
   }
 
-  .glass-dark {
-    @apply bg-black/40 backdrop-blur-md border border-white/10 rounded-lg;
+  /* Field/table-header labels per spec: 11-12px/700/uppercase/muted, tighter tracking */
+  .label-field {
+    @apply text-[11px] font-bold uppercase tracking-[0.04em] text-muted-foreground;
   }
 
   .gradient-text {
-    @apply bg-gradient-to-r from-secondary via-primary to-accent-light bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent;
   }
 
+  /* Soft shadow-lift for light headline text sitting on a hero photo */
+  .text-glow {
+    text-shadow: 0 2px 20px rgba(30, 34, 51, 0.35);
+  }
+
+  /* ---------- Buttons ---------- */
+
   .btn-primary {
-    @apply px-6 py-3 rounded-lg font-semibold text-primary-foreground transition-all duration-300 transform hover:scale-105 active:scale-95;
-    background: linear-gradient(135deg, hsl(var(--secondary)), hsl(var(--primary)));
-    box-shadow: 0 0 0 rgba(0, 217, 255, 0);
+    @apply inline-flex items-center justify-center px-6 py-3 font-semibold text-accent-foreground bg-accent transition-all duration-200;
+    border-radius: 10px;
   }
 
   .btn-primary:hover {
-    box-shadow: 0 0 32px hsl(var(--primary) / 0.55);
+    filter: brightness(1.06);
+    transform: translateY(-1px);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
   }
 
   .btn-secondary {
-    @apply px-6 py-3 bg-white/5 text-foreground border border-white/15 backdrop-blur-md rounded-lg font-semibold hover:border-primary/60 hover:bg-white/10 transition-all duration-300;
+    @apply inline-flex items-center justify-center px-6 py-3 font-semibold text-foreground bg-card border border-border transition-all duration-200 hover:border-primary/50 hover:bg-muted/50;
+    border-radius: 10px;
   }
 
-  .card-luxury {
-    @apply bg-card/60 border border-white/10 backdrop-blur-xl rounded-xl p-6 shadow-lg hover:shadow-2xl hover:border-primary/40 transition-all duration-300;
-  }
+  /* ---------- Cards & panels ---------- */
 
-  .input-luxury {
-    @apply w-full px-4 py-3 bg-white/5 border border-white/15 backdrop-blur-md rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all;
-  }
-
-  .star-rating {
-    @apply flex gap-1;
-  }
-
-  .star {
-    @apply text-accent text-lg;
-  }
-
-  /* 3D Animation Classes */
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0px );
-    }
-    50% {
-      transform: translateY(-20px);
-    }
-  }
-
-  .animate-float {
-    animation: float 3s ease-in-out infinite;
-  }
-
-  @keyframes glow {
-    0%, 100% {
-      box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
-    }
-    50% {
-      box-shadow: 0 0 40px rgba(0, 217, 255, 0.6);
-    }
-  }
-
-  .animate-glow {
-    animation: glow 3s ease-in-out infinite;
-  }
-
-  @keyframes slideInUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .animate-slide-in-up {
-    animation: slideInUp 0.6s ease-out;
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  .animate-fade-in {
-    animation: fadeIn 0.8s ease-out;
-  }
-
-  /* Parallax effect */
-  .parallax {
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-
-  /* --- Obsidian Luxury: wow-factor primitives --- */
-
-  /* Frosted glass panel — true glassmorphism: 10-20% opacity, soft white border, heavy blur */
+  /* Primary content card — white surface, hairline border, no blur (this design
+     is flat/paper, not glass — only the navbar uses real glassmorphism). */
   .glass-panel {
-    @apply rounded-2xl border border-white/15 backdrop-blur-2xl transition-all duration-500;
-    background: hsl(0 0% 100% / 0.07);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    @apply bg-card rounded-2xl border border-border transition-all duration-300;
   }
 
   .glass-panel:hover {
-    border-color: hsl(var(--primary) / 0.5);
-    box-shadow: 0 8px 40px hsl(var(--primary) / 0.15);
+    border-color: hsl(var(--primary) / 0.35);
   }
 
-  /* Transparent glass input for search bars / forms sitting on glow backdrops */
+  /* Compact card variant (14px radius) */
+  .card-luxury {
+    @apply bg-card border border-border rounded-[14px] p-6 transition-all duration-300;
+  }
+
+  .card-luxury:hover {
+    border-color: hsl(var(--primary) / 0.35);
+    box-shadow: 0 8px 24px rgba(30, 34, 51, 0.1);
+  }
+
+  /* Elevated card (floating over hero imagery, e.g. search card) */
+  .card-elevated {
+    @apply bg-card rounded-2xl;
+    box-shadow: 0 20px 40px rgba(30, 34, 51, 0.25);
+  }
+
+  /* ---------- Nav "Dynamic Island" glass ---------- */
+
+  .nav-island {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.62));
+    backdrop-filter: blur(24px) saturate(200%);
+    -webkit-backdrop-filter: blur(24px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    box-shadow:
+      inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
+      inset 0 -2px 4px rgba(30, 34, 51, 0.08),
+      0 1px 2px rgba(30, 34, 51, 0.12),
+      0 6px 12px rgba(30, 34, 51, 0.12),
+      0 14px 24px rgba(30, 34, 51, 0.14);
+  }
+
+  .nav-pill-active {
+    background: linear-gradient(155deg, #3b4e8a 0%, #2b3a67 55%, #1e2a50 100%);
+    box-shadow:
+      inset 0 1px 1px rgba(255, 255, 255, 0.35),
+      inset 0 -3px 5px rgba(0, 0, 0, 0.25),
+      0 4px 10px rgba(43, 58, 103, 0.35);
+  }
+
+  /* ---------- Inputs ---------- */
+
+  .input-luxury {
+    @apply w-full px-4 py-3 bg-card border border-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all;
+  }
+
   .input-glass {
-    @apply w-full bg-white/5 border border-white/15 backdrop-blur-md rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all;
+    @apply w-full bg-card/80 border border-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all;
   }
 
-  /* Ambient glow blob — position absolutely behind hero/key content for depth */
+  /* ---------- Status badges ---------- */
+
+  .badge-success {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+    background: hsl(var(--success-bg));
+    color: hsl(var(--success-text));
+  }
+
+  .badge-warning {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+    background: hsl(var(--warning-bg));
+    color: hsl(var(--warning-text));
+  }
+
+  .badge-danger {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+    background: hsl(var(--danger-bg));
+    color: hsl(var(--danger-text));
+  }
+
+  /* ---------- Photo placeholder (fallback when a hotel/tour/destination has no imageUrl) ---------- */
+
+  .photo-placeholder {
+    background-image: repeating-linear-gradient(
+      45deg,
+      #efe8d8,
+      #efe8d8 12px,
+      #e7dcc5 12px,
+      #e7dcc5 24px
+    );
+  }
+
+  .photo-placeholder-caption {
+    @apply font-mono text-[11px] tracking-wide;
+    color: hsl(var(--faint));
+  }
+
+  /* Dark bottom-gradient overlay for text contrast on hero photos */
+  .hero-vignette {
+    background: linear-gradient(180deg, rgba(30, 34, 51, 0.05), rgba(30, 34, 51, 0.55));
+  }
+
+  /* ---------- Ambient accents (kept subtle — this system is flat/paper, not glow-driven) ---------- */
+
   .aurora-glow {
     pointer-events: none;
-    background: radial-gradient(circle, hsl(var(--primary) / 0.45), transparent 70%);
+    background: radial-gradient(circle, hsl(var(--accent) / 0.12), transparent 70%);
     filter: blur(90px);
   }
 
   .aurora-glow-teal {
     pointer-events: none;
-    background: radial-gradient(circle, hsl(var(--secondary) / 0.6), transparent 70%);
+    background: radial-gradient(circle, hsl(var(--primary) / 0.1), transparent 70%);
     filter: blur(90px);
+  }
+
+  .mesh-gradient {
+    background-image:
+      radial-gradient(at 20% 20%, hsl(var(--primary) / 0.08) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, hsl(var(--accent) / 0.1) 0px, transparent 50%),
+      radial-gradient(at 50% 100%, hsl(var(--primary) / 0.06) 0px, transparent 50%);
+    background-size: 200% 200%;
+    animation: meshDrift 18s ease-in-out infinite;
+  }
+
+  @keyframes meshDrift {
+    0%, 100% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
   }
 
   /* Subtle 3D tilt-lift on hover for image/feature cards */
@@ -227,29 +273,51 @@
   }
 
   .tilt-card:hover {
-    transform: translateY(-8px) rotateX(2deg) rotateY(-2deg);
-    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6);
+    transform: translateY(-6px);
+    box-shadow: 0 24px 48px -16px rgba(30, 34, 51, 0.2);
   }
 
-  /* Soft electric-blue glow behind hero/display text */
-  .text-glow {
-    text-shadow: 0 0 30px hsl(var(--primary) / 0.5);
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
   }
 
-  /* Radial vignette to seat text over hero imagery */
-  .hero-vignette {
-    background: radial-gradient(circle, transparent 25%, hsl(var(--background) / 0.95) 100%);
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
   }
 
-  /* Uppercase tracked-out eyebrow / micro-label */
-  .label-caps {
-    @apply text-xs font-semibold uppercase tracking-[0.25em] text-accent;
+  @keyframes glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(232, 114, 76, 0.25); }
+    50% { box-shadow: 0 0 40px rgba(232, 114, 76, 0.5); }
   }
 
-  /* Thin aurora-gradient divider */
-  .gold-divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.7), transparent);
+  .animate-glow {
+    animation: glow 3s ease-in-out infinite;
+  }
+
+  @keyframes slideInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-slide-in-up {
+    animation: slideInUp 0.6s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out;
+  }
+
+  .parallax {
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
   }
 
   /* Pulsing waypoint marker (e.g. hotspot on a 3D/image preview) */
@@ -263,11 +331,11 @@
     100% { transform: scale(1); opacity: 0.9; }
   }
 
-  /* Aurora shimmer sweep for skeleton loading states */
+  /* Shimmer sweep for skeleton loading states */
   .shimmer {
     position: relative;
     overflow: hidden;
-    background: hsl(var(--muted) / 0.3);
+    background: hsl(var(--muted) / 0.6);
   }
 
   .shimmer::after {
@@ -275,12 +343,7 @@
     position: absolute;
     inset: 0;
     transform: translateX(-100%);
-    background: linear-gradient(
-      90deg,
-      transparent,
-      hsl(var(--primary) / 0.16),
-      transparent
-    );
+    background: linear-gradient(90deg, transparent, hsl(0 0% 100% / 0.6), transparent);
     animation: shimmerSweep 1.8s infinite;
   }
 
@@ -288,24 +351,14 @@
     100% { transform: translateX(100%); }
   }
 
-  /* Slow ambient gradient drift behind hero sections (CSS-only, no WebGL) */
-  .mesh-gradient {
-    background-image:
-      radial-gradient(at 20% 20%, hsl(var(--primary) / 0.16) 0px, transparent 50%),
-      radial-gradient(at 80% 0%, hsl(var(--secondary) / 0.35) 0px, transparent 50%),
-      radial-gradient(at 50% 100%, hsl(var(--primary) / 0.12) 0px, transparent 50%);
-    background-size: 200% 200%;
-    animation: meshDrift 18s ease-in-out infinite;
-  }
-
-  @keyframes meshDrift {
-    0%, 100% { background-position: 0% 0%; }
-    50% { background-position: 100% 100%; }
-  }
-
-  /* Magnetic-feel primary CTA (pairs with a small JS tilt in MagneticButton) */
   .btn-magnetic {
     @apply relative inline-flex items-center justify-center transition-transform duration-300 ease-out will-change-transform;
+  }
+
+  /* Thin divider */
+  .gold-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--border)), transparent);
   }
 
   /* Hide scrollbar on horizontally-scrollable carousels while staying scrollable */
@@ -319,7 +372,6 @@
   }
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   h1 {
     @apply text-3xl;
@@ -334,18 +386,10 @@
   }
 
   .container {
-    @apply px-3;
+    @apply px-4;
   }
 }
 
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-  body {
-    @apply bg-background text-foreground;
-  }
-}
-
-/* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;

@@ -25,6 +25,13 @@ export default {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
+        faint: 'hsl(var(--faint))',
+        'success-bg': 'hsl(var(--success-bg))',
+        'success-text': 'hsl(var(--success-text))',
+        'warning-bg': 'hsl(var(--warning-bg))',
+        'warning-text': 'hsl(var(--warning-text))',
+        'danger-bg': 'hsl(var(--danger-bg))',
+        'danger-text': 'hsl(var(--danger-text))',
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -53,8 +60,8 @@ export default {
           '50%': { transform: 'translateY(-20px)' },
         },
         glow: {
-          '0%, 100%': { boxShadow: '0 0 20px rgba(0, 217, 255, 0.3)' },
-          '50%': { boxShadow: '0 0 40px rgba(0, 217, 255, 0.6)' },
+          '0%, 100%': { boxShadow: '0 0 20px rgba(232, 114, 76, 0.25)' },
+          '50%': { boxShadow: '0 0 40px rgba(232, 114, 76, 0.5)' },
         },
         slideInUp: {
           from: {

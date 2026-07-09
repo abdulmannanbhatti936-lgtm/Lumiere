@@ -57,13 +57,13 @@ export default function AdminUsers() {
                 </thead>
                 <tbody>
                   {users.map((user) => (
-                    <tr key={user.id} className="border-b border-border hover:bg-white/5 transition-colors">
+                    <tr key={user.id} className="border-b border-border hover:bg-muted/60 transition-colors">
                       <td className="py-4 px-4 font-semibold">{user.name ?? '—'}</td>
                       <td className="py-4 px-4 text-muted-foreground">{user.email}</td>
                       <td className="py-4 px-4">
                         <span
                           className={`px-3 py-1 rounded-sm text-xs font-semibold capitalize ${
-                            user.role === 'admin' ? 'bg-purple-400/10 text-purple-400' : 'bg-muted text-muted-foreground'
+                            user.role === 'admin' ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground'
                           }`}
                         >
                           {user.role}

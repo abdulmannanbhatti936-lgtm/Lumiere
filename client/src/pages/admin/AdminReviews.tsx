@@ -55,8 +55,8 @@ export default function AdminReviews() {
               className={cn(
                 'px-4 py-2 rounded-sm label-caps !text-[10px] border transition-colors',
                 status === f.value
-                  ? 'bg-accent !text-accent-foreground border-accent'
-                  : 'bg-white/5 !text-muted-foreground border-white/10 hover:!text-foreground hover:border-white/20',
+                  ? 'bg-primary !text-primary-foreground border-primary'
+                  : 'bg-card !text-muted-foreground border-border hover:!text-foreground hover:border-primary/40',
               )}
             >
               {f.label}
@@ -86,7 +86,7 @@ export default function AdminReviews() {
                       <p className="font-semibold">{review.hotel.name}</p>
                       <span
                         className={`px-2 py-0.5 rounded-sm text-xs font-semibold ${
-                          review.approved ? 'bg-green-400/10 text-green-400' : 'bg-yellow-400/10 text-yellow-400'
+                          review.approved ? 'bg-success-bg text-success-text' : 'bg-warning-bg text-warning-text'
                         }`}
                       >
                         {review.approved ? 'Approved' : 'Pending'}
@@ -108,7 +108,7 @@ export default function AdminReviews() {
                       <button
                         onClick={() => handleApprove(review.id)}
                         disabled={approveReview.isPending}
-                        className="p-2 rounded-md hover:bg-white/5 transition-colors text-green-400"
+                        className="p-2 rounded-md hover:bg-muted/60 transition-colors text-success-text"
                         title="Approve"
                       >
                         <Check size={20} />
@@ -117,7 +117,7 @@ export default function AdminReviews() {
                     <button
                       onClick={() => handleRemove(review.id)}
                       disabled={removeReview.isPending}
-                      className="p-2 rounded-md hover:bg-white/5 transition-colors text-destructive"
+                      className="p-2 rounded-md hover:bg-muted/60 transition-colors text-destructive"
                       title="Delete"
                     >
                       <Trash2 size={20} />

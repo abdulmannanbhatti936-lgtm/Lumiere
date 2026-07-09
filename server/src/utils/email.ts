@@ -58,3 +58,12 @@ export function sendBookingCancelledEmail(to: string, booking: BookingEmailDetai
      <p>Hi ${booking.guestName}, your booking (confirmation LUM-${booking.confirmationNumber}) at <strong>${booking.hotelName}</strong> for ${booking.checkIn} – ${booking.checkOut} has been cancelled.</p>`,
   );
 }
+
+export function sendContactAcknowledgement(to: string, firstName: string) {
+  return send(
+    to,
+    'We received your message — Lumière Stays',
+    `<h1>Thanks for reaching out, ${firstName}!</h1>
+     <p>Our team has received your message and will get back to you shortly.</p>`,
+  );
+}

@@ -10,10 +10,10 @@ import { Skeleton } from '@/components/ui/skeleton';
 const STATUS_OPTIONS = ['pending', 'confirmed', 'cancelled', 'completed'] as const;
 
 const STATUS_BADGE: Record<string, string> = {
-  pending: 'bg-yellow-400/10 text-yellow-400',
-  confirmed: 'bg-green-400/10 text-green-400',
+  pending: 'bg-warning-bg text-warning-text',
+  confirmed: 'bg-success-bg text-success-text',
   cancelled: 'bg-muted text-muted-foreground',
-  completed: 'bg-blue-400/10 text-blue-400',
+  completed: 'bg-primary/10 text-primary',
 };
 
 export default function AdminBookings() {
@@ -62,7 +62,7 @@ export default function AdminBookings() {
                 </thead>
                 <tbody>
                   {bookings.map((booking) => (
-                    <tr key={booking.id} className="border-b border-border hover:bg-white/5 transition-colors">
+                    <tr key={booking.id} className="border-b border-border hover:bg-muted/60 transition-colors">
                       <td className="py-4 px-4">
                         <p className="font-semibold">{booking.hotel.name}</p>
                         <p className="text-xs text-muted-foreground">{booking.room.name}</p>
@@ -74,7 +74,7 @@ export default function AdminBookings() {
                       <td className="py-4 px-4 text-muted-foreground">
                         {booking.checkIn} → {booking.checkOut}
                       </td>
-                      <td className="py-4 px-4 font-semibold text-accent">{formatCurrency(Number(booking.totalPrice))}</td>
+                      <td className="py-4 px-4 font-semibold text-primary">{formatCurrency(Number(booking.totalPrice))}</td>
                       <td className="py-4 px-4">
                         <select
                           value={booking.status}
