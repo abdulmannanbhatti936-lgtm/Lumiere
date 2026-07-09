@@ -2,12 +2,15 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useLocation } from 'wouter';
+import { Sparkles } from 'lucide-react';
 import { signupSchema, type SignupInput } from '@shared/validation';
 import { useAuth, getAuthErrorMessage } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import Reveal from '@/components/motion/Reveal';
+import Magnetic from '@/components/motion/Magnetic';
 
 export default function Signup() {
   const { signup } = useAuth();
@@ -30,71 +33,93 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center py-12 px-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Create your account</CardTitle>
-          <CardDescription>Join Lumiere Stays to book luxury stays worldwide.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Full name</FormLabel>
-                    <FormControl>
-                      <Input autoComplete="name" placeholder="Jane Doe" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input type="email" autoComplete="email" placeholder="you@example.com" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input type="password" autoComplete="new-password" placeholder="••••••••" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+    <div className="relative min-h-[calc(100vh-5rem)] flex items-center justify-center py-16 px-4 overflow-hidden">
+      <div className="absolute inset-0 z-0">
+        <img
+          src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1600&q=80"
+          alt=""
+          className="w-full h-full object-cover blur-sm scale-105 opacity-40"
+        />
+        <div className="absolute inset-0 bg-background/70" />
+        <div className="absolute -top-1/4 -right-1/4 w-[50vw] h-[50vw] aurora-glow-teal" />
+        <div className="absolute -bottom-1/4 -left-1/4 w-[50vw] h-[50vw] aurora-glow" />
+        <div className="absolute inset-0 hero-vignette" />
+      </div>
 
-              {serverError && <p className="text-sm font-medium text-destructive">{serverError}</p>}
+      <Reveal className="relative z-10 w-full max-w-md">
+        <Card className="glass-panel border-white/10 shadow-2xl">
+          <CardHeader className="text-center pt-10">
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <Sparkles className="text-accent" size={18} />
+              <span className="font-serif text-2xl tracking-tight">
+                LUMI<span className="text-accent">È</span>RE
+              </span>
+            </div>
+            <CardTitle className="font-serif text-2xl font-normal">Create your account</CardTitle>
+            <CardDescription>Join Lumière Stays to book luxury stays worldwide.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Full name</FormLabel>
+                      <FormControl>
+                        <Input autoComplete="name" placeholder="Jane Doe" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input type="email" autoComplete="email" placeholder="you@example.com" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input type="password" autoComplete="new-password" placeholder="••••••••" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? 'Creating account...' : 'Sign Up'}
-              </Button>
-            </form>
-          </Form>
+                {serverError && <p className="text-sm font-medium text-destructive">{serverError}</p>}
 
-          <p className="mt-6 text-center text-sm text-muted-foreground">
-            Already have an account?{' '}
-            <Link href="/login" className="text-accent hover:underline">
-              Sign in
-            </Link>
-          </p>
-        </CardContent>
-      </Card>
+                <Magnetic className="block w-full">
+                  <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+                    {form.formState.isSubmitting ? 'Creating account...' : 'Sign Up'}
+                  </Button>
+                </Magnetic>
+              </form>
+            </Form>
+
+            <p className="mt-6 text-center text-sm text-muted-foreground">
+              Already have an account?{' '}
+              <Link href="/login" className="text-accent hover:underline">
+                Sign in
+              </Link>
+            </p>
+          </CardContent>
+        </Card>
+      </Reveal>
     </div>
   );
 }

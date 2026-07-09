@@ -16,17 +16,15 @@ export default function ReviewCard({
   createdAt,
 }: ReviewCardProps) {
   return (
-    <div className="card-luxury">
+    <div className="glass-panel p-6">
       {/* Header */}
-      <div className="flex items-start justify-between mb-3">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center">
-            <User size={20} className="text-accent" />
-          </div>
-          <div>
-            <p className="font-semibold text-foreground">{userName}</p>
-            <p className="text-xs text-muted-foreground">{formatDate(createdAt)}</p>
-          </div>
+      <div className="flex items-center gap-3 mb-4">
+        <div className="w-10 h-10 rounded-full border border-accent/30 bg-accent/10 flex items-center justify-center shrink-0">
+          <User size={18} className="text-accent" />
+        </div>
+        <div>
+          <p className="font-serif text-lg leading-tight">{userName}</p>
+          <p className="label-caps !text-[9px] !text-muted-foreground mt-1">{formatDate(createdAt)}</p>
         </div>
       </div>
 
@@ -35,14 +33,14 @@ export default function ReviewCard({
         {[...Array(5)].map((_, i) => (
           <Star
             key={i}
-            size={16}
+            size={14}
             className={i < rating ? 'fill-accent text-accent' : 'text-muted'}
           />
         ))}
       </div>
 
       {/* Comment */}
-      <p className="text-foreground text-sm leading-relaxed">{comment}</p>
+      <p className="text-muted-foreground text-sm leading-relaxed">{comment}</p>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
+import Magnetic from '@/components/motion/Magnetic';
 
 interface PaymentFormProps {
   onSuccess: () => void;
@@ -37,13 +38,15 @@ export default function PaymentForm({ onSuccess }: PaymentFormProps) {
     <form onSubmit={handleSubmit} className="space-y-6">
       <PaymentElement />
       {errorMessage && <p className="text-sm font-medium text-destructive">{errorMessage}</p>}
-      <button
-        type="submit"
-        disabled={!stripe || isProcessing}
-        className="btn-primary w-full disabled:opacity-50"
-      >
-        {isProcessing ? 'Processing payment...' : 'Pay Now'}
-      </button>
+      <Magnetic className="block w-full">
+        <button
+          type="submit"
+          disabled={!stripe || isProcessing}
+          className="btn-primary w-full disabled:opacity-50"
+        >
+          {isProcessing ? 'Processing payment...' : 'Pay Now'}
+        </button>
+      </Magnetic>
     </form>
   );
 }

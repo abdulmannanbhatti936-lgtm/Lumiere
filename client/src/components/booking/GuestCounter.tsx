@@ -12,30 +12,28 @@ export default function GuestCounter({
   maxGuests = 10,
 }: GuestCounterProps) {
   return (
-    <div className="card-luxury">
-      <h3 className="font-semibold text-foreground mb-4">Number of Guests</h3>
-
+    <div className="glass-panel p-6">
       <div className="flex items-center justify-between">
         <button
           onClick={() => guests > 1 && onGuestChange(guests - 1)}
-          className="p-2 hover:bg-muted rounded transition-colors disabled:opacity-50"
+          className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center hover:border-accent hover:text-accent transition-colors disabled:opacity-30 disabled:hover:border-white/15 disabled:hover:text-foreground"
           disabled={guests <= 1}
         >
-          <Minus size={20} />
+          <Minus size={16} />
         </button>
 
-        <div className="text-2xl font-bold text-accent">{guests}</div>
+        <div className="font-serif text-3xl text-accent">{guests}</div>
 
         <button
           onClick={() => guests < maxGuests && onGuestChange(guests + 1)}
-          className="p-2 hover:bg-muted rounded transition-colors disabled:opacity-50"
+          className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center hover:border-accent hover:text-accent transition-colors disabled:opacity-30 disabled:hover:border-white/15 disabled:hover:text-foreground"
           disabled={guests >= maxGuests}
         >
-          <Plus size={20} />
+          <Plus size={16} />
         </button>
       </div>
 
-      <p className="text-xs text-muted-foreground mt-3">
+      <p className="label-caps !text-[9px] !text-muted-foreground mt-4 text-center">
         Maximum {maxGuests} guests
       </p>
     </div>

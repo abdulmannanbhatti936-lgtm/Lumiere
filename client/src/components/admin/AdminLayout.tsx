@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { Link, useLocation } from 'wouter';
+import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 const ADMIN_NAV = [
@@ -16,9 +17,9 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="border-b border-border bg-card">
+      <div className="glass-panel border-x-0 border-t-0 rounded-none">
         <div className="container overflow-x-auto">
-          <nav className="flex gap-2 py-3">
+          <nav className="flex gap-8">
             {ADMIN_NAV.map((item) => {
               const isActive = location === item.href || location.startsWith(`${item.href}/`);
               return (
@@ -26,13 +27,17 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    'px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition-colors',
-                    isActive
-                      ? 'bg-accent text-accent-foreground'
-                      : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+                    'relative py-5 label-caps !text-xs whitespace-nowrap transition-colors',
+                    isActive ? '!text-accent' : '!text-muted-foreground hover:!text-foreground',
                   )}
                 >
                   {item.label}
+                  {isActive && (
+                    <motion.div
+                      layoutId="admin-nav-underline"
+                      className="absolute left-0 right-0 -bottom-px h-[2px] bg-accent"
+                    />
+                  )}
                 </Link>
               );
             })}

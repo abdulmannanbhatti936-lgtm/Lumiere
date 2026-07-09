@@ -19,6 +19,7 @@ export default {
         'muted-foreground': 'hsl(var(--muted-foreground))',
         accent: 'hsl(var(--accent))',
         'accent-foreground': 'hsl(var(--accent-foreground))',
+        'accent-light': 'hsl(var(--accent-light))',
         destructive: 'hsl(var(--destructive))',
         'destructive-foreground': 'hsl(var(--destructive-foreground))',
         border: 'hsl(var(--border))',
@@ -30,8 +31,14 @@ export default {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      spacing: {
+        gutter: '24px',
+        'section-gap': '120px',
+        'margin-desktop': '80px',
+        'margin-mobile': '20px',
+      },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ['Manrope', 'sans-serif'],
         serif: ['Playfair Display', 'serif'],
       },
       animation: {
@@ -46,8 +53,8 @@ export default {
           '50%': { transform: 'translateY(-20px)' },
         },
         glow: {
-          '0%, 100%': { boxShadow: '0 0 20px rgba(255, 193, 7, 0.3)' },
-          '50%': { boxShadow: '0 0 40px rgba(255, 193, 7, 0.6)' },
+          '0%, 100%': { boxShadow: '0 0 20px rgba(0, 217, 255, 0.3)' },
+          '50%': { boxShadow: '0 0 40px rgba(0, 217, 255, 0.6)' },
         },
         slideInUp: {
           from: {

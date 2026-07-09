@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Search, Filter, X, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
+import { Search, Filter, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSearch } from 'wouter';
+import { motion, AnimatePresence } from 'framer-motion';
 import HotelCard from '@/components/hotels/HotelCard';
+import Reveal from '@/components/motion/Reveal';
+import { HotelCardSkeleton } from '@/components/ui/skeleton';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 import { trpc } from '@/lib/trpc';
 import type { HotelsQueryInput } from '@shared/validation';
@@ -38,22 +41,25 @@ export default function Hotels() {
   const pagination = data?.pagination;
 
   return (
-    <div className="min-h-screen bg-background py-12">
-      <div className="container">
-        {/* Header */}
-        <div className="mb-12">
-          <h1 className="text-5xl font-bold mb-4">Discover Luxury Hotels</h1>
-          <p className="text-muted-foreground text-lg">
-            Browse our collection of premium accommodations worldwide
-          </p>
-        </div>
+    <div className="relative min-h-screen bg-background py-12 md:py-20 overflow-hidden">
+      <div className="absolute -top-1/4 -left-1/3 w-[45vw] h-[45vw] aurora-glow-teal pointer-events-none" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className="container relative">
+        {/* Header */}
+        <Reveal className="mb-12">
+          <span className="label-caps mb-4 block">The Global Portfolio</span>
+          <h1 className="font-serif text-4xl md:text-5xl mb-4">Discover Luxury Hotels</h1>
+          <p className="text-muted-foreground text-lg">
+            Browse our collection of premium accommodations worldwide.
+          </p>
+        </Reveal>
+
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-gutter">
           {/* Filters Sidebar */}
           <div className={`${showFilters ? 'block' : 'hidden'} lg:block`}>
-            <div className="card-luxury sticky top-24">
+            <div className="glass-panel p-6 sticky top-24">
               <div className="flex items-center justify-between mb-6 lg:hidden">
-                <h3 className="font-semibold text-foreground">Filters</h3>
+                <h3 className="label-caps !text-foreground">Filters</h3>
                 <button onClick={() => setShowFilters(false)}>
                   <X size={20} />
                 </button>
@@ -61,11 +67,9 @@ export default function Hotels() {
 
               {/* Search */}
               <div className="mb-6">
-                <label className="text-sm font-semibold text-foreground mb-2 block">
-                  Search
-                </label>
+                <label className="label-caps !text-[10px] mb-2 block">Search</label>
                 <div className="relative">
-                  <Search size={18} className="absolute left-3 top-3 text-muted-foreground" />
+                  <Search size={16} className="absolute left-3 top-3.5 text-muted-foreground" />
                   <input
                     type="text"
                     placeholder="Hotel name..."
@@ -78,9 +82,7 @@ export default function Hotels() {
 
               {/* City Filter */}
               <div className="mb-6">
-                <label className="text-sm font-semibold text-foreground mb-2 block">
-                  City
-                </label>
+                <label className="label-caps !text-[10px] mb-2 block">City</label>
                 <input
                   type="text"
                   placeholder="Any city..."
@@ -92,9 +94,7 @@ export default function Hotels() {
 
               {/* Price Range */}
               <div className="mb-6">
-                <label className="text-sm font-semibold text-foreground mb-2 block">
-                  Max Price: ${maxPrice}
-                </label>
+                <label className="label-caps !text-[10px] mb-2 block">Max Price: ${maxPrice}</label>
                 <input
                   type="range"
                   min="0"
@@ -102,15 +102,13 @@ export default function Hotels() {
                   step="50"
                   value={maxPrice}
                   onChange={(e) => setMaxPrice(parseInt(e.target.value))}
-                  className="w-full"
+                  className="w-full accent-accent"
                 />
               </div>
 
               {/* Star Rating */}
               <div className="mb-6">
-                <label className="text-sm font-semibold text-foreground mb-3 block">
-                  Star Rating
-                </label>
+                <label className="label-caps !text-[10px] mb-3 block">Star Rating</label>
                 <div className="space-y-2">
                   {[0, 3, 4, 5].map((rating) => (
                     <label key={rating} className="flex items-center gap-2 cursor-pointer">
@@ -120,7 +118,7 @@ export default function Hotels() {
                         value={rating}
                         checked={starRating === rating}
                         onChange={(e) => setStarRating(parseInt(e.target.value))}
-                        className="w-4 h-4"
+                        className="w-4 h-4 accent-accent"
                       />
                       <span className="text-sm text-foreground">
                         {rating === 0 ? 'All Ratings' : `${rating}+ Stars`}
@@ -132,7 +130,7 @@ export default function Hotels() {
 
               {/* Sort */}
               <div className="mb-6">
-                <label className="text-sm font-semibold text-foreground mb-2 block">Sort By</label>
+                <label className="label-caps !text-[10px] mb-2 block">Sort By</label>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as HotelsQueryInput['sortBy'])}
@@ -168,63 +166,73 @@ export default function Hotels() {
               onClick={() => setShowFilters(!showFilters)}
               className="lg:hidden mb-6 btn-secondary flex items-center gap-2 w-full justify-center"
             >
-              <Filter size={20} />
+              <Filter size={18} />
               Filters
             </button>
 
             {/* Results */}
             <div className="mb-6">
-              <p className="text-muted-foreground">
+              <p className="label-caps !text-[10px] !text-muted-foreground">
                 {pagination ? `Showing ${hotels.length} of ${pagination.total} hotels` : ' '}
               </p>
             </div>
 
             {isLoading ? (
-              <div className="flex justify-center py-24">
-                <Loader2 size={40} className="animate-spin text-accent" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-gutter">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <HotelCardSkeleton key={i} />
+                ))}
               </div>
             ) : isError ? (
-              <div className="text-center py-12">
+              <div className="glass-panel text-center py-16">
                 <p className="text-muted-foreground text-lg">
                   Something went wrong loading hotels. Please try again.
                 </p>
               </div>
             ) : hotels.length > 0 ? (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {hotels.map((hotel) => (
-                    <HotelCard
-                      key={hotel.id}
-                      id={hotel.id}
-                      name={hotel.name}
-                      city={hotel.city}
-                      country={hotel.country}
-                      starRating={hotel.starRating}
-                      imageUrl={hotel.imageUrl}
-                      price={Number(hotel.basePrice)}
-                      amenities={hotel.amenities}
-                      averageRating={hotel.averageRating}
-                      reviewCount={hotel.reviewCount}
-                    />
-                  ))}
-                </div>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={page}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.4 }}
+                    className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-gutter"
+                  >
+                    {hotels.map((hotel) => (
+                      <HotelCard
+                        key={hotel.id}
+                        id={hotel.id}
+                        name={hotel.name}
+                        city={hotel.city}
+                        country={hotel.country}
+                        starRating={hotel.starRating}
+                        imageUrl={hotel.imageUrl}
+                        price={Number(hotel.basePrice)}
+                        amenities={hotel.amenities}
+                        averageRating={hotel.averageRating}
+                        reviewCount={hotel.reviewCount}
+                      />
+                    ))}
+                  </motion.div>
+                </AnimatePresence>
 
                 {pagination && pagination.totalPages > 1 && (
-                  <div className="flex items-center justify-center gap-4 mt-12">
+                  <div className="flex items-center justify-center gap-6 mt-16">
                     <button
                       onClick={() => setPage((p) => Math.max(1, p - 1))}
                       disabled={page <= 1}
-                      className="btn-secondary flex items-center gap-2 disabled:opacity-50"
+                      className="btn-secondary flex items-center gap-2 disabled:opacity-40"
                     >
                       <ChevronLeft size={18} /> Prev
                     </button>
-                    <span className="text-muted-foreground text-sm">
+                    <span className="label-caps !text-[10px]">
                       Page {pagination.page} of {pagination.totalPages}
                     </span>
                     <button
                       onClick={() => setPage((p) => Math.min(pagination.totalPages, p + 1))}
                       disabled={page >= pagination.totalPages}
-                      className="btn-secondary flex items-center gap-2 disabled:opacity-50"
+                      className="btn-secondary flex items-center gap-2 disabled:opacity-40"
                     >
                       Next <ChevronRight size={18} />
                     </button>
@@ -232,10 +240,8 @@ export default function Hotels() {
                 )}
               </>
             ) : (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground text-lg">
-                  No hotels found matching your criteria
-                </p>
+              <div className="glass-panel text-center py-16">
+                <p className="text-muted-foreground text-lg">No hotels found matching your criteria.</p>
               </div>
             )}
           </div>

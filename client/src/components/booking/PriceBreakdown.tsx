@@ -14,15 +14,15 @@ export default function PriceBreakdown({ pricePerNight, nights }: PriceBreakdown
 
   return (
     <div className="space-y-3">
-      <div className="flex justify-between">
+      <div className="flex justify-between text-sm">
         <span className="text-muted-foreground">
           {formatCurrency(pricePerNight)} × {nights} night{nights > 1 ? 's' : ''}
         </span>
         <span className="font-semibold">{formatCurrency(total)}</span>
       </div>
-      <div className="flex justify-between text-lg font-bold border-t border-border pt-3">
-        <span>Total:</span>
-        <span className="text-accent">{formatCurrency(total)}</span>
+      <div className="flex justify-between items-baseline border-t border-border pt-4">
+        <span className="label-caps !text-[10px] !text-foreground">Total</span>
+        <span className="font-serif text-2xl text-accent">{formatCurrency(total)}</span>
       </div>
     </div>
   );

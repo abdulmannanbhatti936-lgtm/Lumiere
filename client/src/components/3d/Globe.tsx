@@ -30,7 +30,7 @@ function GlobeMesh({ onLocationClick }: GlobeProps) {
       ctx.fillRect(1200, 250, 400, 450);
 
       // Ocean glow
-      ctx.strokeStyle = '#ffc107';
+      ctx.strokeStyle = '#00D9FF';
       ctx.lineWidth = 2;
       for (let i = 0; i < 10; i++) {
         ctx.beginPath();
@@ -70,7 +70,7 @@ function GlobeMesh({ onLocationClick }: GlobeProps) {
         color="#1a1a1a"
         metalness={0.4}
         roughness={0.3}
-        emissive="#ffc107"
+        emissive="#00D9FF"
         emissiveIntensity={0.1}
       />
     </mesh>
@@ -93,7 +93,7 @@ export default function Globe({ onLocationClick }: GlobeProps) {
         intensity={1}
         color="#ffffff"
       />
-      <pointLight position={[0, 0, 2]} intensity={0.8} color="#ffc107" />
+      <pointLight position={[0, 0, 2]} intensity={0.8} color="#00D9FF" />
 
       <GlobeMesh onLocationClick={onLocationClick} />
 

@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>LUMIERE | Modern Obsidian Luxury Stays</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Manrope:wght@200..800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/history@5/umd/history.development.js"></script>
+    <script src="https://unpkg.com/react-router@6.3.0/umd/react-router.development.js"></script>
+    <script src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#224d4e",
+                    "on-secondary-container": "#92bdbe",
+                    "tertiary": "#dbc794",
+                    "on-primary-fixed": "#251a00",
+                    "on-primary-fixed-variant": "#5a4302",
+                    "surface-container-lowest": "#0e0e10",
+                    "on-secondary": "#053637",
+                    "background": "#131315",
+                    "secondary-fixed-dim": "#a3cfcf",
+                    "surface": "#131315",
+                    "on-background": "#e5e1e4",
+                    "on-error": "#690005",
+                    "secondary": "#a3cfcf",
+                    "on-secondary-fixed": "#002020",
+                    "tertiary-fixed-dim": "#d8c592",
+                    "on-error-container": "#ffdad6",
+                    "tertiary-container": "#beac7b",
+                    "inverse-primary": "#745b1b",
+                    "primary-fixed": "#ffdf9b",
+                    "on-tertiary": "#3b2f09",
+                    "on-secondary-fixed-variant": "#224d4e",
+                    "inverse-surface": "#e5e1e4",
+                    "tertiary-fixed": "#f5e1ac",
+                    "error": "#ffb4ab",
+                    "secondary-fixed": "#beebeb",
+                    "outline-variant": "#4d4639",
+                    "surface-dim": "#131315",
+                    "surface-variant": "#353437",
+                    "surface-container-highest": "#353437",
+                    "inverse-on-surface": "#313032",
+                    "on-tertiary-fixed": "#231a00",
+                    "on-surface-variant": "#d0c5b4",
+                    "on-tertiary-fixed-variant": "#53461e",
+                    "outline": "#999080",
+                    "primary-container": "#c9a961",
+                    "on-primary-container": "#533d00",
+                    "surface-container": "#201f21",
+                    "surface-tint": "#e4c278",
+                    "surface-container-low": "#1c1b1d",
+                    "surface-container-high": "#2a2a2c",
+                    "surface-bright": "#39393b",
+                    "on-primary": "#3f2e00",
+                    "primary": "#e6c479",
+                    "on-surface": "#e5e1e4",
+                    "on-tertiary-container": "#4d4019",
+                    "primary-fixed-dim": "#e4c278",
+                    "error-container": "#93000a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-mobile": "20px",
+                    "section-gap": "120px",
+                    "gutter": "24px",
+                    "container-max": "1440px",
+                    "margin-desktop": "80px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Playfair Display"],
+                    "body-md": ["Manrope"],
+                    "headline-lg": ["Playfair Display"],
+                    "display-md": ["Playfair Display"],
+                    "body-lg": ["Manrope"],
+                    "label-sm": ["Manrope"]
+            },
+            "fontSize": {
+                    "display-lg": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0.01em", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.3", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "display-md": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0.01em", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.15em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+        body { background-color: #131315; color: #e5e1e4; overflow-x: hidden; }
+        .glass-panel { backdrop-filter: blur(20px); background: rgba(22, 21, 26, 0.7); border: 1px solid #2A2820; transition: border-color 0.5s ease; }
+        .glass-panel:hover { border-color: #C9A961; }
+        .text-glow { text-shadow: 0 0 15px rgba(230, 196, 121, 0.3); }
+        .hero-vignette { background: radial-gradient(circle, transparent 20%, rgba(19, 19, 21, 0.9) 100%); }
+        .tilt-card { transform-style: preserve-3d; perspective: 1000px; transition: transform 0.5s ease; }
+        .tilt-card:hover { transform: translateY(-10px) rotateX(2deg) rotateY(2deg); }
+        .material-symbols-outlined { vertical-align: middle; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0e0e10; }
+        ::-webkit-scrollbar-thumb { background: #2A2820; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #C9A961; }
+        
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-scroll { animation: scroll 40s linear infinite; }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .waypoint-pulse { animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.2); opacity: 0.4; } 100% { transform: scale(1); opacity: 0.8; } }
+    </style>
+</head>
+<body class="font-body-md text-body-md">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+        const { createRoot } = ReactDOM;
+        const { MemoryRouter, Routes, Route, Link, useNavigate, useLocation } = ReactRouterDOM;
+
+        // --- Shared Components ---
+
+        const Nav = ({ transparent = false, showFull = true }) => {
+            const navigate = useNavigate();
+            return (
+                <header className={`fixed top-0 w-full z-50 ${transparent ? 'bg-transparent' : 'bg-surface/70 backdrop-blur-xl border-b border-outline-variant/30'} shadow-2xl transition-all duration-500 ease-in-out h-20`}>
+                    <nav className="flex justify-between items-center px-margin-desktop h-20 w-full max-w-container-max mx-auto">
+                        <Link to="/" className="font-display-md text-display-md text-primary tracking-tighter">LUMIERE</Link>
+                        {showFull && (
+                            <div className="hidden md:flex items-center gap-10 font-label-sm text-label-sm tracking-[0.15em] uppercase">
+                                <Link className="text-on-surface-variant hover:text-primary transition-colors" to="/destinations">Destinations</Link>
+                                <Link className="text-on-surface-variant hover:text-primary transition-colors" to="/immersive">Immersive</Link>
+                                <Link className="text-on-surface-variant hover:text-primary transition-colors" to="/concierge">Concierge</Link>
+                                <Link className="text-primary border-b border-primary pb-1" to="/reservations">Reservations</Link>
+                            </div>
+                        )}
+                        <div className="flex items-center gap-6">
+                            <button className="material-symbols-outlined text-primary text-2xl">search</button>
+                            <button onClick={() => navigate('/login')} className="font-label-sm text-label-sm tracking-[0.15em] uppercase px-8 py-3 border border-primary text-primary hover:bg-primary hover:text-on-primary transition-all duration-300">
+                                Sign In
+                            </button>
+                        </div>
+                    </nav>
+                </header>
+            );
+        };
+
+        const Footer = () => (
+            <footer className="relative w-full border-t border-outline-variant/20 bg-background">
+                <div className="flex flex-col items-center gap-8 py-section-gap px-margin-desktop w-full max-w-container-max mx-auto">
+                    <div className="font-display-lg text-display-lg text-primary tracking-tighter">LUMIERE</div>
+                    <div className="grid grid-cols-2 md:grid-cols-5 gap-12 w-full text-center md:text-left">
+                        <div className="flex flex-col gap-4">
+                            <h6 className="text-primary font-label-sm uppercase tracking-widest">Global Sites</h6>
+                            <a className="text-on-surface-variant hover:text-primary transition-colors" href="#">Americas</a>
+                            <a className="text-on-surface-variant hover:text-primary transition-colors" href="#">Europe</a>
+                            <a className="text-on-surface-variant hover:text-primary transition-colors" href="#">Asia Pacific</a>
+                        </div>
+                        <div className="flex flex-col gap-4">
+                            <h6 className="text-primary font-label-sm uppercase tracking-widest">Experience</h6>
+                            <a className="text-on-surface-variant hover:text-primary transition-colors" href="#">3D Walkthroughs</a>
+                            <a className="text-on-surface-variant hover:text-primary transition-colors" href="#">Private Chefs</a>
+                            <a className="text-on-surface-variant hover:text-primary transition-colors" href="#">Curated Stays</a>
+                        </div>
+                        <div className="flex flex-col gap-4">
+                            <h6 className="text-primary font-label-sm uppercase tracking-widest">About</h6>
+                            <a className="text-on-surface-variant hover:text-primary transition-colors" href="#">Sustainability</a>
+                            <a className="text-on-surface-variant hover:text-primary transition-colors" href="#">Careers</a>
+                            <a className="text-on-surface-variant hover:text-primary transition-colors" href="#">Press</a>
+                        </div>
+                        <div className="flex flex-col gap-4">
+                            <h6 className="text-primary font-label-sm uppercase tracking-widest">Support</h6>
+                            <a className="text-on-surface-variant hover:text-primary transition-colors" href="#">Concierge 24/7</a>
+                            <a className="text-on-surface-variant hover:text-primary transition-colors" href="#">FAQ</a>
+                            <a className="text-on-surface-variant hover:text-primary transition-colors" href="#">Contact</a>
+                        </div>
+                        <div className="flex flex-col gap-4 col-span-2 md:col-span-1">
+                            <h6 className="text-primary font-label-sm uppercase tracking-widest">Follow</h6>
+                            <div className="flex justify-center md:justify-start gap-4">
+                                <span className="material-symbols-outlined text-on-surface-variant hover:text-primary">public</span>
+                                <span className="material-symbols-outlined text-on-surface-variant hover:text-primary">photo_camera</span>
+                                <span className="material-symbols-outlined text-on-surface-variant hover:text-primary">play_circle</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 border-t border-outline-variant/10 pt-8 w-full font-label-sm text-label-sm uppercase tracking-widest">
+                        <span className="text-on-surface-variant">© 2024 LUMIÈRE STAYS. ALL RIGHTS RESERVED.</span>
+                        <a className="text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+                        <a className="text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+                    </div>
+                </div>
+            </footer>
+        );
+
+        // --- Screen Components ---
+
+        const HomePage = () => (
+            <div className="animate-fadeIn">
+                <Nav />
+                <main>
+                    <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
+                        <div className="absolute inset-0 z-0">
+                            <div className="absolute inset-0 hero-vignette z-10"></div>
+                            <div className="w-full h-full bg-cover bg-center scale-105 animate-[pulse_10s_infinite_alternate]" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCat9nLw_JTdQ_XZvrbaPaEmp1-vS9JFNmKKN3C32Q0FvRz7T-JgYemxw_AUJ9xwMvHZbzyFnJOcFZjA_vgE1NOPLCRBbAqtOEezCN7haQEtNdjzVeTGO7n6TzA7q5XDuBwO1doakLXcPZg6AGT1oOsZ3ZiQKeTpqL1OXCQ3nC8KosxalH5LfWbQ874oCpaX5wkNZgtt4wbBH51HPkChU4G2XGlXFq3liRr7Hy3EPgri1-2LuFWDod3s7A6Dfx1ev4wyOBH1SybaeA')"}}></div>
+                        </div>
+                        <div className="relative z-20 text-center max-w-4xl px-margin-mobile">
+                            <h1 className="font-display-lg text-display-lg mb-4 text-glow animate-[fadeInUp_1s_ease_forwards]">
+                                Architecture of <br/><span className="italic">Quiet Luxury</span>
+                            </h1>
+                            <p className="font-body-lg text-body-lg text-on-surface-variant mb-12 animate-[fadeInUp_1.2s_ease_forwards]">
+                                Escape into a world where obsidian design meets curated hospitality.
+                            </p>
+                            <Link to="/destinations" className="bg-primary text-on-primary font-label-sm text-label-sm tracking-[0.2em] uppercase px-12 py-5 shadow-2xl hover:bg-primary-container transition-all">
+                                Discover Your Stay
+                            </Link>
+                        </div>
+                    </section>
+                    <section className="py-section-gap px-margin-desktop max-w-container-max mx-auto">
+                        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                            <div className="max-w-xl">
+                                <span className="text-primary font-label-sm text-label-sm uppercase tracking-[0.3em] mb-4 block">Curated Collections</span>
+                                <h2 className="font-display-md text-display-md">Destinations that <br/>define the horizon.</h2>
+                            </div>
+                            <Link className="text-primary font-label-sm text-label-sm uppercase tracking-widest border-b border-primary/30 pb-1 hover:border-primary transition-all" to="/destinations">View All Destinations</Link>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+                            <div className="md:col-span-8 group cursor-pointer tilt-card">
+                                <div className="relative h-[600px] overflow-hidden rounded-lg">
+                                    <div className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCeTjPcoiRMUJd1UjJutn9iNmLIRwsB93juovsfvsPLX9bzjSpAgd1i1T6beeF_um8ozaI3YUzf1jCJjsHriNx-FE4JsXjPF9eIMqOEoFhNW6hhztUB6WgYsen1x1BrlpRpbVGtnyurDRjP1PkLLmG6_gLuxLeXbnzLgdU2WnEGpyRqRLSvP_m3POLtyeFgS1J8wII1-_n3-jGQoFCorrxgfyDk2pfHikd7GfOt9Rg34ZlpoxhjfL0Iz8U9c7wlE-J8L4syIQfZ24g')"}}></div>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent"></div>
+                                    <div className="absolute bottom-10 left-10">
+                                        <h3 className="font-display-md text-display-md mb-2">Santorini Obsidian</h3>
+                                        <p className="font-body-md text-on-surface-variant flex items-center gap-2">
+                                            <span className="material-symbols-outlined text-sm">explore</span> Cyclades, Greece
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="md:col-span-4 flex flex-col gap-gutter">
+                                <div className="relative flex-1 group cursor-pointer tilt-card rounded-lg overflow-hidden min-h-[288px]">
+                                    <div className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuAqMvvPw8TSGFArU52Tmzrvzl-GsdcFiH1f81VTspjj0GtxeWl99DkVGaBlzNnLfpA6PWSe-BEGZL1Yonrl6hddiii2t29Upriq_JpzMPpiQmg3HLJs5Dki8ljSi82_Tx8qyjTPkfK8QQG6IsdrdDbcyL7lmadxp2DuTN9jXPtO2nPvdK8Kj41_a1VCzEutJ1WBsTjcBcjxvV__uwwzBW2dX6FQut3tNXSV1A_8N3ETN_bN7MpAXESSmRJc82b7ORYHlV4YlX3zH4c')"}}></div>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent"></div>
+                                    <div className="absolute bottom-6 left-6">
+                                        <h4 className="font-headline-lg text-headline-lg">AlUla Echo</h4>
+                                        <p className="text-primary font-label-sm uppercase tracking-widest">Desert Sanctuary</p>
+                                    </div>
+                                </div>
+                                <div className="relative flex-1 group cursor-pointer tilt-card rounded-lg overflow-hidden min-h-[288px]">
+                                    <div className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBL6qYomK35nUjXMirOzj1LBrcRkSpUoCwT5DhWXptiGY3LSGeIhFGceEweWxMktNJJosja-vQUOeezWrboK5yEb8sX5txbKs8bupEPLsToapHPmeHOKGYWMCRppBYaerJyBjiaZJEAsW-ExTg_YVcVAE0C-J6E2mV5MLK6uvzDr9hDyMrIH0sU09hXsdBrUWIvHz4RWtHB2GDKXR0a0Va8L3lqcXeACF-9BYvm2IH7SqRm449I0BA9xdTj7YUQtTAK1gCDH4hfo8o')"}}></div>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent"></div>
+                                    <div className="absolute bottom-6 left-6">
+                                        <h4 className="font-headline-lg text-headline-lg">St. Moritz Loft</h4>
+                                        <p className="text-primary font-label-sm uppercase tracking-widest">Alpine Peak</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+                <Footer />
+            </div>
+        );
+
+        const DestinationsPage = () => {
+            const hotels = [
+                { id: 1, name: 'Villa Obsidian', location: 'Italy', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB8jQrjjnFJqy4f-jcjLFQ63nbX1DAQODPX2OdVp6SkI7iQ4Ue15O77Hp84fp60GUZGrmIHdP_URdbHY99wHueac07-N9XGJ4HeccPCNNM8CPv6l-NlFyj4bynULMvLwS9ySvQmiNhY9tZ-DBGisCXRL2D48VG2KsHFjX-nC-Hd4En3seDe216klNDhzxHRSqjzVZZCUjqkKqcUoSuINBfIIZ8P6uNI9Wnze2mM2izbODm5_ap8uLwBfFJGBmqtgQ951PJ5yMIn3jE' },
+                { id: 2, name: 'Azure Atoll', location: 'Maldives', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA6BUprDCY96fANrPbL-QRlEDNamdsIaoaMGJ7lxQFo8EsM4X6SmM2hwhaLU2Ungu_zI_3X7gLjUJ7UDwPLOEX5xOxg9w6WdIS0nY5KkmAnMDpv3fDLbLuTgnYK6sZjegIcDzG5qegt2IGX3wFhRBICft2FR01LxLL_chVcNHvqeaicud0mvquerpBIaXGKyMh1lhSx25D5xfj_Ts8lNZDYf5YHDyBxGuN18sSJvtzaHUKx-IBitv1GfT30s9mGxtYdAWsWosgI1mk' },
+                { id: 3, name: 'Peak Pavilion', location: 'Switzerland', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDZHK2sXzHsEpohsjaaubMdQnxSK3Fy4w0zYBD86cuJfaHHLSb9_lKYAy0GxFIMfGxmfYcu8XX-slWJkRKS7T7FJQNe9NCSgOm_uduoDw8CnCgZhnmWKY0KjTL9v5GF3R8WbHMgbkXjGAk-MthXj4cUfvkWMyHQSfciGgi9uiiHwiDgLxvFpQbd2YHI7N4O-iNto-7aYAZbcNRCbBvUMZAwZgmAWI58F8Jppdcjta0OIVTA6c7t_2gs_-_mFAGXhiaY-9TXSPp-1_A' }
+            ];
+
+            return (
+                <div className="animate-fadeIn">
+                    <Nav />
+                    <main className="pt-32 pb-section-gap px-margin-desktop max-w-container-max mx-auto">
+                        <header className="mb-16">
+                            <span className="font-label-sm text-label-sm text-primary uppercase tracking-[0.3em]">The Global Portfolio</span>
+                            <h1 className="font-display-lg text-display-lg text-on-surface leading-none">Curated <span className="italic text-primary">Sanctuaries</span></h1>
+                        </header>
+                        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+                            {hotels.map(hotel => (
+                                <Link to={`/hotel/${hotel.id}`} key={hotel.id} className="destination-card relative h-[600px] overflow-hidden group">
+                                    <img className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src={hotel.img} alt={hotel.name}/>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60"></div>
+                                    <div className="absolute bottom-0 left-0 w-full p-10 flex flex-col items-start">
+                                        <span className="font-label-sm text-label-sm text-primary uppercase tracking-[0.2em] mb-2">{hotel.location}</span>
+                                        <h3 className="font-display-md text-display-md text-on-surface leading-tight mb-4 group-hover:italic transition-all duration-500">{hotel.name}</h3>
+                                        <div className="flex items-center gap-4 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">
+                                            <span className="font-label-sm text-label-sm uppercase tracking-widest text-primary border-b border-primary/40 pb-1">View Sanctuary</span>
+                                            <span className="material-symbols-outlined text-primary">arrow_forward</span>
+                                        </div>
+                                    </div>
+                                </Link>
+                            ))}
+                        </section>
+                    </main>
+                    <Footer />
+                </div>
+            );
+        };
+
+        const HotelDetailPage = () => {
+            const [activeRoom, setActiveRoom] = useState('Penthouse');
+            const navigate = useNavigate();
+
+            return (
+                <div className="bg-background text-on-surface">
+                    <Nav />
+                    <main className="pt-20 min-h-screen flex flex-col md:flex-row max-w-container-max mx-auto">
+                        <aside className="w-full md:w-3/5 lg:w-[65%] sticky top-20 h-[512px] md:h-[calc(100vh-80px)] overflow-hidden bg-surface-container-lowest">
+                            <div className="relative w-full h-full">
+                                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoQ6Bobc9of92axlrmoBCeI4RUT5tvWw-RtD_4i6mzApyXxK3qpPULGSyyUehmErTpB52ax34DPApIPNoEWl9pOTNn0QTGqc7DLCMvnlKzF4xwGZX82m_j03A-sU0wCE-XOZOvg_uve4SItIamzrKYfYr4EZaSKAGUID2h232WNFo1Ab6e-YwFMJFmifHLXJv803cIDPW5Jclqkkqn5Hk2lcl-zL25qVFcDbMGojg2W3ysBExFpLldZpNlG9OxNYINRirK13-d-RQ" className="w-full h-full object-cover" />
+                                <div className="absolute inset-0 p-10 flex flex-col justify-between pointer-events-none">
+                                    <div className="glass-panel p-4 pointer-events-auto self-start">
+                                        <span className="font-label-sm text-label-sm uppercase tracking-widest text-primary">Live 3D Preview</span>
+                                        <p className="text-xs text-on-surface-variant mt-1">PENTHOUSE SUITE - 402</p>
+                                    </div>
+                                    <div className="absolute top-1/2 left-1/3 pointer-events-auto">
+                                        <div className="relative group cursor-pointer">
+                                            <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md border border-white/40 waypoint-pulse">
+                                                <div className="w-2 h-2 bg-primary rounded-full"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </aside>
+                        <section className="w-full md:w-2/5 lg:w-[35%] bg-background px-8 md:px-12 py-12 flex flex-col gap-12 overflow-y-auto h-screen custom-scrollbar">
+                            <header className="flex flex-col gap-4">
+                                <div className="flex items-center gap-2 text-primary font-label-sm text-label-sm tracking-widest uppercase">
+                                    <span className="material-symbols-outlined text-[16px]">location_on</span> ST. MORITZ, SWITZERLAND
+                                </div>
+                                <h1 className="font-display-lg text-display-lg text-on-surface">The Obsidian Peak</h1>
+                                <p className="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                                    A masterclass in quiet luxury, carved directly into the granite face of the Alpine range.
+                                </p>
+                            </header>
+                            <div className="flex flex-col gap-4">
+                                <div onClick={() => setActiveRoom('Penthouse')} className={`glass-panel p-6 cursor-pointer flex justify-between items-center transition-all ${activeRoom === 'Penthouse' ? 'border-primary bg-primary/5' : ''}`}>
+                                    <div><h4 className="font-headline-lg">Penthouse Suite</h4><p className="text-xs opacity-60">120m² • View</p></div>
+                                    <div className="text-right text-primary font-display-md text-[24px]">€2,400</div>
+                                </div>
+                                <div onClick={() => setActiveRoom('Glacier')} className={`glass-panel p-6 cursor-pointer flex justify-between items-center transition-all ${activeRoom === 'Glacier' ? 'border-primary bg-primary/5' : ''}`}>
+                                    <div><h4 className="font-headline-lg">Glacier Loft</h4><p className="text-xs opacity-60">85m² • View</p></div>
+                                    <div className="text-right text-on-surface-variant font-display-md text-[24px]">€1,850</div>
+                                </div>
+                            </div>
+                            <button onClick={() => navigate('/reservation-flow')} className="w-full bg-primary text-on-primary py-5 font-label-sm text-label-sm uppercase tracking-[0.2em] font-bold hover:scale-[1.01] transition-all">
+                                Reserve This Experience
+                            </button>
+                        </section>
+                    </main>
+                    <Footer />
+                </div>
+            );
+        };
+
+        const ReservationFlow = () => {
+            const navigate = useNavigate();
+            return (
+                <div className="animate-fadeIn">
+                    <Nav />
+                    <main className="pt-32 pb-section-gap px-margin-desktop max-w-container-max mx-auto">
+                        <div className="flex items-center justify-center mb-16 gap-8 font-label-sm text-label-sm uppercase tracking-[0.2em]">
+                            <div className="flex items-center gap-3 text-on-surface/50"><span>01</span><span>Dates</span></div>
+                            <div className="w-12 h-[1px] bg-outline-variant/30"></div>
+                            <div className="flex items-center gap-3 text-primary font-bold"><span>02</span><span>Select Room</span></div>
+                            <div className="w-12 h-[1px] bg-outline-variant/30"></div>
+                            <div className="flex items-center gap-3 text-on-surface/30"><span>03</span><span>Payment</span></div>
+                        </div>
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                            <div className="lg:col-span-8 space-y-8">
+                                <div className="glass-panel flex flex-col md:flex-row h-auto md:h-80 overflow-hidden">
+                                    <div className="w-full md:w-2/5"><img className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZ7AONWQZL1oiq4N5svaxtuyyqxmJHVdG6TzuCcndNr329beHVLmSfh5d19q8caSAp5ShNrdncM7PFF2OxQ4iUIMz-B4cAVlZrXxbnA47wbDZxRdVBwZsvGeg6EaPhVLDFsHjs1c9SwOJ-3EbkqQ6wLIPCsUovCCGuorY-STbKJd4wR8wSjq7Ec3JxGCX99d42Ei7wzM9IcHVzR0SJsxueb-fPsgp6pHEemKZZY9v2mJOa9Il8WwHdLODW5bIAs9xu1oFVJ1UsP64" /></div>
+                                    <div className="p-8 flex-1 flex flex-col justify-between">
+                                        <div className="flex justify-between items-start">
+                                            <h3 className="font-display-md text-headline-lg">The Celestial Suite</h3>
+                                            <span className="text-primary text-[10px] bg-primary/10 px-2 py-1">MOST POPULAR</span>
+                                        </div>
+                                        <div className="flex items-center justify-between">
+                                            <div className="text-primary text-headline-lg font-display-md">$1,250 <span className="text-xs opacity-40">/ NIGHT</span></div>
+                                            <button onClick={() => navigate('/checkout')} className="bg-primary text-on-primary px-8 py-3 uppercase tracking-widest">Select Suite</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <aside className="lg:col-span-4 glass-panel p-8">
+                                <h2 className="font-display-md text-headline-lg border-b border-outline-variant pb-4 mb-6">Summary</h2>
+                                <div className="flex justify-between mb-8">
+                                    <span className="uppercase text-xs opacity-60">Total</span>
+                                    <span className="text-primary text-2xl font-bold">$7,200.00</span>
+                                </div>
+                                <button onClick={() => navigate('/checkout')} className="w-full bg-primary text-on-primary py-4 uppercase font-bold tracking-widest">Checkout</button>
+                            </aside>
+                        </div>
+                    </main>
+                    <Footer />
+                </div>
+            );
+        };
+
+        const CheckoutPage = () => {
+            const navigate = useNavigate();
+            return (
+                <div className="animate-fadeIn">
+                    <Nav showFull={false}/>
+                    <main className="pt-32 pb-section-gap px-margin-desktop max-w-container-max mx-auto">
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+                            <div className="lg:col-span-7 space-y-12">
+                                <header>
+                                    <h1 className="font-display-md text-display-md mb-2">Checkout</h1>
+                                    <p className="opacity-60">Secure payment and guest registration.</p>
+                                </header>
+                                <section className="space-y-6">
+                                    <h2 className="uppercase tracking-widest text-primary text-xs">Payment Information</h2>
+                                    <div className="glass-panel p-8 rounded-xl space-y-6">
+                                        <input className="w-full bg-transparent border-0 border-b border-outline-variant py-3 focus:border-primary focus:ring-0" placeholder="CARD NUMBER" />
+                                        <div className="grid grid-cols-2 gap-8">
+                                            <input className="bg-transparent border-0 border-b border-outline-variant py-3 focus:border-primary focus:ring-0" placeholder="EXPIRY DATE" />
+                                            <input className="bg-transparent border-0 border-b border-outline-variant py-3 focus:border-primary focus:ring-0" placeholder="CVV" type="password" />
+                                        </div>
+                                    </div>
+                                    <button onClick={() => navigate('/confirmation')} className="bg-primary text-on-primary px-12 py-5 font-bold uppercase tracking-widest w-full">Pay $4,250.00</button>
+                                </section>
+                            </div>
+                        </div>
+                    </main>
+                    <Footer />
+                </div>
+            );
+        };
+
+        const ConfirmationPage = () => (
+            <div className="animate-fadeIn">
+                <Nav />
+                <main className="pt-32 pb-section-gap flex flex-col items-center">
+                    <span className="text-primary animate-pulse tracking-widest mb-6">CONFIRMED</span>
+                    <h1 className="font-display-lg text-display-lg italic mb-4 text-center">Your Journey Begins</h1>
+                    <p className="max-w-2xl text-center opacity-60">LMR-88294-Z • Kyoto, Japan • Oct 24, 2024</p>
+                    <div className="mt-12 glass-panel p-10 max-w-4xl w-full flex flex-col md:flex-row gap-10">
+                        <div className="w-full md:w-1/2 aspect-[4/5] rounded overflow-hidden">
+                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGnxjV0vQ-05YqTFZ7wb3ngPubnXIISDvDa2TwzR92MiCHYOBoSlEKQWVLMzQEnexSsIRjiQgWo07G5RrPboQD913ncH55DDFvtlOenx7BiqGLLtbHY88OGD9gy-anwK1a9O8Z7t0WLauPiRh3zvMnjwFHiRQy-hWL5JA2f9i-afF0jFLpxi7C6LeRm08S0u4UHAgVJX1Ob7pO5fBCJJk2k9DgYKOV5Pz7YERePB_ZD_phMNxY1orabakfUcpNVooir7qxlNwhzLI" className="w-full h-full object-cover" />
+                        </div>
+                        <div className="flex-1 py-4 flex flex-col justify-between">
+                            <h2 className="font-headline-lg">The Obsidian Penthouse</h2>
+                            <Link to="/dashboard" className="bg-primary text-on-primary py-4 text-center font-bold uppercase tracking-widest">Go to Dashboard</Link>
+                        </div>
+                    </div>
+                </main>
+                <Footer />
+            </div>
+        );
+
+        const LoginPage = () => {
+            const [mode, setMode] = useState('login');
+            const navigate = useNavigate();
+            return (
+                <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+                    <div className="fixed inset-0 z-0 bg-black/60">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyg6WOwv77BV1l3XH_E4othn2_k_qr7po6UnJgua_avVFjsgtjw8iEAQKQ0y7MwX42I9fjc8mwyv7a8sAO43GCQfqySzjAvHL18QutK8kdX8fSP2WlL0y1hFLs7Sx9ARLDxjSaNRZGL6VuIWqWNfnTi-8VqWD0UccXGHqc2kufx0Jkyz4mDuMcTdIQjysUqAl6h6I4VwDhbjg262gtkugaNej5s1YGCh0lLZLnnXb06_gXjYuf2y0QjbpRYrO0DEj5Pr3lRk7HGA8" className="w-full h-full object-cover blur-sm opacity-60" />
+                    </div>
+                    <main className="relative z-20 w-full max-w-[480px] p-10 glass-panel animate-fadeIn">
+                        <div className="text-center mb-12">
+                            <h1 className="font-display-md text-primary">LUMIÈRE</h1>
+                            <p className="uppercase text-xs tracking-widest opacity-60">The Art of Sanctuary</p>
+                        </div>
+                        {mode === 'login' ? (
+                            <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); navigate('/dashboard'); }}>
+                                <input className="w-full bg-transparent border-0 border-b border-outline-variant py-3 focus:border-primary focus:ring-0" placeholder="EMAIL" />
+                                <input className="w-full bg-transparent border-0 border-b border-outline-variant py-3 focus:border-primary focus:ring-0" placeholder="PASSWORD" type="password" />
+                                <button className="w-full bg-primary text-on-primary py-4 uppercase font-bold tracking-widest">Sign In</button>
+                                <p className="text-center text-xs opacity-60">New? <span onClick={() => setMode('signup')} className="text-primary cursor-pointer">Request Access</span></p>
+                            </form>
+                        ) : (
+                            <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); setMode('login'); }}>
+                                <input className="w-full bg-transparent border-0 border-b border-outline-variant py-3 focus:border-primary focus:ring-0" placeholder="FULL NAME" />
+                                <input className="w-full bg-transparent border-0 border-b border-outline-variant py-3 focus:border-primary focus:ring-0" placeholder="EMAIL" />
+                                <button className="w-full bg-primary text-on-primary py-4 uppercase font-bold tracking-widest">Create Account</button>
+                                <p className="text-center text-xs opacity-60">Member? <span onClick={() => setMode('login')} className="text-primary cursor-pointer">Sign In</span></p>
+                            </form>
+                        )}
+                    </main>
+                </div>
+            );
+        };
+
+        const UserDashboard = () => {
+            const navigate = useNavigate();
+            return (
+                <div className="min-h-screen flex">
+                    <aside className="fixed left-0 top-0 h-full w-64 bg-surface-container-lowest border-r border-outline-variant flex flex-col py-8 z-40 hidden md:flex">
+                        <div className="px-8 mb-12">
+                            <h1 className="font-display-md text-primary tracking-tighter">LUMIERE</h1>
+                        </div>
+                        <nav className="flex-1 px-4 space-y-2">
+                            <a className="flex items-center gap-4 px-4 py-3 rounded text-primary bg-secondary-container/20 border-r-2 border-primary" href="#">
+                                <span className="material-symbols-outlined">calendar_month</span><span>Bookings</span>
+                            </a>
+                            <a onClick={() => navigate('/admin')} className="flex items-center gap-4 px-4 py-3 rounded text-on-surface-variant hover:text-on-surface cursor-pointer">
+                                <span className="material-symbols-outlined">analytics</span><span>Management</span>
+                            </a>
+                        </nav>
+                        <div className="mt-auto px-4"><button onClick={() => navigate('/')} className="w-full py-3 border border-error text-error uppercase text-xs">Logout</button></div>
+                    </aside>
+                    <main className="md:ml-64 flex-1 p-margin-desktop bg-background min-h-screen">
+                        <header className="mb-16 flex justify-between items-end">
+                            <div><h2 className="font-display-lg">My Sanctuary</h2><p className="opacity-60">Julian Alexander Vance • Elite Member</p></div>
+                        </header>
+                        <div className="glass-panel p-8 flex flex-col md:flex-row gap-8 items-center rounded-xl overflow-hidden mb-8">
+                            <div className="w-48 h-48 bg-cover bg-center rounded" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuAFwI_jplMNy8j23b5L7mde0dt06udrKpsQfuO9r1H2H75l_lkptpRJD-6h8FDNEsXEcmGHyO5VHFKXIb53v-jFMp_EBSszlmEVGMcfbuRfG2r4PCUp2mb_wH5_rlgqgvOgfaue-rVYMhRiE1uyTb-VSYBymN0YI1mGUuRXk60gh4ZVy4fPmy149Fb2MEh3WECMRocJ76k2Me4Fiz7eKBAgDmtMYQzwk0KUpXNv9IMtU7CQeO5X7oELOxfRDPUV-BFhtewqHIHlFMo')"}}></div>
+                            <div className="flex-1">
+                                <h3 className="font-headline-lg">The Obsidian Spire</h3>
+                                <p className="opacity-60 mb-4">Reykjavík, Iceland • Oct 14, 2024</p>
+                                <button className="border border-primary text-primary px-6 py-2 uppercase text-xs">Manage Stay</button>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            );
+        };
+
+        const AdminDashboard = () => {
+            const navigate = useNavigate();
+            return (
+                <div className="min-h-screen flex">
+                    <aside className="fixed left-0 top-0 h-full w-64 bg-surface-container-lowest border-r border-outline-variant flex flex-col py-8 z-40">
+                        <div className="px-8 mb-12">
+                            <h1 className="font-display-md text-primary tracking-tighter">LUMIERE</h1>
+                            <p className="text-[10px] uppercase opacity-40">Management Portal</p>
+                        </div>
+                        <nav className="flex-1 px-4 space-y-2">
+                            <div className="flex items-center gap-4 px-4 py-3 rounded text-primary bg-secondary-container/20 border-r-2 border-primary">
+                                <span className="material-symbols-outlined">analytics</span><span>Analytics</span>
+                            </div>
+                        </nav>
+                        <div className="px-4"><button onClick={() => navigate('/dashboard')} className="w-full py-3 border border-primary text-primary uppercase text-xs">User Portal</button></div>
+                    </aside>
+                    <main className="ml-64 flex-1 p-10 bg-background overflow-y-auto">
+                        <header className="mb-10 flex justify-between items-center">
+                            <h2 className="font-headline-lg">Analytics Overview</h2>
+                            <span className="opacity-40 uppercase text-xs">October 2024</span>
+                        </header>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div className="glass-panel p-8 rounded">
+                                <span className="uppercase text-xs opacity-40">Monthly Revenue</span>
+                                <div className="text-3xl text-primary font-bold mt-2">$428,500</div>
+                            </div>
+                            <div className="glass-panel p-8 rounded">
+                                <span className="uppercase text-xs opacity-40">Total Bookings</span>
+                                <div className="text-3xl text-primary font-bold mt-2">1,284</div>
+                            </div>
+                            <div className="glass-panel p-8 rounded">
+                                <span className="uppercase text-xs opacity-40">Occupancy</span>
+                                <div className="text-3xl text-primary font-bold mt-2">94.2%</div>
+                            </div>
+                        </div>
+                        <div className="mt-10 glass-panel p-8">
+                            <h3 className="uppercase text-xs opacity-60 mb-6">Recent Reservations</h3>
+                            <div className="space-y-4">
+                                {[1,2,3].map(i => (
+                                    <div key={i} className="flex justify-between border-b border-outline-variant/30 pb-4">
+                                        <span>Julian Sinclair</span>
+                                        <span className="opacity-60">The Obsidian Vault</span>
+                                        <span className="text-primary font-bold">$12,400</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            );
+        };
+
+        const App = () => {
+            return (
+                <MemoryRouter>
+                    <Routes>
+                        <Route path="/" element={<HomePage />} />
+                        <Route path="/destinations" element={<DestinationsPage />} />
+                        <Route path="/hotel/:id" element={<HotelDetailPage />} />
+                        <Route path="/reservation-flow" element={<ReservationFlow />} />
+                        <Route path="/checkout" element={<CheckoutPage />} />
+                        <Route path="/confirmation" element={<ConfirmationPage />} />
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="/dashboard" element={<UserDashboard />} />
+                        <Route path="/admin" element={<AdminDashboard />} />
+                    </Routes>
+                </MemoryRouter>
+            );
+        };
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

@@ -14,6 +14,23 @@ export const reviewsRouter = router({
     });
   }),
 
+  // Cross-hotel feed of approved reviews for homepage testimonials — real guest
+  // quotes rather than fabricated marketing copy.
+  listRecent: publicProcedure
+    .input(z.object({ limit: z.coerce.number().int().min(1).max(20).default(6) }).optional())
+    .query(async ({ input }) => {
+      const limit = input?.limit ?? 6;
+      return db.query.reviews.findMany({
+        where: eq(schema.reviews.approved, true),
+        orderBy: desc(schema.reviews.createdAt),
+        limit,
+        with: {
+          user: { columns: { id: true, name: true } },
+          hotel: { columns: { id: true, name: true, city: true, country: true } },
+        },
+      });
+    }),
+
   create: protectedProcedure.input(reviewCreateSchema).mutation(async ({ input, ctx }) => {
     const booking = await db.query.bookings.findFirst({ where: eq(schema.bookings.id, input.bookingId) });
     if (!booking || booking.userId !== ctx.user.sub || booking.hotelId !== input.hotelId) {

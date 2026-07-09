@@ -22,6 +22,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import Navigation from './components/common/Navigation';
 import Footer from './components/common/Footer';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import PageTransition from './components/motion/PageTransition';
 
 function Router() {
   return (
@@ -55,7 +56,9 @@ function App() {
         <div className="min-h-screen flex flex-col bg-background text-foreground">
           <Navigation />
           <main className="flex-1">
-            <Router />
+            <PageTransition>
+              <Router />
+            </PageTransition>
           </main>
           <Footer />
         </div>

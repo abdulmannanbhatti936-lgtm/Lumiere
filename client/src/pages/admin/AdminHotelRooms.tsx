@@ -2,12 +2,15 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRoute, Link } from 'wouter';
-import { Loader2, Plus, Pencil, Trash2, ArrowLeft } from 'lucide-react';
+import { Plus, Pencil, Trash2, ArrowLeft } from 'lucide-react';
 import { TRPCClientError } from '@trpc/client';
 import { roomWriteSchema, type RoomWriteInput, type RoomWriteFormInput } from '@shared/validation';
 import { trpc, type RouterOutputs } from '@/lib/trpc';
 import { formatCurrency } from '@/lib/utils';
 import AdminLayout from '@/components/admin/AdminLayout';
+import Reveal from '@/components/motion/Reveal';
+import Magnetic from '@/components/motion/Magnetic';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -104,65 +107,79 @@ export default function AdminHotelRooms() {
   return (
     <AdminLayout>
       <div className="mb-8">
-        <Link href="/admin/hotels" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-4">
-          <ArrowLeft size={18} /> Back to Hotels
+        <Link
+          href="/admin/hotels"
+          className="inline-flex items-center gap-2 label-caps !text-[10px] !text-muted-foreground hover:!text-accent transition-colors mb-6"
+        >
+          <ArrowLeft size={14} /> Back to Hotels
         </Link>
-        <div className="flex items-center justify-between">
-          <h1 className="text-4xl font-bold">Rooms — {hotel?.name ?? '...'}</h1>
-          <Button onClick={openCreateDialog} className="flex items-center gap-2">
-            <Plus size={18} /> Add Room
-          </Button>
-        </div>
+        <Reveal className="flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <span className="label-caps mb-2 block">Inventory</span>
+            <h1 className="font-serif text-4xl">Rooms — {hotel?.name ?? '...'}</h1>
+          </div>
+          <Magnetic>
+            <Button onClick={openCreateDialog} className="flex items-center gap-2">
+              <Plus size={18} /> Add Room
+            </Button>
+          </Magnetic>
+        </Reveal>
       </div>
 
-      <div className="card-luxury">
-        {isLoading ? (
-          <div className="flex justify-center py-12">
-            <Loader2 size={32} className="animate-spin text-accent" />
-          </div>
-        ) : rooms && rooms.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-border">
-                  <th className="text-left py-3 px-4 font-semibold text-muted-foreground">Name</th>
-                  <th className="text-left py-3 px-4 font-semibold text-muted-foreground">Capacity</th>
-                  <th className="text-left py-3 px-4 font-semibold text-muted-foreground">Price/night</th>
-                  <th className="text-left py-3 px-4 font-semibold text-muted-foreground">Units</th>
-                  <th className="text-right py-3 px-4 font-semibold text-muted-foreground">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rooms.map((room) => (
-                  <tr key={room.id} className="border-b border-border hover:bg-muted/50 transition-colors">
-                    <td className="py-4 px-4 font-semibold">{room.name}</td>
-                    <td className="py-4 px-4 text-muted-foreground">{room.capacity} guests</td>
-                    <td className="py-4 px-4 text-muted-foreground">{formatCurrency(Number(room.pricePerNight))}</td>
-                    <td className="py-4 px-4 text-muted-foreground">{room.totalUnits}</td>
-                    <td className="py-4 px-4">
-                      <div className="flex items-center justify-end gap-2">
-                        <Button variant="ghost" size="icon" title="Edit" onClick={() => openEditDialog(room)}>
-                          <Pencil size={18} />
-                        </Button>
-                        <Button variant="ghost" size="icon" title="Delete" onClick={() => handleDelete(room)}>
-                          <Trash2 size={18} className="text-destructive" />
-                        </Button>
-                      </div>
-                    </td>
+      <Reveal delay={0.1}>
+        <div className="glass-panel p-6">
+          {isLoading ? (
+            <div className="space-y-3">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Skeleton key={i} className="h-12 w-full" />
+              ))}
+            </div>
+          ) : rooms && rooms.length > 0 ? (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="text-left py-3 px-4 label-caps !text-[10px] !text-muted-foreground">Name</th>
+                    <th className="text-left py-3 px-4 label-caps !text-[10px] !text-muted-foreground">Capacity</th>
+                    <th className="text-left py-3 px-4 label-caps !text-[10px] !text-muted-foreground">Price/night</th>
+                    <th className="text-left py-3 px-4 label-caps !text-[10px] !text-muted-foreground">Units</th>
+                    <th className="text-right py-3 px-4 label-caps !text-[10px] !text-muted-foreground">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <p className="text-muted-foreground text-center py-12">No rooms yet — add the first one.</p>
-        )}
-      </div>
+                </thead>
+                <tbody>
+                  {rooms.map((room) => (
+                    <tr key={room.id} className="border-b border-border hover:bg-white/5 transition-colors">
+                      <td className="py-4 px-4 font-semibold">{room.name}</td>
+                      <td className="py-4 px-4 text-muted-foreground">{room.capacity} guests</td>
+                      <td className="py-4 px-4 text-muted-foreground">{formatCurrency(Number(room.pricePerNight))}</td>
+                      <td className="py-4 px-4 text-muted-foreground">{room.totalUnits}</td>
+                      <td className="py-4 px-4">
+                        <div className="flex items-center justify-end gap-2">
+                          <Button variant="ghost" size="icon" title="Edit" onClick={() => openEditDialog(room)}>
+                            <Pencil size={18} />
+                          </Button>
+                          <Button variant="ghost" size="icon" title="Delete" onClick={() => handleDelete(room)}>
+                            <Trash2 size={18} className="text-destructive" />
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="text-muted-foreground text-center py-12">No rooms yet — add the first one.</p>
+          )}
+        </div>
+      </Reveal>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+        <DialogContent className="glass-panel border-white/10 max-w-2xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{editingRoom ? `Edit ${editingRoom.name}` : 'Add Room'}</DialogTitle>
+            <DialogTitle className="font-serif text-2xl font-normal">
+              {editingRoom ? `Edit ${editingRoom.name}` : 'Add Room'}
+            </DialogTitle>
           </DialogHeader>
 
           <Form {...form}>
@@ -266,9 +283,11 @@ export default function AdminHotelRooms() {
                 <Button type="button" variant="secondary" onClick={() => setDialogOpen(false)}>
                   Cancel
                 </Button>
-                <Button type="submit" disabled={isSaving}>
-                  {isSaving ? 'Saving...' : editingRoom ? 'Save Changes' : 'Create Room'}
-                </Button>
+                <Magnetic>
+                  <Button type="submit" disabled={isSaving}>
+                    {isSaving ? 'Saving...' : editingRoom ? 'Save Changes' : 'Create Room'}
+                  </Button>
+                </Magnetic>
               </div>
             </form>
           </Form>

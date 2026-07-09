@@ -37,8 +37,8 @@ function HotelBox() {
         >
           <boxGeometry args={[0.3, 0.3, 0.1]} />
           <meshStandardMaterial
-            color="#ffc107"
-            emissive="#ffc107"
+            color="#00D9FF"
+            emissive="#00D9FF"
             emissiveIntensity={0.5}
           />
         </mesh>
@@ -74,7 +74,7 @@ export default function HotelModel() {
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
       />
-      <pointLight position={[-10, 5, 5]} intensity={0.5} color="#ffc107" />
+      <pointLight position={[-10, 5, 5]} intensity={0.5} color="#00D9FF" />
 
       <Stage environment="city" intensity={0.5}>
         <HotelBox />

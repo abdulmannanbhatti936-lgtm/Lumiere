@@ -46,7 +46,7 @@ function RoomScene() {
       {/* Window */}
       <mesh position={[2.1, 0.5, 0]} castShadow>
         <planeGeometry args={[0.1, 1.5]} />
-        <meshStandardMaterial color="#ffc107" emissive="#ffc107" emissiveIntensity={0.3} />
+        <meshStandardMaterial color="#00D9FF" emissive="#00D9FF" emissiveIntensity={0.3} />
       </mesh>
 
       {/* Lamp */}
@@ -58,8 +58,8 @@ function RoomScene() {
       <mesh position={[1, 1.1, -0.8]} castShadow>
         <sphereGeometry args={[0.3, 16, 16]} />
         <meshStandardMaterial
-          color="#ffc107"
-          emissive="#ffc107"
+          color="#00D9FF"
+          emissive="#00D9FF"
           emissiveIntensity={0.6}
         />
       </mesh>
@@ -86,7 +86,7 @@ export default function RoomPreview() {
         intensity={1}
         castShadow
       />
-      <pointLight position={[1, 1, 1]} intensity={0.5} color="#ffc107" />
+      <pointLight position={[1, 1, 1]} intensity={0.5} color="#00D9FF" />
 
       <RoomScene />
 

@@ -1,58 +1,81 @@
 import { Link } from 'wouter';
+import { Globe2, Camera, PlayCircle } from 'lucide-react';
+import Reveal from '@/components/motion/Reveal';
 
 export default function Footer() {
   return (
-    <footer className="bg-card border-t border-border mt-20">
-      <div className="container py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-          {/* Brand */}
-          <div>
-            <h3 className="text-xl font-bold gradient-text mb-4">Lumiere Stays</h3>
-            <p className="text-muted-foreground text-sm">
-              Experience luxury travel with immersive 3D hotel browsing and seamless bookings.
-            </p>
+    <footer className="relative border-t border-border bg-background mt-20">
+      <div className="container py-24">
+        <Reveal>
+          <div className="text-center font-serif text-5xl md:text-6xl tracking-tight text-accent mb-16">
+            LUMIÈRE
+          </div>
+        </Reveal>
+
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-10 text-center md:text-left mb-16">
+          <div className="flex flex-col gap-4">
+            <h6 className="label-caps">Explore</h6>
+            <Link href="/hotels" className="text-sm text-muted-foreground hover:text-accent transition-colors">
+              Hotels
+            </Link>
+            <Link href="/destinations" className="text-sm text-muted-foreground hover:text-accent transition-colors">
+              Destinations
+            </Link>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/" className="hover:text-accent transition-colors">Home</Link></li>
-              <li><Link href="/hotels" className="hover:text-accent transition-colors">Hotels</Link></li>
-              <li><Link href="/destinations" className="hover:text-accent transition-colors">Destinations</Link></li>
-            </ul>
+          <div className="flex flex-col gap-4">
+            <h6 className="label-caps">Experience</h6>
+            <span className="text-sm text-muted-foreground">3D Room Tours</span>
+            <span className="text-sm text-muted-foreground">Curated Stays</span>
+            <span className="text-sm text-muted-foreground">Private Concierge</span>
           </div>
 
-          {/* Support */}
-          <div>
-            <h4 className="font-semibold mb-4">Support</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><a href="#" className="hover:text-accent transition-colors">Help Center</a></li>
-              <li><a href="#" className="hover:text-accent transition-colors">Contact Us</a></li>
-              <li><a href="#" className="hover:text-accent transition-colors">FAQ</a></li>
-            </ul>
+          <div className="flex flex-col gap-4">
+            <h6 className="label-caps">About</h6>
+            <a href="#" className="text-sm text-muted-foreground hover:text-accent transition-colors">
+              Sustainability
+            </a>
+            <a href="#" className="text-sm text-muted-foreground hover:text-accent transition-colors">
+              Careers
+            </a>
+            <a href="#" className="text-sm text-muted-foreground hover:text-accent transition-colors">
+              Press
+            </a>
           </div>
 
-          {/* Legal */}
-          <div>
-            <h4 className="font-semibold mb-4">Legal</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><a href="#" className="hover:text-accent transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-accent transition-colors">Terms of Service</a></li>
-              <li><a href="#" className="hover:text-accent transition-colors">Cookies</a></li>
-            </ul>
+          <div className="flex flex-col gap-4">
+            <h6 className="label-caps">Support</h6>
+            <a href="#" className="text-sm text-muted-foreground hover:text-accent transition-colors">
+              Concierge 24/7
+            </a>
+            <a href="#" className="text-sm text-muted-foreground hover:text-accent transition-colors">
+              FAQ
+            </a>
+            <a href="#" className="text-sm text-muted-foreground hover:text-accent transition-colors">
+              Contact
+            </a>
+          </div>
+
+          <div className="flex flex-col gap-4 col-span-2 md:col-span-1">
+            <h6 className="label-caps">Follow</h6>
+            <div className="flex justify-center md:justify-start gap-4">
+              <Globe2 size={18} className="text-muted-foreground hover:text-accent transition-colors cursor-pointer" />
+              <Camera size={18} className="text-muted-foreground hover:text-accent transition-colors cursor-pointer" />
+              <PlayCircle size={18} className="text-muted-foreground hover:text-accent transition-colors cursor-pointer" />
+            </div>
           </div>
         </div>
 
-        <div className="border-t border-border pt-8 flex flex-col md:flex-row items-center justify-between">
-          <p className="text-sm text-muted-foreground">
-            © 2026 Lumiere Stays. All rights reserved.
-          </p>
-          <div className="flex gap-4 mt-4 md:mt-0">
-            <a href="#" className="text-muted-foreground hover:text-accent transition-colors">Twitter</a>
-            <a href="#" className="text-muted-foreground hover:text-accent transition-colors">Instagram</a>
-            <a href="#" className="text-muted-foreground hover:text-accent transition-colors">Facebook</a>
-          </div>
+        <div className="gold-divider mb-8" />
+
+        <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 label-caps !text-muted-foreground !text-[10px]">
+          <span>© 2026 LUMIÈRE STAYS. ALL RIGHTS RESERVED.</span>
+          <a href="#" className="hover:!text-accent transition-colors">
+            Privacy Policy
+          </a>
+          <a href="#" className="hover:!text-accent transition-colors">
+            Terms of Service
+          </a>
         </div>
       </div>
     </footer>

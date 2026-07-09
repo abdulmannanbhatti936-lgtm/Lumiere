@@ -1,4 +1,4 @@
-import { Star, MapPin } from 'lucide-react';
+import { Star, MapPin, ArrowRight, Sparkles } from 'lucide-react';
 import { Link } from 'wouter';
 import { formatCurrency } from '@/lib/utils';
 
@@ -29,64 +29,80 @@ export default function HotelCard({
 }: HotelCardProps) {
   return (
     <Link href={`/hotel/${id}`}>
-      <div className="card-luxury cursor-pointer group overflow-hidden">
-        {/* Image */}
-        <div className="relative w-full h-48 mb-4 overflow-hidden rounded-lg">
-          <img
-            src={imageUrl || 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=500&h=300&fit=crop'}
-            alt={name}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-          />
-          <div className="absolute top-3 right-3 bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-semibold">
-            {formatCurrency(price )}/night
-          </div>
-        </div>
+      <div className="group relative h-[440px] [perspective:1200px] cursor-pointer">
+        <div className="relative h-full w-full transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+          {/* Front face */}
+          <div className="absolute inset-0 overflow-hidden rounded-2xl border border-white/10 group-hover:border-primary/40 transition-colors duration-500 [backface-visibility:hidden]">
+            <img
+              src={imageUrl || 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=1000&fit=crop'}
+              alt={name}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-background/10" />
 
-        {/* Content */}
-        <div className="space-y-3">
-          <h3 className="text-xl font-bold text-foreground group-hover:text-accent transition-colors">
-            {name}
-          </h3>
+            <div
+              className="absolute top-5 right-5 label-caps !text-[10px] px-3 py-1.5 rounded-full border border-white/15 backdrop-blur-md"
+              style={{ background: 'hsl(0 0% 100% / 0.1)' }}
+            >
+              {formatCurrency(price)}
+              <span className="text-muted-foreground normal-case tracking-normal">/night</span>
+            </div>
 
-          {/* Location */}
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <MapPin size={16} />
-            <span className="text-sm">{city}, {country}</span>
-          </div>
-
-          {/* Rating */}
-          <div className="flex items-center gap-2">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                size={16}
-                className={i < starRating ? 'fill-accent text-accent' : 'text-muted'}
-              />
-            ))}
-            <span className="text-sm text-muted-foreground">({starRating}/5)</span>
-            {averageRating != null && reviewCount ? (
-              <span className="text-sm text-muted-foreground">
-                · {averageRating} guest rating ({reviewCount})
+            <div
+              className="absolute bottom-3 left-3 right-3 rounded-xl border border-white/15 backdrop-blur-xl p-5 flex flex-col items-start"
+              style={{ background: 'hsl(0 0% 100% / 0.08)' }}
+            >
+              <span className="label-caps !text-[10px] mb-2 flex items-center gap-1.5">
+                <MapPin size={12} /> {city}, {country}
               </span>
-            ) : null}
+              <h3 className="font-serif text-2xl mb-2 leading-tight">{name}</h3>
+
+              <div className="flex items-center gap-1.5">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={13} className={i < starRating ? 'fill-accent text-accent' : 'text-muted'} />
+                ))}
+                {averageRating != null && reviewCount ? (
+                  <span className="text-xs text-muted-foreground ml-1">
+                    {averageRating} ({reviewCount})
+                  </span>
+                ) : null}
+              </div>
+            </div>
           </div>
 
-          {/* Amenities */}
-          <div className="flex flex-wrap gap-2">
-            {amenities.slice(0, 3).map((amenity) => (
-              <span
-                key={amenity}
-                className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded"
-              >
-                {amenity}
+          {/* Back face — flips into view on hover, Voyara-style highlight reveal */}
+          <div
+            className="absolute inset-0 rounded-2xl border border-primary/30 p-7 flex flex-col [backface-visibility:hidden] [transform:rotateY(180deg)]"
+            style={{ background: 'linear-gradient(160deg, hsl(var(--card)), hsl(var(--background)))' }}
+          >
+            <span className="label-caps !text-[10px] mb-1 flex items-center gap-1.5">
+              <MapPin size={12} /> {city}, {country}
+            </span>
+            <h3 className="font-serif text-2xl mb-5 leading-tight">{name}</h3>
+
+            <div className="space-y-3 flex-1 overflow-hidden">
+              {amenities.length > 0 ? (
+                amenities.slice(0, 5).map((amenity) => (
+                  <div key={amenity} className="flex items-center gap-2.5 text-sm text-muted-foreground">
+                    <Sparkles size={12} className="text-accent shrink-0" />
+                    {amenity}
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-muted-foreground">Full amenity details on the hotel page.</p>
+              )}
+            </div>
+
+            <div className="flex items-center justify-between pt-4 border-t border-white/10">
+              <span className="font-serif text-xl text-accent">
+                {formatCurrency(price)}
+                <span className="text-xs text-muted-foreground normal-case tracking-normal"> /night</span>
               </span>
-            ))}
+              <span className="label-caps !text-[10px] flex items-center gap-1.5">
+                View Details <ArrowRight size={12} />
+              </span>
+            </div>
           </div>
-
-          {/* Button */}
-          <button className="w-full btn-primary mt-4">
-            View Details
-          </button>
         </div>
       </div>
     </Link>

@@ -6,7 +6,8 @@
   "license": "MIT",
   "workspaces": [
     "client",
-    "server"
+    "server",
+    "services/*"
   ],
   "scripts": {
     "dev": "concurrently -n server,client -c blue,yellow \"npm:dev:server\" \"npm:dev:client\"",

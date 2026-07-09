@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2, Plus, Pencil, Trash2 } from 'lucide-react';
+import { Plus, Pencil, Trash2 } from 'lucide-react';
 import { TRPCClientError } from '@trpc/client';
 import { destinationWriteSchema, type DestinationWriteInput, type DestinationWriteFormInput } from '@shared/validation';
 import { trpc, type RouterOutputs } from '@/lib/trpc';
 import AdminLayout from '@/components/admin/AdminLayout';
+import Reveal from '@/components/motion/Reveal';
+import Magnetic from '@/components/motion/Magnetic';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -84,59 +87,76 @@ export default function AdminDestinations() {
 
   return (
     <AdminLayout>
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-4xl font-bold">Manage Destinations</h1>
-        <Button onClick={openCreateDialog} className="flex items-center gap-2">
-          <Plus size={18} /> Add Destination
-        </Button>
-      </div>
+      <Reveal className="flex items-center justify-between mb-8 flex-wrap gap-4">
+        <div>
+          <span className="label-caps mb-2 block">Global Portfolio</span>
+          <h1 className="font-serif text-4xl">Manage Destinations</h1>
+        </div>
+        <Magnetic>
+          <Button onClick={openCreateDialog} className="flex items-center gap-2">
+            <Plus size={18} /> Add Destination
+          </Button>
+        </Magnetic>
+      </Reveal>
 
-      <div className="card-luxury">
-        {isLoading ? (
-          <div className="flex justify-center py-12">
-            <Loader2 size={32} className="animate-spin text-accent" />
-          </div>
-        ) : destinations && destinations.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-border">
-                  <th className="text-left py-3 px-4 font-semibold text-muted-foreground">Name</th>
-                  <th className="text-left py-3 px-4 font-semibold text-muted-foreground">Country</th>
-                  <th className="text-left py-3 px-4 font-semibold text-muted-foreground">Featured</th>
-                  <th className="text-right py-3 px-4 font-semibold text-muted-foreground">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {destinations.map((destination) => (
-                  <tr key={destination.id} className="border-b border-border hover:bg-muted/50 transition-colors">
-                    <td className="py-4 px-4 font-semibold">{destination.name}</td>
-                    <td className="py-4 px-4 text-muted-foreground">{destination.country}</td>
-                    <td className="py-4 px-4 text-muted-foreground">{destination.featured ? 'Yes' : 'No'}</td>
-                    <td className="py-4 px-4">
-                      <div className="flex items-center justify-end gap-2">
-                        <Button variant="ghost" size="icon" title="Edit" onClick={() => openEditDialog(destination)}>
-                          <Pencil size={18} />
-                        </Button>
-                        <Button variant="ghost" size="icon" title="Delete" onClick={() => handleDelete(destination)}>
-                          <Trash2 size={18} className="text-destructive" />
-                        </Button>
-                      </div>
-                    </td>
+      <Reveal delay={0.1}>
+        <div className="glass-panel p-6">
+          {isLoading ? (
+            <div className="space-y-3">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Skeleton key={i} className="h-12 w-full" />
+              ))}
+            </div>
+          ) : destinations && destinations.length > 0 ? (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="text-left py-3 px-4 label-caps !text-[10px] !text-muted-foreground">Name</th>
+                    <th className="text-left py-3 px-4 label-caps !text-[10px] !text-muted-foreground">Country</th>
+                    <th className="text-left py-3 px-4 label-caps !text-[10px] !text-muted-foreground">Featured</th>
+                    <th className="text-right py-3 px-4 label-caps !text-[10px] !text-muted-foreground">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <p className="text-muted-foreground text-center py-12">No destinations yet — add the first one.</p>
-        )}
-      </div>
+                </thead>
+                <tbody>
+                  {destinations.map((destination) => (
+                    <tr key={destination.id} className="border-b border-border hover:bg-white/5 transition-colors">
+                      <td className="py-4 px-4 font-semibold">{destination.name}</td>
+                      <td className="py-4 px-4 text-muted-foreground">{destination.country}</td>
+                      <td className="py-4 px-4">
+                        {destination.featured ? (
+                          <span className="px-3 py-1 rounded-sm text-xs font-semibold bg-accent/10 text-accent">Featured</span>
+                        ) : (
+                          <span className="text-muted-foreground text-sm">—</span>
+                        )}
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="flex items-center justify-end gap-2">
+                          <Button variant="ghost" size="icon" title="Edit" onClick={() => openEditDialog(destination)}>
+                            <Pencil size={18} />
+                          </Button>
+                          <Button variant="ghost" size="icon" title="Delete" onClick={() => handleDelete(destination)}>
+                            <Trash2 size={18} className="text-destructive" />
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="text-muted-foreground text-center py-12">No destinations yet — add the first one.</p>
+          )}
+        </div>
+      </Reveal>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
+        <DialogContent className="glass-panel border-white/10 max-w-lg max-h-[85vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{editingDestination ? `Edit ${editingDestination.name}` : 'Add Destination'}</DialogTitle>
+            <DialogTitle className="font-serif text-2xl font-normal">
+              {editingDestination ? `Edit ${editingDestination.name}` : 'Add Destination'}
+            </DialogTitle>
           </DialogHeader>
 
           <Form {...form}>
@@ -203,7 +223,7 @@ export default function AdminDestinations() {
                         type="checkbox"
                         checked={field.value}
                         onChange={(e) => field.onChange(e.target.checked)}
-                        className="w-4 h-4"
+                        className="w-4 h-4 accent-accent"
                       />
                     </FormControl>
                     <FormLabel className="!mt-0">Featured destination</FormLabel>
@@ -217,9 +237,11 @@ export default function AdminDestinations() {
                 <Button type="button" variant="secondary" onClick={() => setDialogOpen(false)}>
                   Cancel
                 </Button>
-                <Button type="submit" disabled={isSaving}>
-                  {isSaving ? 'Saving...' : editingDestination ? 'Save Changes' : 'Create Destination'}
-                </Button>
+                <Magnetic>
+                  <Button type="submit" disabled={isSaving}>
+                    {isSaving ? 'Saving...' : editingDestination ? 'Save Changes' : 'Create Destination'}
+                  </Button>
+                </Magnetic>
               </div>
             </form>
           </Form>

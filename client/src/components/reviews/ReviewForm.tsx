@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Star } from 'lucide-react';
+import Magnetic from '@/components/motion/Magnetic';
 
 interface ReviewFormProps {
   hotelId: number;
@@ -25,12 +26,12 @@ export default function ReviewForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="card-luxury">
-      <h3 className="font-semibold text-foreground mb-4">Leave a Review</h3>
+    <form onSubmit={handleSubmit} className="glass-panel p-6 md:p-8">
+      <h3 className="label-caps !text-foreground mb-6">Leave a Review</h3>
 
       {/* Rating */}
-      <div className="mb-4">
-        <label className="text-sm text-muted-foreground mb-2 block">Rating</label>
+      <div className="mb-6">
+        <label className="label-caps !text-[10px] mb-3 block">Rating</label>
         <div className="flex gap-2">
           {[1, 2, 3, 4, 5].map((star) => (
             <button
@@ -42,7 +43,7 @@ export default function ReviewForm({
               className="transition-transform hover:scale-110"
             >
               <Star
-                size={24}
+                size={26}
                 className={
                   star <= (hoverRating || rating)
                     ? 'fill-accent text-accent'
@@ -55,28 +56,30 @@ export default function ReviewForm({
       </div>
 
       {/* Comment */}
-      <div className="mb-4">
-        <label className="text-sm text-muted-foreground mb-2 block">Your Review</label>
+      <div className="mb-6">
+        <label className="label-caps !text-[10px] mb-3 block">Your Review</label>
         <textarea
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           placeholder="Share your experience..."
-          className="input-luxury min-h-24 resize-none"
+          className="input-luxury min-h-28 resize-none"
           maxLength={500}
         />
-        <p className="text-xs text-muted-foreground mt-1">
+        <p className="label-caps !text-[9px] !text-muted-foreground mt-2">
           {comment.length}/500
         </p>
       </div>
 
       {/* Submit */}
-      <button
-        type="submit"
-        disabled={!comment.trim() || isLoading}
-        className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {isLoading ? 'Submitting...' : 'Submit Review'}
-      </button>
+      <Magnetic className="block w-full">
+        <button
+          type="submit"
+          disabled={!comment.trim() || isLoading}
+          className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isLoading ? 'Submitting...' : 'Submit Review'}
+        </button>
+      </Magnetic>
     </form>
   );
 }

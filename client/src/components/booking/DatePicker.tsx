@@ -56,12 +56,12 @@ export default function DatePicker({ onDateChange }: DatePickerProps) {
       <button
         key={i}
         onClick={() => handleDateClick(i)}
-        className={`p-2 rounded text-sm font-semibold transition-colors ${
+        className={`p-2 rounded-lg text-sm font-semibold transition-colors ${
           isSelected
             ? 'bg-accent text-accent-foreground'
             : isInRange
-            ? 'bg-accent/20 text-accent'
-            : 'hover:bg-muted text-foreground'
+            ? 'bg-accent/15 text-accent'
+            : 'hover:bg-white/10 text-foreground'
         }`}
       >
         {i}
@@ -70,30 +70,30 @@ export default function DatePicker({ onDateChange }: DatePickerProps) {
   }
 
   return (
-    <div className="card-luxury">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="font-semibold text-foreground">
+    <div className="glass-panel p-6">
+      <div className="flex items-center justify-between mb-5">
+        <h3 className="font-serif text-xl">
           {currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}
         </h3>
-        <div className="flex gap-2">
+        <div className="flex gap-1">
           <button
             onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}
-            className="p-1 hover:bg-muted rounded"
+            className="p-1.5 rounded-full hover:bg-white/10 hover:text-accent transition-colors"
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft size={18} />
           </button>
           <button
             onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))}
-            className="p-1 hover:bg-muted rounded"
+            className="p-1.5 rounded-full hover:bg-white/10 hover:text-accent transition-colors"
           >
-            <ChevronRight size={20} />
+            <ChevronRight size={18} />
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-7 gap-2">
+      <div className="grid grid-cols-7 gap-1.5">
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-          <div key={day} className="text-center text-xs font-semibold text-muted-foreground p-2">
+          <div key={day} className="text-center label-caps !text-[9px] !text-muted-foreground p-2">
             {day}
           </div>
         ))}
@@ -101,7 +101,7 @@ export default function DatePicker({ onDateChange }: DatePickerProps) {
       </div>
 
       {startDate && endDate && (
-        <div className="mt-4 p-3 bg-muted rounded text-sm">
+        <div className="mt-5 p-3 rounded-lg border border-accent/30 bg-accent/5 text-sm">
           <p className="text-foreground">
             {startDate.toLocaleDateString()} - {endDate.toLocaleDateString()}
           </p>

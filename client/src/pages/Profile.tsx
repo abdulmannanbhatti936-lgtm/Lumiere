@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import Reveal from '@/components/motion/Reveal';
 
 export default function Profile() {
   const { user } = useAuth();
@@ -58,101 +59,108 @@ export default function Profile() {
   };
 
   return (
-    <div className="min-h-screen bg-background py-12">
+    <div className="min-h-screen bg-background py-12 md:py-20">
       <div className="container max-w-2xl space-y-8">
-        <h1 className="text-5xl font-bold mb-4">My Profile</h1>
+        <Reveal>
+          <span className="label-caps mb-4 block">Account</span>
+          <h1 className="font-serif text-4xl md:text-5xl mb-4">My Profile</h1>
+        </Reveal>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Profile Information</CardTitle>
-            <CardDescription>{user?.email}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Form {...profileForm}>
-              <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-4">
-                <FormField
-                  control={profileForm.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Full name</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={profileForm.control}
-                  name="phone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Phone</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+        <Reveal delay={0.1}>
+          <Card className="glass-panel border-white/10">
+            <CardHeader>
+              <CardTitle className="font-serif text-2xl font-normal">Profile Information</CardTitle>
+              <CardDescription>{user?.email}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Form {...profileForm}>
+                <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-4">
+                  <FormField
+                    control={profileForm.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Full name</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={profileForm.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Phone</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                {profileSuccess && <p className="text-sm font-medium text-accent">{profileSuccess}</p>}
-                {profileError && <p className="text-sm font-medium text-destructive">{profileError}</p>}
+                  {profileSuccess && <p className="text-sm font-medium text-accent">{profileSuccess}</p>}
+                  {profileError && <p className="text-sm font-medium text-destructive">{profileError}</p>}
 
-                <Button type="submit" disabled={profileForm.formState.isSubmitting}>
-                  {profileForm.formState.isSubmitting ? 'Saving...' : 'Save Changes'}
-                </Button>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
+                  <Button type="submit" disabled={profileForm.formState.isSubmitting}>
+                    {profileForm.formState.isSubmitting ? 'Saving...' : 'Save Changes'}
+                  </Button>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
+        </Reveal>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Change Password</CardTitle>
-            <CardDescription>Choose a strong password you don't use elsewhere.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Form {...passwordForm}>
-              <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-4">
-                <FormField
-                  control={passwordForm.control}
-                  name="currentPassword"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Current password</FormLabel>
-                      <FormControl>
-                        <Input type="password" autoComplete="current-password" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={passwordForm.control}
-                  name="newPassword"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>New password</FormLabel>
-                      <FormControl>
-                        <Input type="password" autoComplete="new-password" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+        <Reveal delay={0.2}>
+          <Card className="glass-panel border-white/10">
+            <CardHeader>
+              <CardTitle className="font-serif text-2xl font-normal">Change Password</CardTitle>
+              <CardDescription>Choose a strong password you don't use elsewhere.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Form {...passwordForm}>
+                <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-4">
+                  <FormField
+                    control={passwordForm.control}
+                    name="currentPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Current password</FormLabel>
+                        <FormControl>
+                          <Input type="password" autoComplete="current-password" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={passwordForm.control}
+                    name="newPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>New password</FormLabel>
+                        <FormControl>
+                          <Input type="password" autoComplete="new-password" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                {passwordSuccess && <p className="text-sm font-medium text-accent">{passwordSuccess}</p>}
-                {passwordError && <p className="text-sm font-medium text-destructive">{passwordError}</p>}
+                  {passwordSuccess && <p className="text-sm font-medium text-accent">{passwordSuccess}</p>}
+                  {passwordError && <p className="text-sm font-medium text-destructive">{passwordError}</p>}
 
-                <Button type="submit" disabled={passwordForm.formState.isSubmitting}>
-                  {passwordForm.formState.isSubmitting ? 'Updating...' : 'Change Password'}
-                </Button>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
+                  <Button type="submit" disabled={passwordForm.formState.isSubmitting}>
+                    {passwordForm.formState.isSubmitting ? 'Updating...' : 'Change Password'}
+                  </Button>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
+        </Reveal>
       </div>
     </div>
   );
