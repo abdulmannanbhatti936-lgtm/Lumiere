@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useRoute, useLocation } from 'wouter';
-import { Star, MapPin, Loader2, Move3d, Check, Heart } from 'lucide-react';
+import { Star, MapPin, Loader2, Check, Heart } from 'lucide-react';
 import { Link } from 'wouter';
-import RoomPreview from '@/components/3d/RoomPreview';
 import ReviewCard from '@/components/reviews/ReviewCard';
 import ReviewForm from '@/components/reviews/ReviewForm';
 import RoomSelector from '@/components/booking/RoomSelector';
@@ -160,7 +159,12 @@ export default function HotelDetail() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-gutter mb-16">
           <div className="lg:col-span-2">
             <h2 className="font-serif text-2xl mb-6">Choose your room</h2>
-            <RoomSelector rooms={hotel.rooms} selectedRoomId={selectedRoom?.id} onSelect={setSelectedRoomId} />
+            <RoomSelector
+              rooms={hotel.rooms}
+              selectedRoomId={selectedRoom?.id}
+              onSelect={setSelectedRoomId}
+              hotelCategory={hotel.category}
+            />
           </div>
 
           <div className="lg:col-span-1">
@@ -199,20 +203,6 @@ export default function HotelDetail() {
             </div>
           </div>
         </div>
-
-        {/* 3D room preview */}
-        <Reveal className="mb-16">
-          <h2 className="font-serif text-2xl mb-6">3D room preview</h2>
-          <div className="relative h-96 rounded-2xl overflow-hidden border border-border">
-            <RoomPreview />
-            <div className="absolute top-5 left-5 glass-panel px-4 py-2.5 pointer-events-none">
-              <span className="label-caps !text-[10px]">Live 3D Preview</span>
-            </div>
-          </div>
-          <p className="text-muted-foreground flex items-center gap-2 mt-4">
-            <Move3d size={16} className="text-primary" /> Drag to rotate, scroll to zoom.
-          </p>
-        </Reveal>
 
         {/* Reviews */}
         <Reveal className="max-w-3xl">

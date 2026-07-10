@@ -12,6 +12,13 @@ const NAV_ITEMS = [
   { label: 'My Trips', href: '/my-bookings', requiresAuth: true },
 ];
 
+// Kept out of the desktop "island" nav to preserve its compact pill layout —
+// reachable via the mobile menu and the footer instead.
+const SECONDARY_NAV_ITEMS = [
+  { label: 'Experience', href: '/experience' },
+  { label: 'About', href: '/about' },
+];
+
 function getInitials(name?: string | null) {
   if (!name) return '?';
   const parts = name.trim().split(/\s+/);
@@ -138,6 +145,19 @@ export default function Navigation() {
                     Admin
                   </Link>
                 )}
+
+                <div className="h-px bg-border my-1" />
+                {SECONDARY_NAV_ITEMS.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="label-field !text-muted-foreground text-base normal-case font-semibold"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+
                 {!isAuthenticated && (
                   <Link
                     href="/login"

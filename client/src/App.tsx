@@ -20,6 +20,8 @@ const Dashboard = lazy(() => import('@/pages/Dashboard'));
 const Destinations = lazy(() => import('@/pages/Destinations'));
 const Tours = lazy(() => import('@/pages/Tours'));
 const Contact = lazy(() => import('@/pages/Contact'));
+const Experience = lazy(() => import('@/pages/Experience'));
+const About = lazy(() => import('@/pages/About'));
 const Login = lazy(() => import('@/pages/Login'));
 const Signup = lazy(() => import('@/pages/Signup'));
 const MyBookings = lazy(() => import('@/pages/MyBookings'));
@@ -63,6 +65,8 @@ function Router() {
         <Route path="/destinations" component={Destinations} />
         <Route path="/tours" component={Tours} />
         <Route path="/contact" component={Contact} />
+        <Route path="/experience" component={Experience} />
+        <Route path="/about" component={About} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route path="/404" component={NotFound} />

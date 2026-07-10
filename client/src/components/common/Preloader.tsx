@@ -13,7 +13,8 @@ export default function Preloader() {
 
   useEffect(() => {
     // Safety net in case the Lottie asset/library fails to load or complete fires late.
-    const fallback = setTimeout(dismiss, 6800);
+    // The animation itself now finishes in ~2s at 3x speed (see PreloaderAnimation).
+    const fallback = setTimeout(dismiss, 2800);
     return () => clearTimeout(fallback);
   }, []);
 

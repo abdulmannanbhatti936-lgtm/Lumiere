@@ -24,36 +24,44 @@ export default function Footer() {
           </div>
 
           <div className="flex flex-col gap-4">
-            <h6 className="label-caps">Experience</h6>
-            <span className="text-sm text-muted-foreground">3D Room Tours</span>
-            <span className="text-sm text-muted-foreground">Curated Stays</span>
-            <span className="text-sm text-muted-foreground">Private Concierge</span>
+            <Link href="/experience" className="label-caps hover:!text-accent transition-colors">
+              Experience
+            </Link>
+            <Link href="/experience#tours" className="text-sm text-muted-foreground hover:text-accent transition-colors">
+              3D Room Tours
+            </Link>
+            <Link href="/experience#stays" className="text-sm text-muted-foreground hover:text-accent transition-colors">
+              Curated Stays
+            </Link>
+            <Link href="/experience#concierge" className="text-sm text-muted-foreground hover:text-accent transition-colors">
+              Private Concierge
+            </Link>
           </div>
 
           <div className="flex flex-col gap-4">
-            <h6 className="label-caps">About</h6>
-            <a href="#" className="text-sm text-muted-foreground hover:text-accent transition-colors">
+            <Link href="/about" className="label-caps hover:!text-accent transition-colors">
+              About
+            </Link>
+            <Link href="/about#sustainability" className="text-sm text-muted-foreground hover:text-accent transition-colors">
               Sustainability
-            </a>
-            <a href="#" className="text-sm text-muted-foreground hover:text-accent transition-colors">
+            </Link>
+            <Link href="/about#careers" className="text-sm text-muted-foreground hover:text-accent transition-colors">
               Careers
-            </a>
-            <a href="#" className="text-sm text-muted-foreground hover:text-accent transition-colors">
+            </Link>
+            <Link href="/about#press" className="text-sm text-muted-foreground hover:text-accent transition-colors">
               Press
-            </a>
+            </Link>
           </div>
 
           <div className="flex flex-col gap-4">
             <h6 className="label-caps">Support</h6>
-            <a href="#" className="text-sm text-muted-foreground hover:text-accent transition-colors">
+            <Link href="/contact" className="text-sm text-muted-foreground hover:text-accent transition-colors">
               Concierge 24/7
-            </a>
-            <a href="#" className="text-sm text-muted-foreground hover:text-accent transition-colors">
-              FAQ
-            </a>
-            <a href="#" className="text-sm text-muted-foreground hover:text-accent transition-colors">
+            </Link>
+            <span className="text-sm text-muted-foreground">FAQ</span>
+            <Link href="/contact" className="text-sm text-muted-foreground hover:text-accent transition-colors">
               Contact
-            </a>
+            </Link>
           </div>
 
           <div className="flex flex-col gap-4 col-span-2 md:col-span-1">
