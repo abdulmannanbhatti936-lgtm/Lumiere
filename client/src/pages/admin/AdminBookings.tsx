@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { toast } from 'sonner';
 import { TRPCClientError } from '@trpc/client';
 import { trpc } from '@/lib/trpc';
 import { formatCurrency } from '@/lib/utils';
@@ -28,8 +29,9 @@ export default function AdminBookings() {
   const handleStatusChange = async (id: number, status: (typeof STATUS_OPTIONS)[number]) => {
     try {
       await updateStatus.mutateAsync({ id, status });
+      toast.success('Booking status updated.');
     } catch (err) {
-      alert(err instanceof TRPCClientError ? err.message : 'Could not update booking status.');
+      toast.error(err instanceof TRPCClientError ? err.message : 'Could not update booking status.');
     }
   };
 

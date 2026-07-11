@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'wouter';
 import { Plus, Pencil, Trash2, BedDouble } from 'lucide-react';
+import { toast } from 'sonner';
 import { TRPCClientError } from '@trpc/client';
 import { hotelWriteSchema, type HotelWriteInput, type HotelWriteFormInput } from '@shared/validation';
 import { trpc, type RouterOutputs } from '@/lib/trpc';
@@ -109,8 +110,9 @@ export default function AdminHotels() {
     if (!confirm(`Delete "${hotel.name}"? This cannot be undone.`)) return;
     try {
       await removeHotel.mutateAsync({ id: hotel.id });
+      toast.success('Hotel deleted.');
     } catch (err) {
-      alert(err instanceof TRPCClientError ? err.message : 'Could not delete this hotel.');
+      toast.error(err instanceof TRPCClientError ? err.message : 'Could not delete this hotel.');
     }
   };
 

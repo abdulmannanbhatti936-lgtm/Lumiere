@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useRoute, useLocation } from 'wouter';
 import { Star, MapPin, Loader2, Check, Heart } from 'lucide-react';
 import { Link } from 'wouter';
+import { toast } from 'sonner';
+import { TRPCClientError } from '@trpc/client';
 import ReviewCard from '@/components/reviews/ReviewCard';
 import ReviewForm from '@/components/reviews/ReviewForm';
 import RoomSelector from '@/components/booking/RoomSelector';
@@ -38,11 +40,24 @@ export default function HotelDetail() {
   const { data: wishlistIds } = trpc.wishlist.listMineIds.useQuery(undefined, { enabled: isAuthenticated });
   const isWishlisted = wishlistIds?.includes(hotelId) ?? false;
 
-  const addWishlist = trpc.wishlist.add.useMutation({ onSuccess: () => utils.wishlist.listMineIds.invalidate() });
-  const removeWishlist = trpc.wishlist.remove.useMutation({ onSuccess: () => utils.wishlist.listMineIds.invalidate() });
+  const onWishlistError = () => toast.error('Could not update your saved stays. Please try again.');
+  const addWishlist = trpc.wishlist.add.useMutation({
+    onSuccess: () => utils.wishlist.listMineIds.invalidate(),
+    onError: onWishlistError,
+  });
+  const removeWishlist = trpc.wishlist.remove.useMutation({
+    onSuccess: () => utils.wishlist.listMineIds.invalidate(),
+    onError: onWishlistError,
+  });
 
   const createReview = trpc.reviews.create.useMutation({
-    onSuccess: () => utils.hotels.getById.invalidate({ id: hotelId }),
+    onSuccess: () => {
+      utils.hotels.getById.invalidate({ id: hotelId });
+      toast.success('Thanks for your review!');
+    },
+    onError: (err) => {
+      toast.error(err instanceof TRPCClientError ? err.message : 'Could not submit your review.');
+    },
   });
 
   if (isLoading) {

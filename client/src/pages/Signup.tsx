@@ -38,6 +38,7 @@ export default function Signup() {
         <img
           src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1600&q=80"
           alt=""
+          fetchPriority="high"
           decoding="async"
           className="w-full h-full object-cover blur-sm scale-105 opacity-40"
         />

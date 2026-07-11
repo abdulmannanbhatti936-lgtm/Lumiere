@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, ShieldCheck, Shield } from 'lucide-react';
+import { toast } from 'sonner';
 import { TRPCClientError } from '@trpc/client';
 import { trpc } from '@/lib/trpc';
 import { formatDate } from '@/lib/utils';
@@ -23,8 +24,9 @@ export default function AdminUsers() {
     if (!confirm(`Change this user's role to "${nextRole}"?`)) return;
     try {
       await updateRole.mutateAsync({ userId, role: nextRole });
+      toast.success(`Role updated to ${nextRole}.`);
     } catch (err) {
-      alert(err instanceof TRPCClientError ? err.message : 'Could not update this user.');
+      toast.error(err instanceof TRPCClientError ? err.message : 'Could not update this user.');
     }
   };
 

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 import { TRPCClientError } from '@trpc/client';
 import { destinationWriteSchema, type DestinationWriteInput, type DestinationWriteFormInput } from '@shared/validation';
 import { trpc, type RouterOutputs } from '@/lib/trpc';
@@ -78,8 +79,9 @@ export default function AdminDestinations() {
     if (!confirm(`Delete "${destination.name}"? Hotels linked to it will be unlinked, not deleted.`)) return;
     try {
       await removeDestination.mutateAsync({ id: destination.id });
+      toast.success('Destination deleted.');
     } catch (err) {
-      alert(err instanceof TRPCClientError ? err.message : 'Could not delete this destination.');
+      toast.error(err instanceof TRPCClientError ? err.message : 'Could not delete this destination.');
     }
   };
 

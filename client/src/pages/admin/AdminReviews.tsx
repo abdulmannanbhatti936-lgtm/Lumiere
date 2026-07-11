@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Check, Trash2, Star } from 'lucide-react';
+import { toast } from 'sonner';
 import { TRPCClientError } from '@trpc/client';
 import { trpc } from '@/lib/trpc';
 import { formatDate } from '@/lib/utils';
@@ -26,8 +27,9 @@ export default function AdminReviews() {
   const handleApprove = async (id: number) => {
     try {
       await approveReview.mutateAsync({ id });
+      toast.success('Review approved.');
     } catch (err) {
-      alert(err instanceof TRPCClientError ? err.message : 'Could not approve this review.');
+      toast.error(err instanceof TRPCClientError ? err.message : 'Could not approve this review.');
     }
   };
 
@@ -35,8 +37,9 @@ export default function AdminReviews() {
     if (!confirm('Delete this review? This cannot be undone.')) return;
     try {
       await removeReview.mutateAsync({ id });
+      toast.success('Review deleted.');
     } catch (err) {
-      alert(err instanceof TRPCClientError ? err.message : 'Could not delete this review.');
+      toast.error(err instanceof TRPCClientError ? err.message : 'Could not delete this review.');
     }
   };
 

@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRoute, Link } from 'wouter';
 import { Plus, Pencil, Trash2, ArrowLeft } from 'lucide-react';
+import { toast } from 'sonner';
 import { TRPCClientError } from '@trpc/client';
 import { roomWriteSchema, type RoomWriteInput, type RoomWriteFormInput } from '@shared/validation';
 import { trpc, type RouterOutputs } from '@/lib/trpc';
@@ -97,8 +98,9 @@ export default function AdminHotelRooms() {
     if (!confirm(`Delete "${room.name}"? This cannot be undone.`)) return;
     try {
       await removeRoom.mutateAsync({ id: room.id });
+      toast.success('Room deleted.');
     } catch (err) {
-      alert(err instanceof TRPCClientError ? err.message : 'Could not delete this room.');
+      toast.error(err instanceof TRPCClientError ? err.message : 'Could not delete this room.');
     }
   };
 

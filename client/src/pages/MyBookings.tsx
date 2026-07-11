@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Loader2, MapPin, Calendar } from 'lucide-react';
 import { Link } from 'wouter';
+import { toast } from 'sonner';
+import { TRPCClientError } from '@trpc/client';
 import { useAuth } from '@/hooks/useAuth';
 import { trpc } from '@/lib/trpc';
 import { formatCurrency } from '@/lib/utils';
@@ -26,6 +28,9 @@ export default function MyBookings() {
     setCancellingId(id);
     try {
       await cancelBooking.mutateAsync({ id });
+      toast.success('Booking cancelled.');
+    } catch (err) {
+      toast.error(err instanceof TRPCClientError ? err.message : 'Could not cancel this booking.');
     } finally {
       setCancellingId(null);
     }

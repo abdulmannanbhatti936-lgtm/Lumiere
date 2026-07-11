@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 import { TRPCClientError } from '@trpc/client';
 import { tourWriteSchema, type TourWriteInput, type TourWriteFormInput } from '@shared/validation';
 import { trpc, type RouterOutputs } from '@/lib/trpc';
@@ -92,8 +93,9 @@ export default function AdminTours() {
     if (!confirm(`Delete "${tour.name}"? This cannot be undone.`)) return;
     try {
       await removeTour.mutateAsync({ id: tour.id });
+      toast.success('Tour deleted.');
     } catch (err) {
-      alert(err instanceof TRPCClientError ? err.message : 'Could not delete this tour.');
+      toast.error(err instanceof TRPCClientError ? err.message : 'Could not delete this tour.');
     }
   };
 

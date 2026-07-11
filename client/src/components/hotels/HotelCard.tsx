@@ -1,5 +1,6 @@
 import { Star, MapPin, Heart } from 'lucide-react';
 import { Link, useLocation } from 'wouter';
+import { toast } from 'sonner';
 import { formatCurrency } from '@/lib/utils';
 import { trpc } from '@/lib/trpc';
 import { useAuth } from '@/hooks/useAuth';
@@ -47,8 +48,15 @@ export default function HotelCard({
   const utils = trpc.useUtils();
   const { data: wishlistIds } = trpc.wishlist.listMineIds.useQuery(undefined, { enabled: isAuthenticated });
   const isWishlisted = wishlistIds?.includes(id) ?? false;
-  const addWishlist = trpc.wishlist.add.useMutation({ onSuccess: () => utils.wishlist.listMineIds.invalidate() });
-  const removeWishlist = trpc.wishlist.remove.useMutation({ onSuccess: () => utils.wishlist.listMineIds.invalidate() });
+  const onWishlistError = () => toast.error('Could not update your saved stays. Please try again.');
+  const addWishlist = trpc.wishlist.add.useMutation({
+    onSuccess: () => utils.wishlist.listMineIds.invalidate(),
+    onError: onWishlistError,
+  });
+  const removeWishlist = trpc.wishlist.remove.useMutation({
+    onSuccess: () => utils.wishlist.listMineIds.invalidate(),
+    onError: onWishlistError,
+  });
 
   const toggleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
