@@ -78,12 +78,12 @@ export default function Footer() {
 
         <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 label-caps !text-muted-foreground !text-[10px]">
           <span>© 2026 LUMIÈRE STAYS. ALL RIGHTS RESERVED.</span>
-          <a href="#" className="hover:!text-accent transition-colors">
+          <Link href="/privacy" className="hover:!text-accent transition-colors">
             Privacy Policy
-          </a>
-          <a href="#" className="hover:!text-accent transition-colors">
+          </Link>
+          <Link href="/terms" className="hover:!text-accent transition-colors">
             Terms of Service
-          </a>
+          </Link>
         </div>
       </div>
     </footer>

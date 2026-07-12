@@ -23,6 +23,12 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: false,
+    // three-vendor (3D room preview) and recharts (admin analytics) are both real
+    // 300kB+ dependencies, but neither ships on first load — they're only fetched
+    // when a room-preview modal or an admin chart page is actually opened. Raising
+    // this past their size just quiets the build warning for a trade-off already
+    // made on purpose; it doesn't change what any real user downloads.
+    chunkSizeWarningLimit: 1100,
     rollupOptions: {
       output: {
         manualChunks: {
