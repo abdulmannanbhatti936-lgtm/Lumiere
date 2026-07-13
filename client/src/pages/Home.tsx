@@ -40,6 +40,8 @@ export default function Home() {
     <div className="bg-background">
       {/* Hero */}
       <section className="relative h-[260px] md:h-[560px] w-full">
+        {/* Poster image: paints immediately, stays as the fallback for prefers-reduced-motion
+            and for the moment before the video has enough data to play. */}
         <img
           src="https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=1800&q=80"
           alt=""
@@ -47,6 +49,16 @@ export default function Home() {
           decoding="async"
           className="absolute inset-0 w-full h-full object-cover"
         />
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover motion-reduce:hidden"
+        >
+          <source src="/hero-video.webm" type="video/webm" />
+        </video>
         <div className="absolute inset-0 hero-vignette" />
 
         <div className="relative z-10 h-full container flex flex-col justify-center pt-16 md:pt-0">

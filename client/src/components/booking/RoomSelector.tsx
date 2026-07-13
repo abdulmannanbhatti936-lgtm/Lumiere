@@ -116,7 +116,6 @@ export default function RoomSelector({ rooms, selectedRoomId, onSelect, hotelCat
               <Suspense fallback={<RoomPreviewFallback />}>
                 <RoomPreview
                   roomName={previewRoom.name}
-                  capacity={previewRoom.capacity}
                   hotelCategory={hotelCategory}
                   priceTier={priceTierOf(previewRoom)}
                 />
