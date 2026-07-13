@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Menu, X, Sparkles } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Link, useLocation } from 'wouter';
@@ -6,17 +6,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const NAV_ITEMS = [
   { label: 'Home', href: '/' },
-  { label: 'Tours', href: '/tours', activeOn: ['/tours', '/destinations'] },
+  { label: 'Tours', href: '/tours', activeOn: ['/tours', '/tour', '/destinations'] },
   { label: 'Search', href: '/hotels', activeOn: ['/hotels', '/hotel', '/booking'] },
-  { label: 'Contact', href: '/contact' },
-  { label: 'My Trips', href: '/my-bookings', requiresAuth: true },
-];
-
-// Kept out of the desktop "island" nav to preserve its compact pill layout —
-// reachable via the mobile menu and the footer instead.
-const SECONDARY_NAV_ITEMS = [
   { label: 'Experience', href: '/experience' },
   { label: 'About', href: '/about' },
+  { label: 'Contact', href: '/contact' },
+  { label: 'My Trips', href: '/my-bookings', requiresAuth: true },
 ];
 
 function getInitials(name?: string | null) {
@@ -28,6 +23,8 @@ function getInitials(name?: string | null) {
 
 export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const collapseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { isAuthenticated, user } = useAuth();
   const [location] = useLocation();
 
@@ -36,51 +33,86 @@ export default function Navigation() {
     return targets.some((href) => (href === '/' ? location === '/' : location.startsWith(href)));
   };
 
+  const handleHoverStart = () => {
+    if (collapseTimer.current) clearTimeout(collapseTimer.current);
+    setExpanded(true);
+  };
+  const handleHoverEnd = () => {
+    // A short grace period so a fast pointer pass-over doesn't flicker the nav open/closed.
+    collapseTimer.current = setTimeout(() => setExpanded(false), 250);
+  };
+
   return (
     <>
-      {/* Desktop "Dynamic Island" */}
+      {/* Desktop "Dynamic Island" — collapses to just the wordmark when the cursor isn't
+          over it, and expands to the full link list on hover. */}
       <div className="hidden md:flex fixed top-5 left-0 right-0 z-50 justify-center px-4">
-        <nav className="nav-island rounded-full flex items-center gap-1 px-2 py-2">
-          <Link href="/" className="flex items-center gap-1.5 pl-3 pr-4">
+        <motion.nav
+          layout
+          onHoverStart={handleHoverStart}
+          onHoverEnd={handleHoverEnd}
+          transition={{ layout: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } }}
+          className="nav-island rounded-full flex items-center gap-1 px-2 py-2"
+        >
+          <Link href="/" className="flex items-center gap-1.5 pl-3 pr-4 shrink-0">
             <span className="font-serif text-[17px] font-bold text-primary tracking-tight">Lumière</span>
+            <motion.span
+              animate={{ opacity: expanded ? 0 : 1, scale: expanded ? 0.5 : 1 }}
+              transition={{ duration: 0.2 }}
+              className="w-1.5 h-1.5 rounded-full bg-accent"
+              aria-hidden="true"
+            />
           </Link>
 
-          <div className="w-px h-5 bg-foreground/10" />
+          <AnimatePresence initial={false}>
+            {expanded && (
+              <motion.div
+                key="nav-expanded"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2, delay: expanded ? 0.08 : 0 }}
+                className="flex items-center gap-1"
+              >
+                <div className="w-px h-5 bg-foreground/10 shrink-0" />
 
-          <div className="flex items-center gap-1 px-1">
-            {NAV_ITEMS.map((item) => {
-              if (item.requiresAuth && !isAuthenticated) return null;
-              const active = isItemActive(item);
-              return (
-                <motion.div key={item.href} whileHover={{ y: -3, scale: 1.05 }} transition={{ duration: 0.15 }}>
-                  <Link
-                    href={item.href}
-                    className={`block px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
-                      active ? 'nav-pill-active text-white' : 'text-[#3A3F52] hover:text-primary'
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                </motion.div>
-              );
-            })}
-            {isAuthenticated && user?.role === 'admin' && (
-              <motion.div whileHover={{ y: -3, scale: 1.05 }} transition={{ duration: 0.15 }}>
-                <Link
-                  href="/dashboard"
-                  className={`block px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
-                    location.startsWith('/dashboard') || location.startsWith('/admin')
-                      ? 'nav-pill-active text-white'
-                      : 'text-[#3A3F52] hover:text-primary'
-                  }`}
-                >
-                  Admin
-                </Link>
+                <div className="flex items-center gap-1 px-1">
+                  {NAV_ITEMS.map((item) => {
+                    if (item.requiresAuth && !isAuthenticated) return null;
+                    const active = isItemActive(item);
+                    return (
+                      <motion.div key={item.href} whileHover={{ y: -3, scale: 1.05 }} transition={{ duration: 0.15 }}>
+                        <Link
+                          href={item.href}
+                          className={`block px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-colors ${
+                            active ? 'nav-pill-active text-white' : 'text-[#3A3F52] hover:text-primary'
+                          }`}
+                        >
+                          {item.label}
+                        </Link>
+                      </motion.div>
+                    );
+                  })}
+                  {isAuthenticated && user?.role === 'admin' && (
+                    <motion.div whileHover={{ y: -3, scale: 1.05 }} transition={{ duration: 0.15 }}>
+                      <Link
+                        href="/dashboard"
+                        className={`block px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-colors ${
+                          location.startsWith('/dashboard') || location.startsWith('/admin')
+                            ? 'nav-pill-active text-white'
+                            : 'text-[#3A3F52] hover:text-primary'
+                        }`}
+                      >
+                        Admin
+                      </Link>
+                    </motion.div>
+                  )}
+                </div>
               </motion.div>
             )}
-          </div>
+          </AnimatePresence>
 
-          <motion.div whileHover={{ y: -2, scale: 1.1 }} transition={{ duration: 0.15 }} className="pl-1">
+          <motion.div layout whileHover={{ y: -2, scale: 1.1 }} transition={{ duration: 0.15 }} className="pl-1 shrink-0">
             {isAuthenticated ? (
               <Link
                 href="/my-bookings"
@@ -98,7 +130,7 @@ export default function Navigation() {
               </Link>
             )}
           </motion.div>
-        </nav>
+        </motion.nav>
       </div>
 
       {/* Mobile top bar (compact — full nav lives in the bottom tab bar) */}
@@ -145,18 +177,6 @@ export default function Navigation() {
                     Admin
                   </Link>
                 )}
-
-                <div className="h-px bg-border my-1" />
-                {SECONDARY_NAV_ITEMS.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="label-field !text-muted-foreground text-base normal-case font-semibold"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
 
                 {!isAuthenticated && (
                   <Link

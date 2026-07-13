@@ -40,7 +40,7 @@ export default function Tours() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter">
             {tours.map((tour, i) => (
               <Reveal key={tour.id} delay={Math.min(i * 0.06, 0.4)}>
-                <Link href={`/destinations?destinationId=${tour.destinationId}`}>
+                <Link href={`/tour/${tour.id}`}>
                   <div className="group glass-panel overflow-hidden cursor-pointer h-full flex flex-col">
                     <div className="relative h-44 overflow-hidden">
                       {tour.imageUrl ? (

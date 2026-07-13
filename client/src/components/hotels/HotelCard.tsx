@@ -1,4 +1,4 @@
-import { Star, MapPin, Heart } from 'lucide-react';
+import { Star, MapPin, Heart, ArrowUpRight } from 'lucide-react';
 import { Link, useLocation } from 'wouter';
 import { toast } from 'sonner';
 import { formatCurrency } from '@/lib/utils';
@@ -83,26 +83,39 @@ export default function HotelCard({
   );
 
   const photo = imageUrl ? (
-    <img src={imageUrl} alt={name} loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover" />
+    <img
+      src={imageUrl}
+      alt={name}
+      loading="lazy"
+      decoding="async"
+      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+    />
   ) : (
     <div className="photo-placeholder absolute inset-0 flex items-center justify-center">
       <span className="photo-placeholder-caption">PHOTO — {city}, {country}</span>
     </div>
   );
 
+  const viewBadge = (
+    <span className="absolute bottom-3 right-3 z-10 w-9 h-9 rounded-full bg-white/95 text-primary flex items-center justify-center opacity-0 scale-75 translate-y-1 transition-all duration-300 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0">
+      <ArrowUpRight size={16} />
+    </span>
+  );
+
   if (layout === 'horizontal') {
     return (
       <Link href={`/hotel/${id}`}>
-        <div className="group glass-panel overflow-hidden cursor-pointer flex flex-col sm:flex-row">
+        <div className="group glass-panel overflow-hidden cursor-pointer flex flex-col sm:flex-row transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
           <div className="relative h-52 sm:h-auto sm:w-[280px] shrink-0 overflow-hidden">
             {photo}
             <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent sm:hidden" />
             {wishlistButton}
+            {viewBadge}
           </div>
           <div className="p-6 flex flex-col flex-1 justify-between">
             <div>
               <div className="flex items-start justify-between gap-4 mb-1">
-                <h3 className="font-serif text-xl font-semibold leading-tight">{name}</h3>
+                <h3 className="font-serif text-xl font-semibold leading-tight transition-colors group-hover:text-primary">{name}</h3>
                 <span className="shrink-0 inline-flex items-center gap-1 text-xs font-bold bg-muted px-2.5 py-1 rounded-full">
                   <Star size={12} className="fill-accent text-accent" /> {displayRating}
                 </span>
@@ -134,15 +147,16 @@ export default function HotelCard({
 
   return (
     <Link href={`/hotel/${id}`}>
-      <div className="group glass-panel overflow-hidden cursor-pointer h-full flex flex-col">
+      <div className="group glass-panel overflow-hidden cursor-pointer h-full flex flex-col transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl">
         <div className="relative h-56 overflow-hidden">
           {photo}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent transition-opacity duration-300 group-hover:from-black/25" />
           {wishlistButton}
+          {viewBadge}
         </div>
         <div className="p-5 flex flex-col flex-1">
           <div className="flex items-start justify-between gap-3 mb-1">
-            <h3 className="font-serif text-[19px] font-semibold leading-tight">{name}</h3>
+            <h3 className="font-serif text-[19px] font-semibold leading-tight transition-colors group-hover:text-primary">{name}</h3>
             <span className="shrink-0 inline-flex items-center gap-1 text-xs font-bold bg-muted px-2 py-1 rounded-full">
               <Star size={12} className="fill-accent text-accent" /> {displayRating}
             </span>

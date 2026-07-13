@@ -29,6 +29,9 @@ const DESTINATIONS = [
   { name: 'Bali', country: 'Indonesia', description: 'Tropical paradise of temples, beaches and rice terraces.', imageUrl: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&h=600&fit=crop', latitude: '-8.409518', longitude: '115.188919', featured: true },
   { name: 'New York', country: 'USA', description: 'The city that never sleeps.', imageUrl: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800&h=600&fit=crop', latitude: '40.712776', longitude: '-74.005974', featured: false },
   { name: 'Dubai', country: 'UAE', description: 'Futuristic skyline rising from the desert.', imageUrl: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&h=600&fit=crop', latitude: '25.204849', longitude: '55.270782', featured: true },
+  { name: 'Rome', country: 'Italy', description: 'Ancient grandeur and timeless piazzas, two and a half millennia in the making.', imageUrl: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800&h=600&fit=crop', latitude: '41.902782', longitude: '12.496366', featured: true },
+  { name: 'Santorini', country: 'Greece', description: 'Whitewashed cliffs over a sapphire-blue caldera.', imageUrl: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=800&h=600&fit=crop', latitude: '36.393154', longitude: '25.461510', featured: true },
+  { name: 'Kyoto', country: 'Japan', description: 'A thousand years of temples, gardens, and quiet ceremony.', imageUrl: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&h=600&fit=crop', latitude: '35.011564', longitude: '135.768149', featured: false },
 ] as const;
 
 const HOTELS = [
@@ -74,12 +77,41 @@ const HOTELS = [
     images: ['https://images.unsplash.com/photo-1512632578888-169bbbc64f33?w=1200&h=800&fit=crop'],
     amenities: ['Pool', 'Spa', 'Restaurant', 'Concierge'],
   },
+  {
+    destination: 'Rome', name: 'Piazza Navona Residenza', city: 'Rome', country: 'Italy', starRating: 5, basePrice: '480.00', category: 'city' as const,
+    description: 'A restored 17th-century palazzo steps from Piazza Navona, where every room frames a slice of the old city.',
+    imageUrl: 'https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=500&h=300&fit=crop',
+    images: ['https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=1200&h=800&fit=crop'],
+    amenities: ['WiFi', 'Restaurant', 'Concierge', 'Rooftop Bar'],
+  },
+  {
+    destination: 'Santorini', name: 'Caldera Cliffside Villas', city: 'Santorini', country: 'Greece', starRating: 5, basePrice: '610.00', category: 'beach' as const,
+    description: 'Whitewashed suites carved into the caldera, each with a private plunge pool facing the sunset.',
+    imageUrl: 'https://images.unsplash.com/photo-1469796466635-455ede028aca?w=500&h=300&fit=crop',
+    images: ['https://images.unsplash.com/photo-1469796466635-455ede028aca?w=1200&h=800&fit=crop'],
+    amenities: ['Pool', 'Sea View', 'Breakfast', 'WiFi'],
+  },
+  {
+    destination: 'Kyoto', name: 'Zen Garden Ryokan', city: 'Kyoto', country: 'Japan', starRating: 4, basePrice: '340.00', category: 'boutique' as const,
+    description: 'A traditional ryokan with tatami rooms, a private onsen, and a moss garden older than the hotel itself.',
+    imageUrl: 'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=500&h=300&fit=crop',
+    images: ['https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=1200&h=800&fit=crop'],
+    amenities: ['Onsen', 'Garden', 'Breakfast', 'WiFi'],
+  },
+  {
+    destination: 'Paris', name: 'Le Marais Boutique Hotel', city: 'Paris', country: 'France', starRating: 4, basePrice: '310.00', category: 'boutique' as const,
+    description: 'A design-forward boutique stay tucked into a cobblestone courtyard in the heart of Le Marais.',
+    imageUrl: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=500&h=300&fit=crop',
+    images: ['https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1200&h=800&fit=crop'],
+    amenities: ['WiFi', 'Breakfast', 'Bar', 'Concierge'],
+  },
 ] as const;
 
 const ROOM_TEMPLATES = [
   { name: 'Standard Room', capacity: 2, multiplier: 1, totalUnits: 10 },
   { name: 'Deluxe Room', capacity: 2, multiplier: 1.4, totalUnits: 6 },
   { name: 'Suite', capacity: 4, multiplier: 2.1, totalUnits: 3 },
+  { name: 'Family Suite', capacity: 5, multiplier: 2.6, totalUnits: 2 },
 ] as const;
 
 const TOURS = [
@@ -112,6 +144,46 @@ const TOURS = [
     destination: 'Dubai', name: 'Desert Safari & Bedouin Camp', category: 'Adventure', durationDays: 1, groupSize: 10, pricePerPerson: '150.00',
     description: 'Dune bashing, camel riding and a Bedouin-style dinner under the stars.',
     imageUrl: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&h=600&fit=crop',
+  },
+  {
+    destination: 'Rome', name: 'Colosseum Underground & Roman Forum', category: 'Small group', durationDays: 1, groupSize: 10, pricePerPerson: '90.00',
+    description: 'Skip-the-line access to the Colosseum\'s underground chambers, followed by a walk through the Roman Forum and Palatine Hill.',
+    imageUrl: 'https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=800&h=600&fit=crop',
+  },
+  {
+    destination: 'Santorini', name: 'Caldera Sailing & Sunset in Oia', category: 'Small group', durationDays: 1, groupSize: 10, pricePerPerson: '130.00',
+    description: 'A catamaran sail around the caldera with a swim stop at the hot springs, timed to reach Oia for sunset.',
+    imageUrl: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=800&h=600&fit=crop',
+  },
+  {
+    destination: 'Kyoto', name: 'Fushimi Inari & Arashiyama Bamboo Grove', category: 'Small group', durationDays: 1, groupSize: 8, pricePerPerson: '85.00',
+    description: 'An early walk through the thousand torii gates of Fushimi Inari, then the towering bamboo groves of Arashiyama before the crowds.',
+    imageUrl: 'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=800&h=600&fit=crop',
+  },
+  {
+    destination: 'Paris', name: 'Seine Sunset Cruise & Champagne Tasting', category: 'Food & Culture', durationDays: 1, groupSize: 12, pricePerPerson: '75.00',
+    description: 'A golden-hour cruise past Notre-Dame and the Eiffel Tower, paired with a guided champagne tasting on deck.',
+    imageUrl: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&h=600&fit=crop',
+  },
+  {
+    destination: 'Singapore', name: 'Gardens by the Bay Night Safari', category: 'Small group', durationDays: 1, groupSize: 10, pricePerPerson: '70.00',
+    description: 'The Supertree Grove light show followed by a guided tram tour through the Night Safari\'s free-roaming enclosures.',
+    imageUrl: 'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=800&h=600&fit=crop',
+  },
+  {
+    destination: 'Zermatt', name: 'Gornergrat Sunrise Railway', category: 'Small group', durationDays: 1, groupSize: 15, pricePerPerson: '120.00',
+    description: 'Europe\'s highest open-air cogwheel railway, timed for sunrise over the Matterhorn and 28 surrounding peaks.',
+    imageUrl: 'https://images.unsplash.com/photo-1544198365-f5d60b6d8190?w=800&h=600&fit=crop',
+  },
+  {
+    destination: 'Bali', name: 'Ubud Waterfalls & Coffee Plantation', category: 'Adventure', durationDays: 1, groupSize: 10, pricePerPerson: '60.00',
+    description: 'A jungle trek to three hidden waterfalls, ending with a tasting flight at a family-run luwak coffee plantation.',
+    imageUrl: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&h=600&fit=crop',
+  },
+  {
+    destination: 'New York', name: 'Broadway Backstage & Times Square', category: 'Small group', durationDays: 1, groupSize: 8, pricePerPerson: '130.00',
+    description: 'A backstage theater tour with a working stage crew, followed by a guided walk through Times Square at dusk.',
+    imageUrl: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800&h=600&fit=crop',
   },
 ] as const;
 

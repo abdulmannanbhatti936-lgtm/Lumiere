@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useSearch } from 'wouter';
 import { CheckCircle, Mail, Phone, MapPin } from 'lucide-react';
 import { TRPCClientError } from '@trpc/client';
 import { contactMessageSchema, type ContactMessageInput } from '@shared/validation';
@@ -13,12 +14,26 @@ import { Button } from '@/components/ui/button';
 
 const SUBJECTS = ['General enquiry', 'Booking support', 'Partnerships', 'Press', 'Other'] as const;
 
+function isValidSubject(value: string | null): value is (typeof SUBJECTS)[number] {
+  return !!value && (SUBJECTS as readonly string[]).includes(value);
+}
+
 export default function Contact() {
+  const searchParams = new URLSearchParams(useSearch());
+  const tourName = searchParams.get('tour');
+  const subjectParam = searchParams.get('subject');
+
   const submitMessage = trpc.contact.submit.useMutation();
 
   const form = useForm<ContactMessageInput>({
     resolver: zodResolver(contactMessageSchema),
-    defaultValues: { firstName: '', lastName: '', email: '', subject: 'General enquiry', message: '' },
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      subject: isValidSubject(subjectParam) ? subjectParam : 'General enquiry',
+      message: tourName ? `I'd like to book the "${tourName}" tour. Please let me know availability and next steps.` : '',
+    },
   });
 
   const onSubmit = async (values: ContactMessageInput) => {

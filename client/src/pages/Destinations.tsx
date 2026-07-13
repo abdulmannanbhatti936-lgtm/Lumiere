@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useSearch } from 'wouter';
-import { Clock, Users } from 'lucide-react';
+import { useSearch, Link } from 'wouter';
+import { Clock, Users, ArrowRight } from 'lucide-react';
 import Reveal from '@/components/motion/Reveal';
 import HotelCard from '@/components/hotels/HotelCard';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -99,22 +99,27 @@ export default function Destinations() {
           {tours && tours.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter">
               {tours.map((tour) => (
-                <div key={tour.id} className="card-luxury">
-                  <span className="label-caps !text-[10px] block mb-2">{tour.category}</span>
-                  <h3 className="font-serif text-lg font-semibold mb-2">{tour.name}</h3>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
-                    <span className="flex items-center gap-1.5">
-                      <Clock size={13} /> {tour.durationDays} day{tour.durationDays > 1 ? 's' : ''}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <Users size={13} /> up to {tour.groupSize}
-                    </span>
+                <Link key={tour.id} href={`/tour/${tour.id}`}>
+                  <div className="card-luxury cursor-pointer transition-all hover:-translate-y-1 hover:shadow-lg hover:border-primary/30">
+                    <span className="label-caps !text-[10px] block mb-2">{tour.category}</span>
+                    <h3 className="font-serif text-lg font-semibold mb-2">{tour.name}</h3>
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
+                      <span className="flex items-center gap-1.5">
+                        <Clock size={13} /> {tour.durationDays} day{tour.durationDays > 1 ? 's' : ''}
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <Users size={13} /> up to {tour.groupSize}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-bold">
+                        {formatCurrency(Number(tour.pricePerPerson))}
+                        <span className="text-xs text-muted-foreground font-normal"> / person</span>
+                      </span>
+                      <ArrowRight size={14} className="text-primary" />
+                    </div>
                   </div>
-                  <span className="text-sm font-bold">
-                    {formatCurrency(Number(tour.pricePerPerson))}
-                    <span className="text-xs text-muted-foreground font-normal"> / person</span>
-                  </span>
-                </div>
+                </Link>
               ))}
             </div>
           ) : (
