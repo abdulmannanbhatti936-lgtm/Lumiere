@@ -7,6 +7,7 @@ import { contactMessageSchema, type ContactMessageInput } from '@shared/validati
 import { trpc } from '@/lib/trpc';
 import Reveal from '@/components/motion/Reveal';
 import Magnetic from '@/components/motion/Magnetic';
+import BackButton from '@/components/common/BackButton';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -47,6 +48,9 @@ export default function Contact() {
   return (
     <div className="bg-background pb-section-gap">
       <div className="container max-w-[920px]">
+        <div className="pt-6 pb-2">
+          <BackButton fallbackHref="/" />
+        </div>
         <Reveal className="mb-12 text-center">
           <h1 className="font-serif text-3xl md:text-4xl mb-3">Get in touch</h1>
           <p className="text-muted-foreground text-lg">We'd love to hear from you — questions, feedback, or partnership ideas.</p>

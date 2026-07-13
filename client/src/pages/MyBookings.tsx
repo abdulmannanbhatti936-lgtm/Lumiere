@@ -9,6 +9,7 @@ import { formatCurrency } from '@/lib/utils';
 import Reveal from '@/components/motion/Reveal';
 import Magnetic from '@/components/motion/Magnetic';
 import HotelCard from '@/components/hotels/HotelCard';
+import BackButton from '@/components/common/BackButton';
 
 function getInitials(name?: string | null) {
   if (!name) return '?';
@@ -42,6 +43,9 @@ export default function MyBookings() {
   return (
     <div className="bg-background pb-section-gap">
       <div className="container max-w-[1000px]">
+        <div className="pt-6 pb-2">
+          <BackButton fallbackHref="/" />
+        </div>
         {/* Header */}
         <Reveal className="flex items-center gap-4 mb-14">
           <div className="nav-pill-active w-14 h-14 rounded-full flex items-center justify-center text-white font-bold shrink-0">

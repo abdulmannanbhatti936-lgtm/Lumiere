@@ -1,6 +1,7 @@
 import { Link } from 'wouter';
 import { Leaf, Hammer, HeartHandshake, Lock, Mail, Newspaper } from 'lucide-react';
 import Reveal from '@/components/motion/Reveal';
+import BackButton from '@/components/common/BackButton';
 import { trpc } from '@/lib/trpc';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 
@@ -51,6 +52,9 @@ export default function About() {
     <div className="bg-background pb-section-gap">
       {/* Hero / story */}
       <section className="container pt-16 md:pt-24 mb-20 md:mb-28">
+        <div className="mb-10 max-w-3xl mx-auto">
+          <BackButton fallbackHref="/" />
+        </div>
         <Reveal className="max-w-3xl mx-auto text-center mb-16">
           <p className="label-caps mb-4">Our story</p>
           <h1 className="font-serif text-4xl md:text-5xl leading-[1.1] mb-6">

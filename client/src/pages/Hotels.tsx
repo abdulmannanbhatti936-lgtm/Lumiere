@@ -3,6 +3,7 @@ import { useSearch } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import HotelCard from '@/components/hotels/HotelCard';
 import Reveal from '@/components/motion/Reveal';
+import BackButton from '@/components/common/BackButton';
 import { HotelCardSkeleton } from '@/components/ui/skeleton';
 import { trpc } from '@/lib/trpc';
 import type { HotelsQueryInput, HotelCategory } from '@shared/validation';
@@ -58,6 +59,9 @@ export default function Hotels() {
   return (
     <div className="bg-background pb-section-gap">
       <div className="container">
+        <div className="pt-6 pb-4">
+          <BackButton fallbackHref="/" />
+        </div>
         <Reveal className="mb-10">
           <h1 className="font-serif text-3xl md:text-4xl mb-2">Search stays</h1>
           <p className="text-muted-foreground">Browse our collection of boutique hotels and villas.</p>

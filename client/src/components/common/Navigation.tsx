@@ -1,17 +1,17 @@
 import { useRef, useState } from 'react';
-import { Menu, X, Sparkles } from 'lucide-react';
+import { Menu, X, Sparkles, Home as HomeIcon, Compass, Search, Gem, Info, Mail, Luggage } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Link, useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const NAV_ITEMS = [
-  { label: 'Home', href: '/' },
-  { label: 'Tours', href: '/tours', activeOn: ['/tours', '/tour', '/destinations'] },
-  { label: 'Search', href: '/hotels', activeOn: ['/hotels', '/hotel', '/booking'] },
-  { label: 'Experience', href: '/experience' },
-  { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' },
-  { label: 'My Trips', href: '/my-bookings', requiresAuth: true },
+  { label: 'Home', href: '/', icon: HomeIcon },
+  { label: 'Tours', href: '/tours', activeOn: ['/tours', '/tour', '/destinations'], icon: Compass },
+  { label: 'Search', href: '/hotels', activeOn: ['/hotels', '/hotel', '/booking'], icon: Search },
+  { label: 'Experience', href: '/experience', icon: Gem },
+  { label: 'About', href: '/about', icon: Info },
+  { label: 'Contact', href: '/contact', icon: Mail },
+  { label: 'My Trips', href: '/my-bookings', requiresAuth: true, icon: Luggage },
 ];
 
 function getInitials(name?: string | null) {
@@ -44,8 +44,9 @@ export default function Navigation() {
 
   return (
     <>
-      {/* Desktop "Dynamic Island" — collapses to just the wordmark when the cursor isn't
-          over it, and expands to the full link list on hover. */}
+      {/* Desktop "Dynamic Island" — collapses to icon-only pills when the cursor isn't
+          over it (so first-time visitors can still see every page), and expands to
+          the full labeled link list on hover. */}
       <div className="hidden md:flex fixed top-5 left-0 right-0 z-50 justify-center px-4">
         <motion.nav
           layout
@@ -64,53 +65,75 @@ export default function Navigation() {
             />
           </Link>
 
-          <AnimatePresence initial={false}>
-            {expanded && (
-              <motion.div
-                key="nav-expanded"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2, delay: expanded ? 0.08 : 0 }}
-                className="flex items-center gap-1"
-              >
-                <div className="w-px h-5 bg-foreground/10 shrink-0" />
+          <motion.div layout className="w-px h-5 bg-foreground/10 shrink-0" />
 
-                <div className="flex items-center gap-1 px-1">
-                  {NAV_ITEMS.map((item) => {
-                    if (item.requiresAuth && !isAuthenticated) return null;
-                    const active = isItemActive(item);
-                    return (
-                      <motion.div key={item.href} whileHover={{ y: -3, scale: 1.05 }} transition={{ duration: 0.15 }}>
-                        <Link
-                          href={item.href}
-                          className={`block px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-colors ${
-                            active ? 'nav-pill-active text-white' : 'text-[#3A3F52] hover:text-primary'
-                          }`}
+          {/* Nav items stay visible as icon-only pills when collapsed, so a first-time
+              visitor can still see every page is one click away — labels reveal on hover. */}
+          <motion.div layout className="flex items-center gap-1 px-1">
+            {NAV_ITEMS.map((item) => {
+              if (item.requiresAuth && !isAuthenticated) return null;
+              const active = isItemActive(item);
+              const Icon = item.icon;
+              return (
+                <motion.div key={item.href} layout whileHover={{ y: -3, scale: 1.05 }} transition={{ duration: 0.15 }}>
+                  <Link
+                    href={item.href}
+                    title={item.label}
+                    aria-label={item.label}
+                    className={`flex items-center justify-center gap-1.5 h-9 rounded-full text-sm font-semibold whitespace-nowrap transition-colors ${
+                      expanded ? 'px-4' : 'w-9'
+                    } ${active ? 'nav-pill-active text-white' : 'text-[#3A3F52] hover:text-primary'}`}
+                  >
+                    <Icon size={15} className="shrink-0" />
+                    <AnimatePresence initial={false}>
+                      {expanded && (
+                        <motion.span
+                          initial={{ opacity: 0, width: 0 }}
+                          animate={{ opacity: 1, width: 'auto' }}
+                          exit={{ opacity: 0, width: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="overflow-hidden"
                         >
                           {item.label}
-                        </Link>
-                      </motion.div>
-                    );
-                  })}
-                  {isAuthenticated && user?.role === 'admin' && (
-                    <motion.div whileHover={{ y: -3, scale: 1.05 }} transition={{ duration: 0.15 }}>
-                      <Link
-                        href="/dashboard"
-                        className={`block px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-colors ${
-                          location.startsWith('/dashboard') || location.startsWith('/admin')
-                            ? 'nav-pill-active text-white'
-                            : 'text-[#3A3F52] hover:text-primary'
-                        }`}
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                  </Link>
+                </motion.div>
+              );
+            })}
+            {isAuthenticated && user?.role === 'admin' && (
+              <motion.div layout whileHover={{ y: -3, scale: 1.05 }} transition={{ duration: 0.15 }}>
+                <Link
+                  href="/dashboard"
+                  title="Admin"
+                  aria-label="Admin"
+                  className={`flex items-center justify-center gap-1.5 h-9 rounded-full text-sm font-semibold whitespace-nowrap transition-colors ${
+                    expanded ? 'px-4' : 'w-9'
+                  } ${
+                    location.startsWith('/dashboard') || location.startsWith('/admin')
+                      ? 'nav-pill-active text-white'
+                      : 'text-[#3A3F52] hover:text-primary'
+                  }`}
+                >
+                  <Sparkles size={15} className="shrink-0" />
+                  <AnimatePresence initial={false}>
+                    {expanded && (
+                      <motion.span
+                        initial={{ opacity: 0, width: 0 }}
+                        animate={{ opacity: 1, width: 'auto' }}
+                        exit={{ opacity: 0, width: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="overflow-hidden"
                       >
                         Admin
-                      </Link>
-                    </motion.div>
-                  )}
-                </div>
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </Link>
               </motion.div>
             )}
-          </AnimatePresence>
+          </motion.div>
 
           <motion.div layout whileHover={{ y: -2, scale: 1.1 }} transition={{ duration: 0.15 }} className="pl-1 shrink-0">
             {isAuthenticated ? (

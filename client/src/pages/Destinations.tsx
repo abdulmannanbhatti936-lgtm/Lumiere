@@ -3,6 +3,7 @@ import { useSearch, Link } from 'wouter';
 import { Clock, Users, ArrowRight } from 'lucide-react';
 import Reveal from '@/components/motion/Reveal';
 import HotelCard from '@/components/hotels/HotelCard';
+import BackButton from '@/components/common/BackButton';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatCurrency } from '@/lib/utils';
 import { trpc } from '@/lib/trpc';
@@ -38,6 +39,9 @@ export default function Destinations() {
           <div className="photo-placeholder absolute inset-0" />
         )}
         <div className="absolute inset-0 hero-vignette" />
+        <div className="absolute top-5 left-0 right-0 container z-10">
+          <BackButton fallbackHref="/tours" variant="dark" />
+        </div>
         <div className="relative z-10 h-full container flex items-end pb-8">
           <h1 className="font-serif text-4xl md:text-5xl text-white text-glow">{active.name}</h1>
         </div>

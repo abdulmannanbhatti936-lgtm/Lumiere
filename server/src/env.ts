@@ -13,6 +13,7 @@ const envSchema = z.object({
   STRIPE_WEBHOOK_SECRET: z.string().min(1).optional(),
   RESEND_API_KEY: z.string().min(1).optional(),
   EMAIL_FROM: z.string().min(1).default('Lumiere Stays <onboarding@resend.dev>'),
+  MISTRAL_API_KEY: z.preprocess((v) => (v === '' ? undefined : v), z.string().min(1).optional()),
 });
 
 const parsed = envSchema.safeParse(process.env);

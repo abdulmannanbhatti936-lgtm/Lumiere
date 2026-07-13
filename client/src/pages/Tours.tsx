@@ -1,6 +1,7 @@
 import { Link } from 'wouter';
 import { ArrowRight, Clock, Users } from 'lucide-react';
 import Reveal from '@/components/motion/Reveal';
+import BackButton from '@/components/common/BackButton';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatCurrency } from '@/lib/utils';
 import { trpc } from '@/lib/trpc';
@@ -11,6 +12,9 @@ export default function Tours() {
   return (
     <div className="bg-background pb-section-gap">
       <div className="container">
+        <div className="pt-6 pb-4">
+          <BackButton fallbackHref="/" />
+        </div>
         <Reveal className="mb-12 max-w-2xl">
           <h1 className="font-serif text-3xl md:text-4xl mb-3">Guided tours &amp; experiences</h1>
           <p className="text-muted-foreground text-lg">

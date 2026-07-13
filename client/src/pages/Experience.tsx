@@ -2,6 +2,7 @@ import { Link } from 'wouter';
 import { Move3d, Sparkles, Headset, ArrowRight, Compass, ShieldCheck, Gem } from 'lucide-react';
 import Reveal from '@/components/motion/Reveal';
 import Magnetic from '@/components/motion/Magnetic';
+import BackButton from '@/components/common/BackButton';
 import { trpc } from '@/lib/trpc';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 
@@ -60,6 +61,9 @@ export default function Experience() {
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 hero-vignette" />
+        <div className="absolute top-5 left-0 right-0 container z-10">
+          <BackButton fallbackHref="/" variant="dark" />
+        </div>
         <div className="relative z-10 h-full container flex flex-col justify-center max-w-2xl">
           <h1 className="font-serif text-4xl md:text-6xl leading-[1.05] mb-4 text-white text-glow">
             An experience, not just a stay.

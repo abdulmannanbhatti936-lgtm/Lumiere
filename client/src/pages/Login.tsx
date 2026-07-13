@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import Reveal from '@/components/motion/Reveal';
 import Magnetic from '@/components/motion/Magnetic';
+import BackButton from '@/components/common/BackButton';
 
 export default function Login() {
   const { login } = useAuth();
@@ -46,6 +47,10 @@ export default function Login() {
         <div className="absolute -top-1/4 -left-1/4 w-[50vw] h-[50vw] aurora-glow-teal" />
         <div className="absolute -bottom-1/4 -right-1/4 w-[50vw] h-[50vw] aurora-glow" />
         <div className="absolute inset-0 hero-vignette" />
+      </div>
+
+      <div className="absolute top-5 left-5 z-10">
+        <BackButton fallbackHref="/" />
       </div>
 
       <Reveal className="relative z-10 w-full max-w-md">

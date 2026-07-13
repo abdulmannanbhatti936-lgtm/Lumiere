@@ -1,4 +1,5 @@
 import Reveal from '@/components/motion/Reveal';
+import BackButton from '@/components/common/BackButton';
 
 const SECTIONS = [
   {
@@ -27,6 +28,9 @@ export default function Privacy() {
   return (
     <div className="bg-background pb-section-gap">
       <div className="container max-w-3xl">
+        <div className="pt-6 pb-4">
+          <BackButton fallbackHref="/" />
+        </div>
         <Reveal className="mb-12">
           <p className="label-caps mb-3">Legal</p>
           <h1 className="font-serif text-3xl md:text-4xl mb-3">Privacy Policy</h1>

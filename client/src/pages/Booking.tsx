@@ -8,6 +8,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import GuestCounter from '@/components/booking/GuestCounter';
 import PriceBreakdown from '@/components/booking/PriceBreakdown';
 import PaymentForm from '@/components/booking/PaymentForm';
+import BackButton from '@/components/common/BackButton';
 import Reveal from '@/components/motion/Reveal';
 import Magnetic from '@/components/motion/Magnetic';
 import { calculateNights } from '@/lib/utils';
@@ -109,6 +110,9 @@ export default function Booking() {
   return (
     <div className="bg-background pb-section-gap">
       <div className="container max-w-[920px]">
+        <div className="pt-6 pb-4">
+          <BackButton fallbackHref={`/hotel/${hotelId}`} label="Back to stay" />
+        </div>
         <Reveal>
           <h1 className="font-serif text-3xl md:text-4xl mb-10">Complete your booking</h1>
         </Reveal>

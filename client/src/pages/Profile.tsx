@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import Reveal from '@/components/motion/Reveal';
+import BackButton from '@/components/common/BackButton';
 
 export default function Profile() {
   const { user } = useAuth();
@@ -61,6 +62,7 @@ export default function Profile() {
   return (
     <div className="min-h-screen bg-background py-12 md:py-20">
       <div className="container max-w-2xl space-y-8">
+        <BackButton fallbackHref="/" />
         <Reveal>
           <span className="label-caps mb-4 block">Account</span>
           <h1 className="font-serif text-4xl md:text-5xl mb-4">My Profile</h1>

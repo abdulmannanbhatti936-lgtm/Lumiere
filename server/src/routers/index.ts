@@ -11,6 +11,7 @@ import { paymentsRouter } from './payments.router';
 import { toursRouter } from './tours.router';
 import { contactRouter } from './contact.router';
 import { wishlistRouter } from './wishlist.router';
+import { chatRouter } from './chat.router';
 
 export const appRouter = router({
   auth: authRouter,
@@ -25,6 +26,7 @@ export const appRouter = router({
   tours: toursRouter,
   contact: contactRouter,
   wishlist: wishlistRouter,
+  chat: chatRouter,
 });
 
 export type AppRouter = typeof appRouter;

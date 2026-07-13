@@ -3,6 +3,7 @@ import { Clock, Users, MapPin, Loader2, ArrowRight, Check } from 'lucide-react';
 import Reveal from '@/components/motion/Reveal';
 import Magnetic from '@/components/motion/Magnetic';
 import HotelCard from '@/components/hotels/HotelCard';
+import BackButton from '@/components/common/BackButton';
 import { formatCurrency } from '@/lib/utils';
 import { trpc } from '@/lib/trpc';
 
@@ -46,6 +47,9 @@ export default function TourDetail() {
           <div className="photo-placeholder absolute inset-0" />
         )}
         <div className="absolute inset-0 hero-vignette" />
+        <div className="absolute top-5 left-0 right-0 container z-10">
+          <BackButton fallbackHref="/tours" variant="dark" />
+        </div>
         <div className="relative z-10 h-full container flex flex-col justify-end pb-8">
           <span className="label-caps !text-white/80 !text-[10px] mb-3 flex items-center gap-1.5">
             <MapPin size={12} /> {tour.destination.name}, {tour.destination.country}

@@ -10,6 +10,7 @@ import Navigation from './components/common/Navigation';
 import MobileTabBar from './components/common/MobileTabBar';
 import Preloader from './components/common/Preloader';
 import Footer from './components/common/Footer';
+import ChatWidget from './components/chat/ChatWidget';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import PageTransition from './components/motion/PageTransition';
 
@@ -100,6 +101,7 @@ function App() {
           <Footer />
         </div>
         <MobileTabBar />
+        <ChatWidget />
         <Toaster />
       </TooltipProvider>
     </ErrorBoundary>

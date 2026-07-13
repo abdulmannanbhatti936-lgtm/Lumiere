@@ -162,6 +162,21 @@
     box-shadow: 0 20px 40px rgba(30, 34, 51, 0.25);
   }
 
+  /* ---------- Back button (inner pages) ---------- */
+
+  .back-button-sweep {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, transparent 35%, hsl(var(--accent) / 0.45) 50%, transparent 65%);
+    transform: translateX(-130%);
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+  }
+
+  .back-button:hover .back-button-sweep {
+    transform: translateX(130%);
+  }
+
   /* ---------- Nav "Dynamic Island" glass ---------- */
 
   .nav-island {

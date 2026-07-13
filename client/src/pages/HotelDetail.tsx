@@ -7,6 +7,7 @@ import { TRPCClientError } from '@trpc/client';
 import ReviewCard from '@/components/reviews/ReviewCard';
 import ReviewForm from '@/components/reviews/ReviewForm';
 import RoomSelector from '@/components/booking/RoomSelector';
+import BackButton from '@/components/common/BackButton';
 import Reveal from '@/components/motion/Reveal';
 import Magnetic from '@/components/motion/Magnetic';
 import { formatCurrency } from '@/lib/utils';
@@ -99,6 +100,9 @@ export default function HotelDetail() {
   return (
     <div className="bg-background pb-section-gap">
       <div className="container">
+        <div className="pt-6 pb-4">
+          <BackButton fallbackHref="/hotels" label="Back to stays" />
+        </div>
         {/* Gallery */}
         {galleryImages.length > 0 && (
           <Reveal className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
