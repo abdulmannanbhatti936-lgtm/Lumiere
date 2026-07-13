@@ -15,7 +15,8 @@ async function main() {
     throw new Error('DATABASE_URL is not set — copy server/.env.example to server/.env first');
   }
 
-  const migrationClient = postgres(databaseUrl, { max: 1 });
+  const isLocalDb = /localhost|127\.0\.0\.1/.test(databaseUrl);
+  const migrationClient = postgres(databaseUrl, { max: 1, ssl: isLocalDb ? false : 'require' });
   const db = drizzle(migrationClient);
 
   console.log('Running migrations...');
