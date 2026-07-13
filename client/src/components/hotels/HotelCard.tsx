@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { formatCurrency } from '@/lib/utils';
 import { trpc } from '@/lib/trpc';
 import { useAuth } from '@/hooks/useAuth';
+import TiltCard from '@/components/motion/TiltCard';
 
 const CATEGORY_LABELS: Record<string, string> = {
   beach: 'Beachfront',
@@ -105,7 +106,7 @@ export default function HotelCard({
   if (layout === 'horizontal') {
     return (
       <Link href={`/hotel/${id}`}>
-        <div className="group glass-panel overflow-hidden cursor-pointer flex flex-col sm:flex-row transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+        <TiltCard maxTilt={4} className="group glass-panel overflow-hidden cursor-pointer flex flex-col sm:flex-row transition-shadow duration-300 hover:shadow-xl">
           <div className="relative h-52 sm:h-auto sm:w-[280px] shrink-0 overflow-hidden">
             {photo}
             <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent sm:hidden" />
@@ -140,14 +141,14 @@ export default function HotelCard({
               <span className="btn-secondary !py-2.5 text-sm">View stay</span>
             </div>
           </div>
-        </div>
+        </TiltCard>
       </Link>
     );
   }
 
   return (
     <Link href={`/hotel/${id}`}>
-      <div className="group glass-panel overflow-hidden cursor-pointer h-full flex flex-col transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl">
+      <TiltCard maxTilt={6} className="group glass-panel overflow-hidden cursor-pointer h-full flex flex-col transition-shadow duration-300 hover:shadow-xl">
         <div className="relative h-56 overflow-hidden">
           {photo}
           <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent transition-opacity duration-300 group-hover:from-black/25" />
@@ -172,7 +173,7 @@ export default function HotelCard({
             </span>
           </div>
         </div>
-      </div>
+      </TiltCard>
     </Link>
   );
 }

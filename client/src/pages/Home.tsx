@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { Search, ArrowRight } from 'lucide-react';
+import { Search, ArrowRight, Leaf, HeartHandshake } from 'lucide-react';
 import { Link, useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import Reveal from '@/components/motion/Reveal';
 import Magnetic from '@/components/motion/Magnetic';
 import HotelCard from '@/components/hotels/HotelCard';
+import AnimatedCounter from '@/components/motion/AnimatedCounter';
+import ExperienceStack from '@/components/home/ExperienceStack';
+import HorizontalDestinations from '@/components/home/HorizontalDestinations';
 import { HotelCardSkeleton } from '@/components/ui/skeleton';
 import { trpc } from '@/lib/trpc';
 
@@ -14,6 +17,19 @@ const CATEGORIES = [
   { label: 'City', value: 'city' },
   { label: 'Mountain', value: 'mountain' },
   { label: 'Boutique', value: 'boutique' },
+];
+
+const ABOUT_VALUES = [
+  {
+    icon: Leaf,
+    title: 'Sustainability',
+    copy: 'We partner with properties that invest in their communities and their environment — not ones that merely advertise it.',
+  },
+  {
+    icon: HeartHandshake,
+    title: 'Hospitality',
+    copy: 'Every stay is backed by a concierge who treats your trip like it’s the only one they’re working on.',
+  },
 ];
 
 export default function Home() {
@@ -25,6 +41,9 @@ export default function Home() {
 
   const { data, isLoading } = trpc.hotels.list.useQuery({ sortBy: 'rating', page: 1, limit: 3 });
   const featuredHotels = data?.items ?? [];
+
+  const { data: destinationsData } = trpc.destinations.list.useQuery();
+  const { data: toursData } = trpc.tours.list.useQuery();
 
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
@@ -220,6 +239,68 @@ export default function Home() {
           </div>
         </section>
       </div>
+
+      {/* Destinations — scroll-hijacked horizontal gallery, Home-only */}
+      <HorizontalDestinations />
+
+      {/* Experience — scroll-stack pillars, Home-only */}
+      <ExperienceStack />
+
+      {/* About teaser */}
+      <section className="py-section-gap bg-muted/30">
+        <div className="container">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-gutter items-center mb-16">
+            <Reveal>
+              <p className="label-caps mb-4">Our story</p>
+              <h2 className="font-serif text-[28px] md:text-4xl leading-[1.1] mb-5">
+                Founded on the belief that a great trip starts with knowing exactly where you'll sleep.
+              </h2>
+              <p className="text-muted-foreground text-lg leading-relaxed mb-6">
+                Lumière started as a frustration: booking a beautiful-looking hotel online and arriving to a room
+                nothing like the photos. We built a platform where what you see is what you get.
+              </p>
+              <Link href="/about" className="text-sm font-semibold text-primary inline-flex items-center gap-1.5">
+                Read our story <ArrowRight size={14} />
+              </Link>
+            </Reveal>
+
+            <Reveal delay={0.1} className="grid grid-cols-2 gap-4">
+              <div className="card-luxury text-center py-8">
+                <p className="font-serif text-3xl md:text-4xl text-primary mb-2">
+                  <AnimatedCounter value={destinationsData?.length ?? 0} />
+                </p>
+                <p className="label-caps !text-[10px]">Destinations</p>
+              </div>
+              <div className="card-luxury text-center py-8">
+                <p className="font-serif text-3xl md:text-4xl text-primary mb-2">
+                  <AnimatedCounter value={toursData?.length ?? 0} />
+                </p>
+                <p className="label-caps !text-[10px]">Guided tours</p>
+              </div>
+              <div className="card-luxury text-center py-8 col-span-2">
+                <p className="font-serif text-3xl md:text-4xl text-primary mb-2">24/7</p>
+                <p className="label-caps !text-[10px]">Concierge coverage</p>
+              </div>
+            </Reveal>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-gutter">
+            {ABOUT_VALUES.map((value, i) => (
+              <Reveal key={value.title} delay={Math.min(i * 0.06, 0.3)}>
+                <div className="glass-panel p-8 h-full flex gap-5">
+                  <div className="w-11 h-11 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                    <value.icon size={18} className="text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-serif text-lg mb-2">{value.title}</h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{value.copy}</p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

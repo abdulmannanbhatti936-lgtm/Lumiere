@@ -1,15 +1,15 @@
 import { useRef, useState } from 'react';
-import { Menu, X, Sparkles, Home as HomeIcon, Compass, Search, Gem, Info, Mail, Luggage } from 'lucide-react';
+import { Menu, X, Sparkles, Home as HomeIcon, Compass, Search, Mail, Luggage } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Link, useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 
+// Experience and About no longer get their own top-nav slot — they're now
+// sections on the Home page (see Home.tsx) and still reachable from the footer.
 const NAV_ITEMS = [
   { label: 'Home', href: '/', icon: HomeIcon },
   { label: 'Tours', href: '/tours', activeOn: ['/tours', '/tour', '/destinations'], icon: Compass },
   { label: 'Search', href: '/hotels', activeOn: ['/hotels', '/hotel', '/booking'], icon: Search },
-  { label: 'Experience', href: '/experience', icon: Gem },
-  { label: 'About', href: '/about', icon: Info },
   { label: 'Contact', href: '/contact', icon: Mail },
   { label: 'My Trips', href: '/my-bookings', requiresAuth: true, icon: Luggage },
 ];
@@ -80,11 +80,20 @@ export default function Navigation() {
                     href={item.href}
                     title={item.label}
                     aria-label={item.label}
-                    className={`flex items-center justify-center gap-1.5 h-9 rounded-full text-sm font-semibold whitespace-nowrap transition-colors ${
+                    className={`relative flex items-center justify-center gap-1.5 h-9 rounded-full text-sm font-semibold whitespace-nowrap transition-colors ${
                       expanded ? 'px-4' : 'w-9'
-                    } ${active ? 'nav-pill-active text-white' : 'text-[#3A3F52] hover:text-primary'}`}
+                    } ${active ? 'text-white' : 'text-[#3A3F52] hover:text-primary'}`}
                   >
-                    <Icon size={15} className="shrink-0" />
+                    {/* Pill nav: a single shared-layout background slides between whichever
+                        item is active instead of each item toggling its own static fill. */}
+                    {active && (
+                      <motion.span
+                        layoutId="nav-active-pill"
+                        className="absolute inset-0 nav-pill-active rounded-full"
+                        transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                      />
+                    )}
+                    <Icon size={15} className="relative z-10 shrink-0" />
                     <AnimatePresence initial={false}>
                       {expanded && (
                         <motion.span
@@ -92,7 +101,7 @@ export default function Navigation() {
                           animate={{ opacity: 1, width: 'auto' }}
                           exit={{ opacity: 0, width: 0 }}
                           transition={{ duration: 0.2 }}
-                          className="overflow-hidden"
+                          className="relative z-10 overflow-hidden"
                         >
                           {item.label}
                         </motion.span>
@@ -108,15 +117,22 @@ export default function Navigation() {
                   href="/dashboard"
                   title="Admin"
                   aria-label="Admin"
-                  className={`flex items-center justify-center gap-1.5 h-9 rounded-full text-sm font-semibold whitespace-nowrap transition-colors ${
+                  className={`relative flex items-center justify-center gap-1.5 h-9 rounded-full text-sm font-semibold whitespace-nowrap transition-colors ${
                     expanded ? 'px-4' : 'w-9'
                   } ${
                     location.startsWith('/dashboard') || location.startsWith('/admin')
-                      ? 'nav-pill-active text-white'
+                      ? 'text-white'
                       : 'text-[#3A3F52] hover:text-primary'
                   }`}
                 >
-                  <Sparkles size={15} className="shrink-0" />
+                  {(location.startsWith('/dashboard') || location.startsWith('/admin')) && (
+                    <motion.span
+                      layoutId="nav-active-pill"
+                      className="absolute inset-0 nav-pill-active rounded-full"
+                      transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                    />
+                  )}
+                  <Sparkles size={15} className="relative z-10 shrink-0" />
                   <AnimatePresence initial={false}>
                     {expanded && (
                       <motion.span
@@ -124,7 +140,7 @@ export default function Navigation() {
                         animate={{ opacity: 1, width: 'auto' }}
                         exit={{ opacity: 0, width: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="overflow-hidden"
+                        className="relative z-10 overflow-hidden"
                       >
                         Admin
                       </motion.span>
