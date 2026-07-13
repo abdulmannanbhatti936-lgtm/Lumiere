@@ -1,4 +1,5 @@
 import express from 'express';
+import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { createExpressMiddleware } from '@trpc/server/adapters/express';
 import { env } from './env';
@@ -11,6 +12,15 @@ import { stripeWebhookHandler } from './webhooks/stripe.webhook';
 
 const app = express();
 
+// Behind a reverse proxy / load balancer in production (Render, Railway, nginx, etc.)
+// so express-rate-limit and req.ip read the real client IP from X-Forwarded-For
+// instead of the proxy's own address. Trusts exactly one hop.
+app.set('trust proxy', 1);
+
+// This is a JSON/tRPC API with no server-rendered HTML, so helmet's CSP is disabled
+// (it's meant to constrain inline scripts/styles on HTML responses); the rest of its
+// defaults (HSTS, X-Content-Type-Options, Referrer-Policy, etc.) still apply.
+app.use(helmet({ contentSecurityPolicy: false }));
 app.use(corsMiddleware);
 app.use(cookieParser());
 

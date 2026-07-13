@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSearch } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import HotelCard from '@/components/hotels/HotelCard';
@@ -40,9 +40,21 @@ export default function Hotels() {
   const [sortBy, setSortBy] = useState<HotelsQueryInput['sortBy']>('newest');
   const [page, setPage] = useState(1);
 
-  useEffect(() => {
+  // Changing any filter re-pages to 1 directly in these handlers (rather than via
+  // a useEffect watching the filter state) so the reset happens in the same commit
+  // as the filter change instead of triggering an extra render pass.
+  const handleCategoryChange = (value: HotelCategory | 'all') => {
+    setCategory(value);
     setPage(1);
-  }, [category, minRating, sortBy]);
+  };
+  const handleMinRatingChange = (value: number) => {
+    setMinRating(value);
+    setPage(1);
+  };
+  const handleSortChange = (value: HotelsQueryInput['sortBy']) => {
+    setSortBy(value);
+    setPage(1);
+  };
 
   const { data, isLoading, isError } = trpc.hotels.list.useQuery({
     city: selectedCity || undefined,
@@ -72,7 +84,7 @@ export default function Hotels() {
           {CATEGORY_OPTIONS.map((opt) => (
             <button
               key={opt.value}
-              onClick={() => setCategory(opt.value)}
+              onClick={() => handleCategoryChange(opt.value)}
               className={`shrink-0 px-4 py-2 rounded-full text-sm font-semibold border transition-colors ${
                 category === opt.value
                   ? 'bg-primary text-primary-foreground border-primary'
@@ -95,7 +107,7 @@ export default function Hotels() {
                     type="radio"
                     name="category"
                     checked={category === opt.value}
-                    onChange={() => setCategory(opt.value)}
+                    onChange={() => handleCategoryChange(opt.value)}
                     className="w-4 h-4 accent-primary"
                   />
                   <span className="text-sm font-medium text-foreground">{opt.label}</span>
@@ -108,7 +120,7 @@ export default function Hotels() {
               {RATING_OPTIONS.map((opt) => (
                 <button
                   key={opt.value}
-                  onClick={() => setMinRating(opt.value)}
+                  onClick={() => handleMinRatingChange(opt.value)}
                   className={`px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-colors ${
                     minRating === opt.value
                       ? 'bg-primary text-primary-foreground border-primary'
@@ -129,7 +141,7 @@ export default function Hotels() {
               </p>
               <select
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as HotelsQueryInput['sortBy'])}
+                onChange={(e) => handleSortChange(e.target.value as HotelsQueryInput['sortBy'])}
                 className="input-luxury !w-auto text-sm py-2"
               >
                 {SORT_OPTIONS.map((opt) => (

@@ -10,7 +10,10 @@ export type RouterOutputs = inferRouterOutputs<AppRouter>;
 
 export const queryClient = new QueryClient({
   defaultOptions: {
-    queries: { retry: 1, refetchOnWindowFocus: false },
+    // 60s staleTime means navigating back to a page you just visited (e.g. Hotels
+    // list -> a hotel -> back) shows cached data instantly instead of a loading
+    // flash, while still re-fetching in the background often enough to stay fresh.
+    queries: { retry: 1, refetchOnWindowFocus: false, staleTime: 60 * 1000 },
   },
 });
 

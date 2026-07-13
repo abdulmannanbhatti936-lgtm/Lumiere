@@ -31,7 +31,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
             <h1 className="text-4xl font-bold text-foreground mb-4">Oops!</h1>
             <p className="text-muted-foreground mb-8">Something went wrong. Please try again.</p>
             <button
-              onClick={() => this.setState({ hasError: false })}
+              onClick={() => window.location.reload()}
               className="btn-primary"
             >
               Try Again
